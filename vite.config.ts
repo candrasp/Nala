@@ -5,6 +5,9 @@ import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
   plugins: [vue(), tailwindcss()],
+  server: {
+    host: true,
+  },
   resolve: {
     alias: {
       '@': path.resolve(import.meta.dirname, './src'),

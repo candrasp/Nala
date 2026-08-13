@@ -31,3 +31,5 @@ dist-ssr/
 # Documentation & AI context
 GEMINI.md
 BUG-REPORT.md
+.agents/*
+

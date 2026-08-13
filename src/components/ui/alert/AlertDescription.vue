@@ -9,9 +9,8 @@ const props = defineProps<{
 
 <template>
   <div
-    data-slot="sidebar-content"
-    data-sidebar="content"
-    :class="cn('flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto overflow-x-hidden group-data-[collapsible=icon]:overflow-hidden', props.class)"
+    data-slot="alert-description"
+    :class="cn('text-muted-foreground col-start-2 text-sm [&_p]:leading-relaxed', props.class)"
   >
     <slot />
   </div>

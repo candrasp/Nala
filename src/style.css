@@ -1,3 +1,6 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 @font-face {
   font-family: 'Inter';
   src: url('./assets/fonts/InterVariable.woff2') format('woff2-variations');
@@ -167,5 +170,14 @@
   body[style*="overflow: hidden"] {
     overflow: auto !important;
     padding-right: 0px !important;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }

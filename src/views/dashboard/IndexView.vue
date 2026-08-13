@@ -41,12 +41,12 @@ const recentSales = [
 
 <template>
   <div class="space-y-6 max-w-[1920px] mx-auto">
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div>
         <h2 class="text-2xl font-bold tracking-tight">Dashboard Overview</h2>
         <p class="text-muted-foreground text-sm">Welcome back to your analytics and activity hub.</p>
       </div>
-      <Button class="gap-2">
+      <Button class="gap-2 shrink-0 self-start sm:self-auto">
         <TrendingUp class="h-4 w-4" />
         Download Report
       </Button>
