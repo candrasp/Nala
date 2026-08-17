@@ -4,7 +4,7 @@ import { defaultDocument, useEventListener, useMediaQuery, useVModel } from "@vu
 import { TooltipProvider } from "reka-ui"
 import { computed, ref } from "vue"
 import { cn } from "@/lib/utils"
-import { provideSidebarContext, SIDEBAR_COOKIE_MAX_AGE, SIDEBAR_COOKIE_NAME, SIDEBAR_KEYBOARD_SHORTCUT, SIDEBAR_WIDTH, SIDEBAR_WIDTH_ICON } from "./utils"
+import { provideSidebarContext, SIDEBAR_COOKIE_MAX_AGE, SIDEBAR_COOKIE_NAME, SIDEBAR_KEYBOARD_SHORTCUT, SIDEBAR_WIDTH, SIDEBAR_WIDTH_ICON, type SidebarControlMode } from "./utils"
 
 const props = withDefaults(defineProps<{
   defaultOpen?: boolean
@@ -27,6 +27,42 @@ const open = useVModel(props, "open", emits, {
   passive: (props.open === undefined) as false,
 }) as Ref<boolean>
 
+const getSavedMode = (): SidebarControlMode => {
+  if (typeof document === 'undefined') return 'expanded'
+  const match = document.cookie.match(/sidebar_mode=([^;]+)/)
+  if (match && ['expanded', 'collapsed', 'hover'].includes(match[1])) {
+    return match[1] as SidebarControlMode
+  }
+  return open.value ? 'expanded' : 'collapsed'
+}
+
+const sidebarMode = ref<SidebarControlMode>(getSavedMode())
+const isHovered = ref(false)
+const isMenuOpen = ref(false)
+
+function setSidebarMode(mode: SidebarControlMode) {
+  sidebarMode.value = mode
+  document.cookie = `sidebar_mode=${mode}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+  if (mode === "expanded") {
+    setOpen(true)
+  } else if (mode === "collapsed") {
+    setOpen(false)
+  } else if (mode === "hover") {
+    setOpen(false)
+  }
+}
+
+function setIsHovered(val: boolean) {
+  isHovered.value = val
+}
+
+function setIsMenuOpen(val: boolean) {
+  isMenuOpen.value = val
+  if (val) {
+    isHovered.value = true
+  }
+}
+
 function setOpen(value: boolean) {
   open.value = value // emits('update:open', value)
 
@@ -40,7 +76,14 @@ function setOpenMobile(value: boolean) {
 
 // Helper to toggle the sidebar.
 function toggleSidebar() {
-  return isMobile.value ? setOpenMobile(!openMobile.value) : setOpen(!open.value)
+  if (isMobile.value) {
+    setOpenMobile(!openMobile.value)
+  } else {
+    const nextState = !open.value
+    setOpen(nextState)
+    sidebarMode.value = nextState ? 'expanded' : 'collapsed'
+    document.cookie = `sidebar_mode=${sidebarMode.value}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+  }
 }
 
 useEventListener("keydown", (event: KeyboardEvent) => {
@@ -52,7 +95,12 @@ useEventListener("keydown", (event: KeyboardEvent) => {
 
 // We add a state so that we can do data-state="expanded" or "collapsed".
 // This makes it easier to style the sidebar with Tailwind classes.
-const state = computed(() => open.value ? "expanded" : "collapsed")
+const state = computed(() => {
+  if (sidebarMode.value === "hover") {
+    return (isHovered.value || isMenuOpen.value) ? "expanded" : "collapsed"
+  }
+  return open.value ? "expanded" : "collapsed"
+})
 
 provideSidebarContext({
   state,
@@ -62,6 +110,12 @@ provideSidebarContext({
   openMobile,
   setOpenMobile,
   toggleSidebar,
+  sidebarMode,
+  setSidebarMode,
+  isHovered,
+  setIsHovered,
+  isMenuOpen,
+  setIsMenuOpen,
 })
 </script>
 
