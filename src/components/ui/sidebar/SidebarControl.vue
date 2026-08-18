@@ -22,7 +22,7 @@ const onOpenChange = (open: boolean) => {
   <DropdownMenu @update:open="onOpenChange">
     <DropdownMenuTrigger as-child>
       <button
-        class="flex h-8 w-8 items-center justify-center rounded-md border border-sidebar-border bg-sidebar-accent/30 text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+        class="flex h-8 w-8 items-center justify-center rounded-md text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
         aria-label="Sidebar control"
         title="Sidebar control"
       >

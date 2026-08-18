@@ -1,0 +1,159 @@
+<script setup lang="ts">
+import { computed, useId } from 'vue'
+
+interface Props {
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | number | string
+  class?: string
+  withText?: boolean
+  withBackground?: boolean
+  variant?: 'supabase' | 'monochrome'
+  textClass?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  size: 'md',
+  withText: false,
+  withBackground: false,
+  variant: 'supabase',
+})
+
+const gradientId = useId()
+
+const sizeClasses = computed(() => {
+  if (typeof props.size === 'number') {
+    return `h-[${props.size}px] w-[${props.size}px]`
+  }
+  switch (props.size) {
+    case 'xs':
+      return 'h-3.5 w-3.5'
+    case 'sm':
+      return 'h-4 w-4'
+    case 'md':
+      return 'h-5 w-5'
+    case 'lg':
+      return 'h-6 w-6'
+    case 'xl':
+      return 'h-8 w-8'
+    default:
+      return props.size
+  }
+})
+
+const logoPath = `M6600 7929 c-127 -13 -224 -35 -287 -64 -30 -15 -74 -33 -97 -41 -22 -8 -58 -26 -79 -40 -21 -14 -49 -29 -64 -35 -42 -16 -173 -113 -242 -178 -35 -34 -77 -71 -95 -84 -17 -12 -58 -47 -91 -78 -178 -167 -310 -288 -348 -318 -48 -38 -153 -132 -347 -309 -74 -68 -156 -143 -181 -166 -74 -67 -94 -114 -94 -221 0 -80 3 -95 27 -137 60 -100 174 -167 304 -176 59 -4 85 0 150 22 44 14 91 34 105 44 55 36 177 140 279 238 58 55 145 133 193 172 48 39 159 136 245 215 246 227 449 391 528 428 57 26 85 33 160 37 106 5 138 -3 221 -57 47 -30 68 -53 102 -110 24 -40 47 -86 52 -103 4 -17 9 -596 10 -1288 0 -975 -2 -1263 -11 -1281 -30 -58 -105 -131 -164 -161 -53 -28 -71 -32 -141 -32 -75 -1 -85 2 -162 41 -57 30 -118 75 -203 150 -66 59 -151 133 -188 163 -38 30 -139 118 -226 195 -87 77 -197 174 -246 215 -48 41 -150 129 -226 195 -76 66 -150 130 -164 141 -14 12 -101 88 -193 170 -93 82 -200 176 -239 209 -98 82 -334 290 -383 336 -22 20 -78 70 -125 110 -47 40 -143 126 -215 190 -233 209 -338 264 -589 309 -111 20 -396 7 -517 -24 -162 -41 -321 -134 -417 -244 -64 -74 -149 -212 -163 -266 -6 -23 -21 -75 -34 -117 -13 -42 -29 -114 -35 -160 -7 -58 -10 -526 -8 -1524 l3 -1440 41 -108 c45 -116 72 -161 149 -245 83 -92 265 -212 375 -247 30 -10 72 -26 92 -36 63 -32 143 -48 297 -60 182 -14 377 6 476 48 33 14 88 36 123 49 35 13 80 35 100 49 20 14 42 25 48 25 19 0 166 108 247 182 44 40 90 80 103 88 20 14 254 225 384 347 30 28 98 89 151 135 234 203 449 402 473 436 38 55 48 90 49 162 0 103 -16 147 -82 211 -80 79 -146 104 -271 104 -166 0 -217 -30 -492 -280 -84 -78 -198 -177 -253 -222 -55 -44 -111 -93 -125 -108 -53 -58 -271 -247 -503 -436 -21 -17 -75 -47 -120 -67 -140 -61 -271 -48 -384 38 -38 28 -57 55 -95 130 l-47 95 -3 1255 c-2 1160 -1 1257 14 1285 42 75 95 129 156 162 57 30 72 33 147 33 76 0 89 -3 152 -36 83 -44 143 -90 287 -218 61 -54 131 -115 156 -135 58 -46 192 -163 300 -261 47 -43 121 -108 165 -146 44 -37 126 -109 182 -159 56 -49 123 -109 150 -131 113 -97 323 -282 384 -339 36 -34 97 -86 135 -117 38 -30 110 -92 159 -138 160 -146 191 -174 290 -255 54 -44 155 -130 225 -192 70 -62 156 -132 191 -156 69 -46 212 -109 294 -127 144 -33 462 -28 605 9 216 55 395 186 514 375 57 92 122 285 137 411 14 121 12 2900 -2 2967 -20 91 -91 239 -153 317 -92 116 -227 210 -391 276 -44 17 -94 39 -111 48 -47 24 -106 35 -280 52 -87 8 -158 14 -158 14 -1 -1 -39 -6 -86 -10z`
+</script>
+
+<template>
+  <div v-if="withText" class="inline-flex items-center gap-2.5">
+    <!-- SVG with squircle background -->
+    <svg
+      v-if="withBackground"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 1000 1000"
+      :class="[sizeClasses, props.class]"
+      aria-hidden="true"
+    >
+      <defs v-if="variant === 'supabase'">
+        <linearGradient :id="`grad-${gradientId}`" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" class="logo-stop-start" stop-color="#10B981" />
+          <stop offset="50%" class="logo-stop-mid" stop-color="#059669" />
+          <stop offset="100%" class="logo-stop-end" stop-color="#047857" />
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="1000" height="1000" rx="225" fill="#0A0A0E" />
+      <g transform="translate(500,500) scale(1.22) translate(-509.75,-495.8)">
+        <g transform="translate(0,1000) scale(0.1,-0.1)" :fill="variant === 'supabase' ? `url(#grad-${gradientId})` : '#ffffff'" stroke="none">
+          <path :d="logoPath" />
+        </g>
+      </g>
+    </svg>
+    <!-- Tight viewBox for clean icon usage without excessive transparent margin -->
+    <svg
+      v-else
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="200 185 620 620"
+      :class="[sizeClasses, props.class]"
+      aria-hidden="true"
+    >
+      <defs v-if="variant === 'supabase'">
+        <linearGradient :id="`grad-${gradientId}`" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" class="logo-stop-start" stop-color="#10B981" />
+          <stop offset="50%" class="logo-stop-mid" stop-color="#059669" />
+          <stop offset="100%" class="logo-stop-end" stop-color="#047857" />
+        </linearGradient>
+      </defs>
+      <g transform="translate(0,1000) scale(0.1,-0.1)" :fill="variant === 'supabase' ? `url(#grad-${gradientId})` : 'currentColor'">
+        <path :d="logoPath" />
+      </g>
+    </svg>
+    <span :class="['font-bold tracking-tight text-foreground', textClass || 'text-base font-semibold']">
+      Nala
+    </span>
+  </div>
+
+  <!-- Standalone SVG with squircle background -->
+  <svg
+    v-else-if="withBackground"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 1000 1000"
+    :class="[sizeClasses, props.class]"
+    aria-hidden="true"
+  >
+    <defs v-if="variant === 'supabase'">
+      <linearGradient :id="`grad-${gradientId}`" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" class="logo-stop-start" stop-color="#10B981" />
+        <stop offset="50%" class="logo-stop-mid" stop-color="#059669" />
+        <stop offset="100%" class="logo-stop-end" stop-color="#047857" />
+      </linearGradient>
+    </defs>
+    <rect x="0" y="0" width="1000" height="1000" rx="225" fill="#0A0A0E" />
+    <g transform="translate(500,500) scale(1.22) translate(-509.75,-495.8)">
+      <g transform="translate(0,1000) scale(0.1,-0.1)" :fill="variant === 'supabase' ? `url(#grad-${gradientId})` : '#ffffff'" stroke="none">
+        <path :d="logoPath" />
+      </g>
+    </g>
+  </svg>
+
+  <!-- Standalone tight viewBox icon (Razor-sharp vector without CSS filter bleed) -->
+  <svg
+    v-else
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="200 185 620 620"
+    :class="[sizeClasses, props.class]"
+    aria-hidden="true"
+  >
+    <defs v-if="variant === 'supabase'">
+      <linearGradient :id="`grad-${gradientId}`" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" class="logo-stop-start" stop-color="#10B981" />
+        <stop offset="50%" class="logo-stop-mid" stop-color="#059669" />
+        <stop offset="100%" class="logo-stop-end" stop-color="#047857" />
+      </linearGradient>
+    </defs>
+    <g transform="translate(0,1000) scale(0.1,-0.1)" :fill="variant === 'supabase' ? `url(#grad-${gradientId})` : 'currentColor'">
+      <path :d="logoPath" />
+    </g>
+  </svg>
+</template>
+
+<style scoped>
+/* Light Mode: High-contrast, rich & bold emerald (never washed out on white) */
+.logo-stop-start {
+  stop-color: #10B981;
+}
+.logo-stop-mid {
+  stop-color: #059669;
+}
+.logo-stop-end {
+  stop-color: #047857;
+}
+
+/* Dark Mode: Vibrant, glowing mint with luminous highlight on dark background */
+:global(.dark) .logo-stop-start {
+  stop-color: #53F5AC;
+}
+:global(.dark) .logo-stop-mid {
+  stop-color: #3ECF8E;
+}
+:global(.dark) .logo-stop-end {
+  stop-color: #24B47E;
+}
+</style>

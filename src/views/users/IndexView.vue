@@ -1,67 +1,821 @@
 <script setup lang="ts">
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { ref, computed } from 'vue'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Plus, MoreHorizontal } from '@lucide/vue'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Switch } from '@/components/ui/switch'
+import {
+  Search,
+  Plus,
+  MoreHorizontal,
+  Download,
+  Users,
+  UserCheck,
+  UserX,
+  Clock,
+  ShieldCheck,
+  ShieldAlert,
+  Edit2,
+  Trash2,
+  Copy,
+  ChevronLeft,
+  ChevronRight,
+  Sparkles,
+  Check,
+} from '@lucide/vue'
 
-const users = [
-  { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin', status: 'Active' },
-  { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User', status: 'Active' },
-  { id: 3, name: 'Robert Johnson', email: 'robert@example.com', role: 'Editor', status: 'Inactive' },
-]
+export interface UserItem {
+  id: string
+  name: string
+  email: string
+  role: 'Admin' | 'Developer' | 'Editor' | 'Viewer'
+  status: 'Active' | 'Pending' | 'Suspended'
+  twoFactor: boolean
+  avatar: string
+  initials: string
+  lastActive: string
+  createdAt: string
+}
+
+// ─── Initial Mock Data ────────────────────────────────────────────────────────
+const users = ref<UserItem[]>([
+  {
+    id: 'usr-1',
+    name: 'Olivia Martin',
+    email: 'olivia.martin@supabase.io',
+    role: 'Admin',
+    status: 'Active',
+    twoFactor: true,
+    avatar: '',
+    initials: 'OM',
+    lastActive: 'Just now',
+    createdAt: 'Jan 12, 2026',
+  },
+  {
+    id: 'usr-2',
+    name: 'Jackson Lee',
+    email: 'jackson.lee@supabase.io',
+    role: 'Developer',
+    status: 'Active',
+    twoFactor: true,
+    avatar: '',
+    initials: 'JL',
+    lastActive: '5 mins ago',
+    createdAt: 'Feb 03, 2026',
+  },
+  {
+    id: 'usr-3',
+    name: 'Isabella Nguyen',
+    email: 'isabella.nguyen@supabase.io',
+    role: 'Editor',
+    status: 'Pending',
+    twoFactor: false,
+    avatar: '',
+    initials: 'IN',
+    lastActive: 'Never',
+    createdAt: 'Mar 01, 2026',
+  },
+  {
+    id: 'usr-4',
+    name: 'William Kim',
+    email: 'william.kim@partner.io',
+    role: 'Viewer',
+    status: 'Suspended',
+    twoFactor: false,
+    avatar: '',
+    initials: 'WK',
+    lastActive: '3 days ago',
+    createdAt: 'Dec 18, 2025',
+  },
+  {
+    id: 'usr-5',
+    name: 'Sofia Davis',
+    email: 'sofia.davis@supabase.io',
+    role: 'Developer',
+    status: 'Active',
+    twoFactor: true,
+    avatar: '',
+    initials: 'SD',
+    lastActive: '2 hours ago',
+    createdAt: 'Jan 28, 2026',
+  },
+  {
+    id: 'usr-6',
+    name: 'Marcus Vance',
+    email: 'marcus.v@supabase.io',
+    role: 'Admin',
+    status: 'Active',
+    twoFactor: true,
+    avatar: '',
+    initials: 'MV',
+    lastActive: '1 day ago',
+    createdAt: 'Nov 14, 2025',
+  },
+  {
+    id: 'usr-7',
+    name: 'Elena Rostova',
+    email: 'elena.rostova@supabase.io',
+    role: 'Editor',
+    status: 'Active',
+    twoFactor: true,
+    avatar: '',
+    initials: 'ER',
+    lastActive: '4 hours ago',
+    createdAt: 'Feb 19, 2026',
+  },
+  {
+    id: 'usr-8',
+    name: 'Arthur Pendelton',
+    email: 'arthur.p@client.org',
+    role: 'Viewer',
+    status: 'Pending',
+    twoFactor: false,
+    avatar: '',
+    initials: 'AP',
+    lastActive: 'Never',
+    createdAt: 'Mar 10, 2026',
+  },
+])
+
+// ─── Filter & Search States ───────────────────────────────────────────────────
+const searchQuery = ref('')
+const selectedRoleFilter = ref<string>('all')
+const selectedStatusFilter = ref<string>('all')
+const currentPage = ref(1)
+const itemsPerPage = ref(6)
+
+// ─── Stats Summary ────────────────────────────────────────────────────────────
+const stats = computed(() => {
+  const total = users.value.length
+  const active = users.value.filter((u) => u.status === 'Active').length
+  const pending = users.value.filter((u) => u.status === 'Pending').length
+  const suspended = users.value.filter((u) => u.status === 'Suspended').length
+  return { total, active, pending, suspended }
+})
+
+// ─── Filtered & Paginated Users ───────────────────────────────────────────────
+const filteredUsers = computed(() => {
+  return users.value.filter((u) => {
+    const matchesSearch =
+      u.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      u.email.toLowerCase().includes(searchQuery.value.toLowerCase())
+
+    const matchesRole =
+      selectedRoleFilter.value === 'all' || u.role === selectedRoleFilter.value
+
+    const matchesStatus =
+      selectedStatusFilter.value === 'all' || u.status === selectedStatusFilter.value
+
+    return matchesSearch && matchesRole && matchesStatus
+  })
+})
+
+const totalPages = computed(() =>
+  Math.ceil(filteredUsers.value.length / itemsPerPage.value) || 1
+)
+
+const paginatedUsers = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  return filteredUsers.value.slice(start, start + itemsPerPage.value)
+})
+
+// ─── Modal Dialog States ──────────────────────────────────────────────────────
+const isAddModalOpen = ref(false)
+const isEditModalOpen = ref(false)
+const isDeleteModalOpen = ref(false)
+const copiedId = ref<string | null>(null)
+
+// Add Form State
+const newUserName = ref('')
+const newUserEmail = ref('')
+const newUserRole = ref<'Admin' | 'Developer' | 'Editor' | 'Viewer'>('Developer')
+const sendInviteEmail = ref(true)
+
+// Edit Form State
+const editingUser = ref<UserItem | null>(null)
+const editName = ref('')
+const editEmail = ref('')
+const editRole = ref<'Admin' | 'Developer' | 'Editor' | 'Viewer'>('Developer')
+const editStatus = ref<'Active' | 'Pending' | 'Suspended'>('Active')
+
+// Delete Target
+const deletingUser = ref<UserItem | null>(null)
+
+// ─── Actions ──────────────────────────────────────────────────────────────────
+function handleAddUser() {
+  if (!newUserName.value || !newUserEmail.value) return
+
+  const initials = newUserName.value
+    .split(' ')
+    .map((n) => n[0])
+    .slice(0, 2)
+    .join('')
+    .toUpperCase()
+
+  const newUser: UserItem = {
+    id: `usr-${Date.now()}`,
+    name: newUserName.value,
+    email: newUserEmail.value,
+    role: newUserRole.value,
+    status: sendInviteEmail.value ? 'Pending' : 'Active',
+    twoFactor: false,
+    avatar: '',
+    initials,
+    lastActive: 'Never',
+    createdAt: 'Just now',
+  }
+
+  users.value.unshift(newUser)
+
+  // Reset & close
+  newUserName.value = ''
+  newUserEmail.value = ''
+  newUserRole.value = 'Developer'
+  sendInviteEmail.value = true
+  isAddModalOpen.value = false
+}
+
+function openEditModal(user: UserItem) {
+  editingUser.value = user
+  editName.value = user.name
+  editEmail.value = user.email
+  editRole.value = user.role
+  editStatus.value = user.status
+  isEditModalOpen.value = true
+}
+
+function handleSaveEdit() {
+  if (!editingUser.value) return
+  const idx = users.value.findIndex((u) => u.id === editingUser.value?.id)
+  if (idx !== -1) {
+    users.value[idx].name = editName.value
+    users.value[idx].email = editEmail.value
+    users.value[idx].role = editRole.value
+    users.value[idx].status = editStatus.value
+  }
+  isEditModalOpen.value = false
+}
+
+function openDeleteModal(user: UserItem) {
+  deletingUser.value = user
+  isDeleteModalOpen.value = true
+}
+
+function handleConfirmDelete() {
+  if (!deletingUser.value) return
+  users.value = users.value.filter((u) => u.id !== deletingUser.value?.id)
+  isDeleteModalOpen.value = false
+  deletingUser.value = null
+}
+
+function toggleUserStatus(user: UserItem) {
+  user.status = user.status === 'Active' ? 'Suspended' : 'Active'
+}
+
+function copyEmail(email: string, id: string) {
+  navigator.clipboard.writeText(email)
+  copiedId.value = id
+  setTimeout(() => {
+    copiedId.value = null
+  }, 2000)
+}
+
+// ─── Helpers for Role & Status Styling ────────────────────────────────────────
+const roleConfig: Record<string, { label: string; class: string }> = {
+  Admin: { label: 'Admin', class: 'bg-primary/10 text-primary border-primary/20' },
+  Developer: { label: 'Developer', class: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20' },
+  Editor: { label: 'Editor', class: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20' },
+  Viewer: { label: 'Viewer', class: 'bg-muted text-muted-foreground border-border' },
+}
+
+const statusConfig: Record<string, { label: string; dotClass: string; badgeClass: string }> = {
+  Active: {
+    label: 'Active',
+    dotClass: 'bg-emerald-500',
+    badgeClass: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+  },
+  Pending: {
+    label: 'Pending',
+    dotClass: 'bg-amber-500 animate-pulse',
+    badgeClass: 'bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20',
+  },
+  Suspended: {
+    label: 'Suspended',
+    dotClass: 'bg-red-500',
+    badgeClass: 'bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20',
+  },
+}
 </script>
 
 <template>
-  <div class="space-y-6 max-w-[1920px] mx-auto">
-    <div class="flex items-center justify-between">
+  <div class="space-y-6 max-w-[1920px] mx-auto pb-12">
+    <!-- Page Header -->
+    <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
       <div>
-        <h2 class="text-2xl font-bold tracking-tight">User Management</h2>
-        <p class="text-muted-foreground text-sm">Manage team members and user permissions.</p>
+        <div class="flex items-center gap-2">
+          <span class="label-mono">System Module</span>
+          <span class="status-dot"></span>
+        </div>
+        <h1 class="text-2xl font-bold tracking-tight text-foreground mt-1">User Management</h1>
+        <p class="text-sm text-muted-foreground">
+          Manage team member credentials, security roles, two-factor status, and platform access.
+        </p>
       </div>
-      <Button class="gap-2">
-        <Plus class="h-4 w-4" />
-        Add User
-      </Button>
+      <div class="flex items-center gap-2 pt-2 sm:pt-0 shrink-0">
+        <Button variant="outline" size="sm" class="gap-1.5 text-xs">
+          <Download class="h-3.5 w-3.5" />
+          Export Users
+        </Button>
+        <Button size="sm" class="gap-1.5 text-xs" @click="isAddModalOpen = true">
+          <Plus class="h-3.5 w-3.5" />
+          Add Member
+        </Button>
+      </div>
     </div>
 
-    <Card class="shadow-sm">
-      <CardHeader>
-        <CardTitle>Users</CardTitle>
-        <CardDescription>A list of all users registered in the system.</CardDescription>
-      </CardHeader>
-      <CardContent>
+    <!-- 1. Stats Summary Cards -->
+    <div class="grid gap-4 grid-cols-2 lg:grid-cols-4">
+      <Card class="overflow-hidden py-0 gap-0 shadow-sm">
+        <CardContent class="p-4 flex items-center justify-between">
+          <div>
+            <span class="text-xs font-medium text-muted-foreground">Total Members</span>
+            <p class="text-2xl font-bold tracking-tight text-foreground mt-0.5">{{ stats.total }}</p>
+            <span class="text-[11px] text-muted-foreground">Registered accounts</span>
+          </div>
+          <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0">
+            <Users class="h-5 w-5" />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card class="overflow-hidden py-0 gap-0 shadow-sm">
+        <CardContent class="p-4 flex items-center justify-between">
+          <div>
+            <span class="text-xs font-medium text-muted-foreground">Active Now</span>
+            <p class="text-2xl font-bold tracking-tight text-foreground mt-0.5">{{ stats.active }}</p>
+            <span class="text-[11px] text-emerald-500 font-medium">Full access enabled</span>
+          </div>
+          <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500 shrink-0">
+            <UserCheck class="h-5 w-5" />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card class="overflow-hidden py-0 gap-0 shadow-sm">
+        <CardContent class="p-4 flex items-center justify-between">
+          <div>
+            <span class="text-xs font-medium text-muted-foreground">Pending Invites</span>
+            <p class="text-2xl font-bold tracking-tight text-foreground mt-0.5">{{ stats.pending }}</p>
+            <span class="text-[11px] text-amber-500 font-medium">Awaiting acceptance</span>
+          </div>
+          <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/10 text-amber-500 shrink-0">
+            <Clock class="h-5 w-5" />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card class="overflow-hidden py-0 gap-0 shadow-sm">
+        <CardContent class="p-4 flex items-center justify-between">
+          <div>
+            <span class="text-xs font-medium text-muted-foreground">Suspended</span>
+            <p class="text-2xl font-bold tracking-tight text-foreground mt-0.5">{{ stats.suspended }}</p>
+            <span class="text-[11px] text-red-500 font-medium">Access revoked</span>
+          </div>
+          <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-red-500/10 text-red-500 shrink-0">
+            <UserX class="h-5 w-5" />
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+
+    <!-- 2. Main Data Table Card -->
+    <Card class="overflow-hidden py-0 gap-0 shadow-sm border">
+      <!-- Filter Bar Header -->
+      <div class="p-4 border-b border-border bg-muted/20 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <!-- Search Input -->
+        <div class="relative w-full sm:w-80">
+          <Search class="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+          <Input
+            v-model="searchQuery"
+            placeholder="Search by name or email..."
+            class="pl-9 h-9 text-xs"
+          />
+        </div>
+
+        <!-- Filter Dropdowns -->
+        <div class="flex items-center gap-2">
+          <!-- Role Filter -->
+          <Select v-model="selectedRoleFilter">
+            <SelectTrigger class="h-9 w-32 text-xs">
+              <SelectValue placeholder="All Roles" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all" class="text-xs">All Roles</SelectItem>
+              <SelectItem value="Admin" class="text-xs">Admin</SelectItem>
+              <SelectItem value="Developer" class="text-xs">Developer</SelectItem>
+              <SelectItem value="Editor" class="text-xs">Editor</SelectItem>
+              <SelectItem value="Viewer" class="text-xs">Viewer</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <!-- Status Filter -->
+          <Select v-model="selectedStatusFilter">
+            <SelectTrigger class="h-9 w-32 text-xs">
+              <SelectValue placeholder="All Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all" class="text-xs">All Status</SelectItem>
+              <SelectItem value="Active" class="text-xs">Active</SelectItem>
+              <SelectItem value="Pending" class="text-xs">Pending</SelectItem>
+              <SelectItem value="Suspended" class="text-xs">Suspended</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      <!-- Users Table -->
+      <div class="overflow-x-auto">
         <Table>
           <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead class="text-right">Actions</TableHead>
+            <TableRow class="bg-muted/40 hover:bg-muted/40">
+              <TableHead class="w-72 text-xs font-semibold pl-4">Member</TableHead>
+              <TableHead class="text-xs font-semibold">Role</TableHead>
+              <TableHead class="text-xs font-semibold">Status</TableHead>
+              <TableHead class="text-xs font-semibold">2FA</TableHead>
+              <TableHead class="text-xs font-semibold">Last Active</TableHead>
+              <TableHead class="text-xs font-semibold">Joined Date</TableHead>
+              <TableHead class="w-12 text-right pr-4"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow v-for="u in users" :key="u.id">
-              <TableCell class="font-medium">{{ u.name }}</TableCell>
-              <TableCell>{{ u.email }}</TableCell>
-              <TableCell>{{ u.role }}</TableCell>
+            <TableRow v-if="paginatedUsers.length === 0">
+              <TableCell colspan="7" class="h-32 text-center text-muted-foreground text-xs">
+                No users found matching your search and filter criteria.
+              </TableCell>
+            </TableRow>
+
+            <TableRow
+              v-for="u in paginatedUsers"
+              :key="u.id"
+              class="hover:bg-muted/20 transition-colors"
+            >
+              <!-- Member Info -->
+              <TableCell class="pl-4">
+                <div class="flex items-center gap-3">
+                  <Avatar class="h-8 w-8 shrink-0">
+                    <AvatarImage :src="u.avatar" />
+                    <AvatarFallback class="text-xs font-semibold bg-muted text-foreground">
+                      {{ u.initials }}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div class="min-w-0">
+                    <p class="text-xs font-medium text-foreground truncate">{{ u.name }}</p>
+                    <p class="text-[11px] text-muted-foreground truncate">{{ u.email }}</p>
+                  </div>
+                </div>
+              </TableCell>
+
+              <!-- Role Badge -->
               <TableCell>
                 <span
-                  class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold"
-                  :class="u.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-muted text-muted-foreground'"
+                  :class="[
+                    'inline-flex items-center rounded-md border px-2 py-0.5 text-[11px] font-medium',
+                    roleConfig[u.role].class
+                  ]"
                 >
-                  {{ u.status }}
+                  {{ u.role }}
                 </span>
               </TableCell>
-              <TableCell class="text-right">
-                <Button variant="ghost" size="icon">
-                  <MoreHorizontal class="h-4 w-4" />
-                </Button>
+
+              <!-- Status with Dot -->
+              <TableCell>
+                <div class="flex items-center gap-1.5">
+                  <span :class="['h-2 w-2 rounded-full shrink-0', statusConfig[u.status].dotClass]" />
+                  <span
+                    :class="[
+                      'inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-medium',
+                      statusConfig[u.status].badgeClass
+                    ]"
+                  >
+                    {{ u.status }}
+                  </span>
+                </div>
+              </TableCell>
+
+              <!-- 2FA Status -->
+              <TableCell>
+                <div class="flex items-center gap-1">
+                  <component
+                    :is="u.twoFactor ? ShieldCheck : ShieldAlert"
+                    :class="['h-3.5 w-3.5', u.twoFactor ? 'text-emerald-500' : 'text-muted-foreground/60']"
+                  />
+                  <span :class="['text-xs', u.twoFactor ? 'text-foreground font-medium' : 'text-muted-foreground']">
+                    {{ u.twoFactor ? 'Enabled' : 'Disabled' }}
+                  </span>
+                </div>
+              </TableCell>
+
+              <!-- Last Active -->
+              <TableCell>
+                <span class="text-xs text-muted-foreground">{{ u.lastActive }}</span>
+              </TableCell>
+
+              <!-- Joined Date -->
+              <TableCell>
+                <span class="text-xs text-muted-foreground">{{ u.createdAt }}</span>
+              </TableCell>
+
+              <!-- Row Action Dropdown -->
+              <TableCell class="text-right pr-4">
+                <DropdownMenu>
+                  <DropdownMenuTrigger as-child>
+                    <Button variant="ghost" size="icon" class="h-7 w-7">
+                      <MoreHorizontal class="h-3.5 w-3.5" />
+                      <span class="sr-only">Actions</span>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" class="w-44">
+                    <DropdownMenuLabel class="text-xs">Manage User</DropdownMenuLabel>
+                    <DropdownMenuItem class="text-xs cursor-pointer" @click="copyEmail(u.email, u.id)">
+                      <component :is="copiedId === u.id ? Check : Copy" class="mr-2 h-3.5 w-3.5" />
+                      <span>{{ copiedId === u.id ? 'Copied!' : 'Copy Email' }}</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem class="text-xs cursor-pointer" @click="openEditModal(u)">
+                      <Edit2 class="mr-2 h-3.5 w-3.5" />
+                      <span>Edit Details</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem class="text-xs cursor-pointer" @click="toggleUserStatus(u)">
+                      <component :is="u.status === 'Active' ? UserX : UserCheck" class="mr-2 h-3.5 w-3.5" />
+                      <span>{{ u.status === 'Active' ? 'Suspend Access' : 'Activate User' }}</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      class="text-xs text-destructive focus:text-destructive cursor-pointer"
+                      @click="openDeleteModal(u)"
+                    >
+                      <Trash2 class="mr-2 h-3.5 w-3.5" />
+                      <span>Delete User</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </TableCell>
             </TableRow>
           </TableBody>
         </Table>
-      </CardContent>
+      </div>
+
+      <!-- Pagination Footer -->
+      <div class="p-4 border-t border-border bg-muted/20 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs text-muted-foreground">
+        <div>
+          Showing <span class="font-medium text-foreground">{{ paginatedUsers.length }}</span> of <span class="font-medium text-foreground">{{ filteredUsers.length }}</span> members
+        </div>
+
+        <div class="flex items-center gap-2 self-end sm:self-auto">
+          <Button
+            variant="outline"
+            size="sm"
+            class="h-8 px-2.5 text-xs gap-1"
+            :disabled="currentPage === 1"
+            @click="currentPage--"
+          >
+            <ChevronLeft class="h-3.5 w-3.5" />
+            Previous
+          </Button>
+
+          <span class="text-xs px-2 font-medium text-foreground">
+            Page {{ currentPage }} of {{ totalPages }}
+          </span>
+
+          <Button
+            variant="outline"
+            size="sm"
+            class="h-8 px-2.5 text-xs gap-1"
+            :disabled="currentPage >= totalPages"
+            @click="currentPage++"
+          >
+            Next
+            <ChevronRight class="h-3.5 w-3.5" />
+          </Button>
+        </div>
+      </div>
     </Card>
+
+    <!-- ── 3. Add Member Dialog Modal ────────────────────────────────────── -->
+    <Dialog v-model:open="isAddModalOpen">
+      <DialogContent class="sm:max-w-120">
+        <DialogHeader>
+          <DialogTitle class="flex items-center gap-2">
+            <Sparkles class="h-4 w-4 text-primary" />
+            Add Team Member
+          </DialogTitle>
+          <DialogDescription>
+            Invite a new team member to your organization and assign access privileges.
+          </DialogDescription>
+        </DialogHeader>
+
+        <form @submit.prevent="handleAddUser" class="space-y-4 py-2">
+          <div class="space-y-1.5">
+            <Label for="new-name" class="text-xs font-medium">Full Name</Label>
+            <Input
+              id="new-name"
+              v-model="newUserName"
+              placeholder="e.g. Sarah Connor"
+              class="h-9 text-xs"
+              required
+            />
+          </div>
+
+          <div class="space-y-1.5">
+            <Label for="new-email" class="text-xs font-medium">Email Address</Label>
+            <Input
+              id="new-email"
+              v-model="newUserEmail"
+              type="email"
+              placeholder="sarah@supabase.io"
+              class="h-9 text-xs"
+              required
+            />
+          </div>
+
+          <div class="space-y-1.5">
+            <Label class="text-xs font-medium">Role &amp; Permissions</Label>
+            <Select v-model="newUserRole">
+              <SelectTrigger class="h-9 text-xs w-full">
+                <SelectValue placeholder="Select role" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Admin" class="text-xs">
+                  Admin — Full infrastructure &amp; billing access
+                </SelectItem>
+                <SelectItem value="Developer" class="text-xs">
+                  Developer — Database schema, SQL &amp; API keys
+                </SelectItem>
+                <SelectItem value="Editor" class="text-xs">
+                  Editor — Content, storage &amp; auth manage
+                </SelectItem>
+                <SelectItem value="Viewer" class="text-xs">
+                  Viewer — Read-only telemetry access
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div class="flex items-center justify-between rounded-lg border p-3 bg-muted/20">
+            <div class="space-y-0.5">
+              <Label class="text-xs font-medium">Send Invitation Email</Label>
+              <p class="text-[11px] text-muted-foreground">
+                User will receive a link to set up their password and 2FA.
+              </p>
+            </div>
+            <Switch v-model="sendInviteEmail" />
+          </div>
+
+          <DialogFooter class="pt-2">
+            <Button type="button" variant="outline" size="sm" @click="isAddModalOpen = false">
+              Cancel
+            </Button>
+            <Button type="submit" size="sm">
+              Add Member
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+
+    <!-- ── 4. Edit Member Dialog Modal ───────────────────────────────────── -->
+    <Dialog v-model:open="isEditModalOpen">
+      <DialogContent class="sm:max-w-120">
+        <DialogHeader>
+          <DialogTitle class="flex items-center gap-2">
+            <Edit2 class="h-4 w-4 text-primary" />
+            Edit Member Details
+          </DialogTitle>
+          <DialogDescription>
+            Update role permissions and account status for {{ editingUser?.name }}.
+          </DialogDescription>
+        </DialogHeader>
+
+        <form @submit.prevent="handleSaveEdit" class="space-y-4 py-2">
+          <div class="space-y-1.5">
+            <Label for="edit-name" class="text-xs font-medium">Full Name</Label>
+            <Input
+              id="edit-name"
+              v-model="editName"
+              class="h-9 text-xs"
+              required
+            />
+          </div>
+
+          <div class="space-y-1.5">
+            <Label for="edit-email" class="text-xs font-medium">Email Address</Label>
+            <Input
+              id="edit-email"
+              v-model="editEmail"
+              type="email"
+              class="h-9 text-xs"
+              required
+            />
+          </div>
+
+          <div class="grid grid-cols-2 gap-3">
+            <div class="space-y-1.5">
+              <Label class="text-xs font-medium">Role</Label>
+              <Select v-model="editRole">
+                <SelectTrigger class="h-9 text-xs w-full">
+                  <SelectValue placeholder="Role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Admin" class="text-xs">Admin</SelectItem>
+                  <SelectItem value="Developer" class="text-xs">Developer</SelectItem>
+                  <SelectItem value="Editor" class="text-xs">Editor</SelectItem>
+                  <SelectItem value="Viewer" class="text-xs">Viewer</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div class="space-y-1.5">
+              <Label class="text-xs font-medium">Status</Label>
+              <Select v-model="editStatus">
+                <SelectTrigger class="h-9 text-xs w-full">
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Active" class="text-xs">Active</SelectItem>
+                  <SelectItem value="Pending" class="text-xs">Pending</SelectItem>
+                  <SelectItem value="Suspended" class="text-xs">Suspended</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <DialogFooter class="pt-2">
+            <Button type="button" variant="outline" size="sm" @click="isEditModalOpen = false">
+              Cancel
+            </Button>
+            <Button type="submit" size="sm">
+              Save Changes
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+
+    <!-- ── 5. Delete Member Confirmation Modal ───────────────────────────── -->
+    <Dialog v-model:open="isDeleteModalOpen">
+      <DialogContent class="sm:max-w-100">
+        <DialogHeader>
+          <DialogTitle class="flex items-center gap-2 text-destructive">
+            <Trash2 class="h-4 w-4" />
+            Delete Member Account
+          </DialogTitle>
+          <DialogDescription>
+            Are you sure you want to delete <span class="font-semibold text-foreground">{{ deletingUser?.name }}</span>? This will permanently revoke all API access and remove them from your team.
+          </DialogDescription>
+        </DialogHeader>
+
+        <DialogFooter class="pt-2">
+          <Button type="button" variant="outline" size="sm" @click="isDeleteModalOpen = false">
+            Cancel
+          </Button>
+          <Button variant="destructive" size="sm" @click="handleConfirmDelete">
+            Yes, Delete
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   </div>
 </template>
+

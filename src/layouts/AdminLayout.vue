@@ -1,66 +1,28 @@
 <script setup lang="ts">
-import { RouterView, useRoute, useRouter } from 'vue-router'
-import { ref, computed, onMounted, onUnmounted } from 'vue'
-import {
-  SidebarProvider,
-  SidebarInset,
-  SidebarTrigger,
-  Sidebar, 
-  SidebarContent,
-  SidebarFooter,
-  SidebarControl,
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-} from '@/components/ui/sidebar'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Separator } from '@/components/ui/separator'
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-  SheetClose,
-} from '@/components/ui/sheet'
-import { Button } from '@/components/ui/button'
-
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
 import {
   LayoutDashboard,
   Users,
   Settings,
+  MousePointerClick,
+  FormInput,
+  AppWindow,
+  Layers,
+  Table2,
+  SlidersHorizontal,
+  BellRing,
+  Compass,
+  Tag,
+  BellDot,
+  AreaChart,
+  FileCode2,
+  Type,
+  Palette,
+  Sparkles,
+  FileQuestion,
+  ServerCrash,
   LogOut,
   Bell,
   ChevronDown,
-  Command,
   CheckCheck,
   UserPlus,
   ShieldAlert,
@@ -68,8 +30,6 @@ import {
   Clock,
   Search,
 } from '@lucide/vue'
-
-import { useColorMode } from '@vueuse/core'
 import { useAuthStore } from '@/stores/auth'
 
 const router = useRouter()
@@ -92,16 +52,71 @@ onUnmounted(() => {
   window.removeEventListener('keydown', handleKeyDown)
 })
 
+const mainNav = [
+  { name: 'Dashboard', routeName: 'dashboard', href: '/', icon: LayoutDashboard },
+  { name: 'Users', routeName: 'users', href: '/users', icon: Users },
+]
+
+const componentNav = [
+  { name: 'Buttons', routeName: 'components-buttons', href: '/components/buttons', icon: MousePointerClick },
+  { name: 'Form & Inputs', routeName: 'components-forms', href: '/components/forms', icon: FormInput },
+  { name: 'Modals & Dialogs', routeName: 'components-modals', href: '/components/modals', icon: AppWindow },
+  { name: 'Cards & Surfaces', routeName: 'components-cards', href: '/components/cards', icon: Layers },
+  { name: 'Data Tables', routeName: 'components-tables', href: '/components/tables', icon: Table2 },
+  { name: 'Charts & Analytics', routeName: 'components-charts', href: '/components/charts', icon: AreaChart },
+  { name: 'Overlays & Drawers', routeName: 'components-overlays', href: '/components/overlays', icon: SlidersHorizontal },
+  { name: 'Feedback & Loading', routeName: 'components-feedback', href: '/components/feedback', icon: BellRing },
+  { name: 'Badges & Avatars', routeName: 'components-badges', href: '/components/badges', icon: Tag },
+  { name: 'Toast & Alerts', routeName: 'components-toasts', href: '/components/toasts', icon: BellDot },
+  { name: 'Navigation & Flow', routeName: 'components-navigation', href: '/components/navigation', icon: Compass },
+]
+
+const designSystemNav = [
+  { name: 'Typography', routeName: 'components-typography', href: '/components/typography', icon: Type },
+  { name: 'Color Tokens', routeName: 'components-colors', href: '/components/colors', icon: Palette },
+  { name: 'Icons Directory', routeName: 'components-icons', href: '/components/icons', icon: Sparkles },
+]
+
+const pagesNav = [
+  { name: 'Blank Page', routeName: 'starter-blank', href: '/starter/blank', icon: FileCode2 },
+  { name: '404 Not Found', routeName: 'not-found', href: '/errors/404', icon: FileQuestion },
+  { name: '500 Server Error', routeName: 'server-error', href: '/errors/500', icon: ServerCrash },
+  { name: '403 Access Denied', routeName: 'unauthorized', href: '/errors/403', icon: ShieldAlert },
+]
+
+const systemNav = [
+  { name: 'Settings', routeName: 'settings', href: '/settings', icon: Settings },
+]
+
 const searchItems = [
-  { title: 'Dashboard', href: '/', icon: LayoutDashboard, category: 'Page' },
-  { title: 'User Management', href: '/users', icon: Users, category: 'Page' },
-  { title: 'Settings', href: '/settings', icon: Settings, category: 'Page' },
+  { title: 'Dashboard', href: '/', icon: LayoutDashboard, category: 'Overview' },
+  { title: 'User Management', href: '/users', icon: Users, category: 'Overview' },
+  { title: 'Buttons', href: '/components/buttons', icon: MousePointerClick, category: 'UI Components' },
+  { title: 'Form & Inputs', href: '/components/forms', icon: FormInput, category: 'UI Components' },
+  { title: 'Modals & Dialogs', href: '/components/modals', icon: AppWindow, category: 'UI Components' },
+  { title: 'Cards & Surfaces', href: '/components/cards', icon: Layers, category: 'UI Components' },
+  { title: 'Data Tables', href: '/components/tables', icon: Table2, category: 'UI Components' },
+  { title: 'Charts & Analytics', href: '/components/charts', icon: AreaChart, category: 'UI Components' },
+  { title: 'Overlays & Drawers', href: '/components/overlays', icon: SlidersHorizontal, category: 'UI Components' },
+  { title: 'Feedback & Loading', href: '/components/feedback', icon: BellRing, category: 'UI Components' },
+  { title: 'Badges & Avatars', href: '/components/badges', icon: Tag, category: 'UI Components' },
+  { title: 'Toast & Alerts', href: '/components/toasts', icon: BellDot, category: 'UI Components' },
+  { title: 'Navigation & Flow', href: '/components/navigation', icon: Compass, category: 'UI Components' },
+  { title: 'Typography', href: '/components/typography', icon: Type, category: 'Design System' },
+  { title: 'Color Tokens', href: '/components/colors', icon: Palette, category: 'Design System' },
+  { title: 'Icon Directory', href: '/components/icons', icon: Sparkles, category: 'Design System' },
+  { title: 'Blank Starter Page', href: '/starter/blank', icon: FileCode2, category: 'Pages' },
+  { title: '404 Not Found Page', href: '/errors/404', icon: FileQuestion, category: 'Pages' },
+  { title: '500 Server Error Page', href: '/errors/500', icon: ServerCrash, category: 'Pages' },
+  { title: '403 Access Denied', href: '/errors/403', icon: ShieldAlert, category: 'Pages' },
+  { title: 'Settings', href: '/settings', icon: Settings, category: 'System' },
 ]
 
 const filteredSearchItems = computed(() => {
   if (!searchQuery.value) return searchItems
   return searchItems.filter((item) =>
-    item.title.toLowerCase().includes(searchQuery.value.toLowerCase())
+    item.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    item.category.toLowerCase().includes(searchQuery.value.toLowerCase())
   )
 })
 
@@ -172,28 +187,39 @@ const closeMobileSidebar = () => {
 const pageTitle = computed(() => {
   if (route.name === 'dashboard') return 'Dashboard'
   if (route.name === 'users') return 'User Management'
+  if (route.name === 'components-buttons' || route.name === 'buttons') return 'Buttons'
+  if (route.name === 'components-forms') return 'Form & Inputs'
+  if (route.name === 'components-modals') return 'Modals & Dialogs'
+  if (route.name === 'components-cards') return 'Cards & Surfaces'
+  if (route.name === 'components-tables') return 'Data Tables'
+  if (route.name === 'components-charts') return 'Charts & Analytics'
+  if (route.name === 'components-overlays') return 'Overlays & Drawers'
+  if (route.name === 'components-feedback') return 'Feedback & Loading'
+  if (route.name === 'components-badges') return 'Badges & Avatars'
+  if (route.name === 'components-toasts') return 'Toast & Alerts'
+  if (route.name === 'components-navigation') return 'Navigation & Flow'
+  if (route.name === 'components-typography') return 'Typography'
+  if (route.name === 'components-colors') return 'Color Tokens'
+  if (route.name === 'components-icons') return 'Icon Set & Glyphs'
+  if (route.name === 'starter-blank') return 'Blank Page'
   if (route.name === 'settings') return 'Settings'
-  if (route.name === 'unauthorized') return 'Unauthorized'
+  if (route.name === 'not-found' || route.name === 'catch-all-not-found') return '404 Not Found'
+  if (route.name === 'server-error') return '500 Server Error'
+  if (route.name === 'unauthorized') return '403 Access Denied'
   return 'Admin'
 })
-
-const navigation = [
-  { name: 'Dashboard', routeName: 'dashboard', href: '/', icon: LayoutDashboard },
-  { name: 'Users', routeName: 'users', href: '/users', icon: Users },
-  { name: 'Settings', routeName: 'settings', href: '/settings', icon: Settings },
-]
 </script>
 
 <template>
-  <SidebarProvider class="min-h-svh h-svh w-full overflow-hidden flex flex-col pt-16">
+  <SidebarProvider class="min-h-svh h-svh w-full overflow-hidden flex flex-col pt-14">
     <!-- Top Navigation Header (Fixed at top) -->
-    <header class="fixed top-0 left-0 right-0 z-30 flex h-16 w-full shrink-0 items-center justify-between border-b border-border bg-background/80 pr-4 sm:pr-6 backdrop-blur-md">
+    <header class="fixed inset-x-0 top-0 z-40 flex h-14 w-full shrink-0 items-center justify-between border-b border-border bg-background/80 pr-4 sm:pr-6 backdrop-blur-md">
       <div class="flex items-center gap-1 sm:gap-2 min-w-0">
         <!-- Logo container perfectly matched to collapsed sidebar column width (w-14 = 56px = 3.5rem) -->
-        <div class="flex h-16 w-14 shrink-0 items-center justify-center">
-          <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <Command class="h-4 w-4" />
-          </div>
+        <div class="flex h-14 w-14 shrink-0 items-center justify-center">
+          <router-link to="/" class="flex items-center justify-center text-primary hover:opacity-85 transition-opacity" aria-label="Nala Home">
+            <AppLogo class="h-6 w-6" />
+          </router-link>
         </div>
         <SidebarTrigger class="md:hidden" />
         <Separator orientation="vertical" class="h-4 hidden sm:block" />
@@ -398,12 +424,99 @@ const navigation = [
 
     <!-- Main Container below Navbar -->
     <div class="flex flex-1 min-h-0 min-w-0 w-full relative">
-      <Sidebar collapsible="icon" class="top-16 h-[calc(100vh-4rem)]">
-        <SidebarContent class="py-4">
-          <SidebarGroup>
-            <SidebarGroupLabel>Navigation</SidebarGroupLabel>
-            <SidebarMenu class="gap-1">
-              <SidebarMenuItem v-for="item in navigation" :key="item.name">
+      <Sidebar collapsible="icon" class="top-14 h-[calc(100svh-3.5rem)]">
+        <SidebarContent class="py-2 space-y-0">
+          <!-- Overview Group -->
+          <SidebarGroup class="py-1 px-2">
+            <SidebarGroupLabel class="text-[11px] font-medium tracking-wider uppercase text-muted-foreground/70">
+              Overview
+            </SidebarGroupLabel>
+            <SidebarMenu class="gap-0.5">
+              <SidebarMenuItem v-for="item in mainNav" :key="item.name">
+                <SidebarMenuButton
+                  as-child
+                  :is-active="route.name === item.routeName"
+                  :tooltip="item.name"
+                >
+                  <router-link :to="item.href" @click="closeMobileSidebar">
+                    <component :is="item.icon" class="h-4 w-4 shrink-0" />
+                    <span>{{ item.name }}</span>
+                  </router-link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroup>
+
+          <!-- UI Components Group -->
+          <SidebarGroup class="py-1 px-2">
+            <SidebarGroupLabel class="text-[11px] font-medium tracking-wider uppercase text-muted-foreground/70">
+              UI Components
+            </SidebarGroupLabel>
+            <SidebarMenu class="gap-0.5">
+              <SidebarMenuItem v-for="item in componentNav" :key="item.name">
+                <SidebarMenuButton
+                  as-child
+                  :is-active="route.name === item.routeName || (item.routeName === 'components-buttons' && route.name === 'buttons')"
+                  :tooltip="item.name"
+                >
+                  <router-link :to="item.href" @click="closeMobileSidebar">
+                    <component :is="item.icon" class="h-4 w-4 shrink-0" />
+                    <span>{{ item.name }}</span>
+                  </router-link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroup>
+
+          <!-- Design System Group -->
+          <SidebarGroup class="py-1 px-2">
+            <SidebarGroupLabel class="text-[11px] font-medium tracking-wider uppercase text-muted-foreground/70">
+              Design System
+            </SidebarGroupLabel>
+            <SidebarMenu class="gap-0.5">
+              <SidebarMenuItem v-for="item in designSystemNav" :key="item.name">
+                <SidebarMenuButton
+                  as-child
+                  :is-active="route.name === item.routeName"
+                  :tooltip="item.name"
+                >
+                  <router-link :to="item.href" @click="closeMobileSidebar">
+                    <component :is="item.icon" class="h-4 w-4 shrink-0" />
+                    <span>{{ item.name }}</span>
+                  </router-link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroup>
+
+          <!-- Pages Group -->
+          <SidebarGroup class="py-1 px-2">
+            <SidebarGroupLabel class="text-[11px] font-medium tracking-wider uppercase text-muted-foreground/70">
+              Pages
+            </SidebarGroupLabel>
+            <SidebarMenu class="gap-0.5">
+              <SidebarMenuItem v-for="item in pagesNav" :key="item.name">
+                <SidebarMenuButton
+                  as-child
+                  :is-active="route.name === item.routeName"
+                  :tooltip="item.name"
+                >
+                  <router-link :to="item.href" @click="closeMobileSidebar">
+                    <component :is="item.icon" class="h-4 w-4 shrink-0" />
+                    <span>{{ item.name }}</span>
+                  </router-link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroup>
+
+          <!-- System Group -->
+          <SidebarGroup class="py-1 px-2">
+            <SidebarGroupLabel class="text-[11px] font-medium tracking-wider uppercase text-muted-foreground/70">
+              System
+            </SidebarGroupLabel>
+            <SidebarMenu class="gap-0.5">
+              <SidebarMenuItem v-for="item in systemNav" :key="item.name">
                 <SidebarMenuButton
                   as-child
                   :is-active="route.name === item.routeName"
