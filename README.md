@@ -53,7 +53,7 @@
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/your-username/nala.git
+git clone https://github.com/candrasp/Nala.git
 cd nala
 
 # 2. Install dependencies
@@ -333,6 +333,12 @@ pnpm dev      # Start dev server with HMR (http://localhost:5173)
 pnpm build    # Type-check + build for production
 pnpm preview  # Preview production build locally
 ```
+
+---
+
+## 🚀 Deployment
+
+For production deployment instructions on Vercel, Netlify, Cloudflare Pages, GitHub Pages, Docker, and Nginx VPS, see the [Deployment Guide](./DEPLOYMENT.md).
 
 ---
 

@@ -9,9 +9,14 @@
 export {}
 declare global {
   const EffectScope: typeof import('vue').EffectScope
+  const REFRESH_TOKEN_KEY: typeof import('./lib/axios').REFRESH_TOKEN_KEY
+  const TOKEN_KEY: typeof import('./lib/axios').TOKEN_KEY
   const acceptHMRUpdate: typeof import('pinia').acceptHMRUpdate
+  const api: typeof import('./lib/axios').api
+  const apiClient: typeof import('./lib/axios').apiClient
   const asyncComputed: typeof import('@vueuse/core').asyncComputed
   const autoResetRef: typeof import('@vueuse/core').autoResetRef
+  const axios: typeof import('./lib/axios').default
   const cn: typeof import('./lib/utils').cn
   const computed: typeof import('vue').computed
   const computedAsync: typeof import('@vueuse/core').computedAsync
@@ -55,6 +60,7 @@ declare global {
   const isReadonly: typeof import('vue').isReadonly
   const isRef: typeof import('vue').isRef
   const isShallow: typeof import('vue').isShallow
+  const loadingBar: typeof import('./lib/loading-bar').loadingBar
   const makeDestructurable: typeof import('@vueuse/core').makeDestructurable
   const mapActions: typeof import('pinia').mapActions
   const mapGetters: typeof import('pinia').mapGetters
@@ -118,6 +124,7 @@ declare global {
   const toRef: typeof import('vue').toRef
   const toRefs: typeof import('vue').toRefs
   const toValue: typeof import('vue').toValue
+  const tokenStorage: typeof import('./lib/axios').tokenStorage
   const triggerRef: typeof import('vue').triggerRef
   const tryOnBeforeMount: typeof import('@vueuse/core').tryOnBeforeMount
   const tryOnBeforeUnmount: typeof import('@vueuse/core').tryOnBeforeUnmount
@@ -319,6 +326,12 @@ declare global {
   // @ts-ignore
   export type { Component, Slot, Slots, ComponentPublicInstance, ComputedRef, DirectiveBinding, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, ShallowRef, MaybeRef, MaybeRefOrGetter, VNode, WritableComputedRef } from 'vue'
   import('vue')
+  // @ts-ignore
+  export type { CustomRequestConfig } from './lib/axios'
+  import('./lib/axios')
+  // @ts-ignore
+  export type { LoadingBarState } from './lib/loading-bar'
+  import('./lib/loading-bar')
 }
 
 // for vue template auto import
@@ -327,9 +340,14 @@ declare module 'vue' {
   interface GlobalComponents {}
   interface ComponentCustomProperties {
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
+    readonly REFRESH_TOKEN_KEY: UnwrapRef<typeof import('./lib/axios')['REFRESH_TOKEN_KEY']>
+    readonly TOKEN_KEY: UnwrapRef<typeof import('./lib/axios')['TOKEN_KEY']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
+    readonly api: UnwrapRef<typeof import('./lib/axios')['api']>
+    readonly apiClient: UnwrapRef<typeof import('./lib/axios')['apiClient']>
     readonly asyncComputed: UnwrapRef<typeof import('@vueuse/core')['asyncComputed']>
     readonly autoResetRef: UnwrapRef<typeof import('@vueuse/core')['autoResetRef']>
+    readonly axios: UnwrapRef<typeof import('./lib/axios')['default']>
     readonly cn: UnwrapRef<typeof import('./lib/utils')['cn']>
     readonly computed: UnwrapRef<typeof import('vue')['computed']>
     readonly computedAsync: UnwrapRef<typeof import('@vueuse/core')['computedAsync']>
@@ -373,6 +391,7 @@ declare module 'vue' {
     readonly isReadonly: UnwrapRef<typeof import('vue')['isReadonly']>
     readonly isRef: UnwrapRef<typeof import('vue')['isRef']>
     readonly isShallow: UnwrapRef<typeof import('vue')['isShallow']>
+    readonly loadingBar: UnwrapRef<typeof import('./lib/loading-bar')['loadingBar']>
     readonly makeDestructurable: UnwrapRef<typeof import('@vueuse/core')['makeDestructurable']>
     readonly mapActions: UnwrapRef<typeof import('pinia')['mapActions']>
     readonly mapGetters: UnwrapRef<typeof import('pinia')['mapGetters']>
@@ -436,6 +455,7 @@ declare module 'vue' {
     readonly toRef: UnwrapRef<typeof import('vue')['toRef']>
     readonly toRefs: UnwrapRef<typeof import('vue')['toRefs']>
     readonly toValue: UnwrapRef<typeof import('vue')['toValue']>
+    readonly tokenStorage: UnwrapRef<typeof import('./lib/axios')['tokenStorage']>
     readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
     readonly tryOnBeforeMount: UnwrapRef<typeof import('@vueuse/core')['tryOnBeforeMount']>
     readonly tryOnBeforeUnmount: UnwrapRef<typeof import('@vueuse/core')['tryOnBeforeUnmount']>

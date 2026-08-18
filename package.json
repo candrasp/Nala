@@ -1,8 +1,26 @@
 {
   "name": "nala",
-  "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "A modern, production-ready admin dashboard template built with Vue 3, Vite, TypeScript, and Tailwind CSS v4.",
+  "author": "candrasp",
+  "license": "MIT",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/candrasp/Nala.git"
+  },
+  "keywords": [
+    "vue3",
+    "vue-admin",
+    "dashboard-template",
+    "tailwind-v4",
+    "vite",
+    "typescript",
+    "shadcn-vue",
+    "reka-ui",
+    "pinia",
+    "admin-dashboard"
+  ],
   "scripts": {
     "dev": "vite --host",
     "build": "vue-tsc -b && vite build",

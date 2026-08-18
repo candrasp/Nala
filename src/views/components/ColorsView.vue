@@ -4,12 +4,14 @@ import {
   Copy,
   Check,
 } from '@lucide/vue'
+import { toast } from '@/components/ui/sonner'
 
 const copiedToken = ref<string | null>(null)
 
 function copyColor(val: string) {
   navigator.clipboard.writeText(val)
   copiedToken.value = val
+  toast.success(`Copied: ${val}`)
   setTimeout(() => {
     copiedToken.value = null
   }, 2000)
@@ -165,9 +167,16 @@ const statusTokens = [
               :class="['h-16 w-full rounded-lg flex items-center justify-center font-bold text-xs shadow-inner cursor-pointer relative overflow-hidden transition-transform group-hover:scale-[1.02]', color.bgClass]"
               @click="copyColor(`var(${color.cssVar})`)"
             >
-              <span>{{ color.name }}</span>
-              <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity text-white text-[11px] gap-1 font-normal">
-                <Copy class="h-3 w-3" /> Click to copy
+              <!-- Base Name Label (hides smoothly on hover) -->
+              <span class="transition-opacity duration-200 group-hover:opacity-0 select-none">
+                {{ color.name }}
+              </span>
+
+              <!-- Hover / Copied Overlay -->
+              <div class="absolute inset-0 bg-black/65 dark:bg-black/80 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-200 text-white text-[11px] gap-1.5 font-medium select-none">
+                <Check v-if="copiedToken === `var(${color.cssVar})`" class="h-3.5 w-3.5 text-emerald-400" />
+                <Copy v-else class="h-3.5 w-3.5" />
+                <span>{{ copiedToken === `var(${color.cssVar})` ? 'Copied!' : 'Click to copy' }}</span>
               </div>
             </div>
 
@@ -211,14 +220,38 @@ const statusTokens = [
         <div
           v-for="color in surfaceColors"
           :key="color.cssVar"
-          class="rounded-xl border border-border p-4 bg-card flex flex-col justify-between shadow-2xs"
+          class="rounded-xl border border-border p-4 bg-card flex flex-col justify-between shadow-2xs group"
         >
           <div class="space-y-3">
-            <div :class="['h-14 w-full rounded-lg flex items-center justify-center text-xs font-medium shadow-2xs', color.bgClass]">
-              {{ color.name }}
+            <div
+              :class="['h-14 w-full rounded-lg flex items-center justify-center text-xs font-medium shadow-2xs cursor-pointer relative overflow-hidden transition-transform group-hover:scale-[1.02]', color.bgClass]"
+              @click="copyColor(`var(${color.cssVar})`)"
+            >
+              <!-- Base Name Label (hides on hover) -->
+              <span class="transition-opacity duration-200 group-hover:opacity-0 select-none">
+                {{ color.name }}
+              </span>
+
+              <!-- Hover / Copied Overlay -->
+              <div class="absolute inset-0 bg-black/65 dark:bg-black/80 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity duration-200 text-white text-[11px] gap-1.5 font-medium select-none">
+                <Check v-if="copiedToken === `var(${color.cssVar})`" class="h-3.5 w-3.5 text-emerald-400" />
+                <Copy v-else class="h-3.5 w-3.5" />
+                <span>{{ copiedToken === `var(${color.cssVar})` ? 'Copied!' : 'Click to copy' }}</span>
+              </div>
             </div>
             <div>
-              <code class="font-mono text-xs font-semibold text-foreground">{{ color.cssVar }}</code>
+              <div class="flex items-center justify-between">
+                <code class="font-mono text-xs font-semibold text-foreground">{{ color.cssVar }}</code>
+                <button
+                  type="button"
+                  @click="copyColor(color.cssVar)"
+                  class="text-muted-foreground hover:text-foreground cursor-pointer"
+                  title="Copy variable name"
+                >
+                  <Check v-if="copiedToken === color.cssVar" class="h-3.5 w-3.5 text-emerald-500" />
+                  <Copy v-else class="h-3.5 w-3.5" />
+                </button>
+              </div>
               <p class="text-xs text-muted-foreground mt-1 leading-relaxed">{{ color.description }}</p>
             </div>
           </div>

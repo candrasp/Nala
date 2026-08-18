@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { loadingBar } from '@/lib/loading-bar'
 
 // ─── Route Guard (Auth Protection) ────────────────────────────────────────────
 // Uncomment the block below to enable authentication-based route protection.
@@ -201,6 +202,20 @@ const router = createRouter({
       ],
     },
   ],
+})
+
+// ─── Global Route Transition Loading Indicator ──────────────────────────────
+router.beforeEach((_to, _from, next) => {
+  loadingBar.start()
+  next()
+})
+
+router.afterEach(() => {
+  loadingBar.finish()
+})
+
+router.onError(() => {
+  loadingBar.fail()
 })
 
 export default router

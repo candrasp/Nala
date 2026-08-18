@@ -87,6 +87,7 @@ declare module 'vue' {
     Input: typeof import('./components/ui/input/Input.vue')['default']
     Kbd: typeof import('./components/ui/kbd/Kbd.vue')['default']
     Label: typeof import('./components/ui/label/Label.vue')['default']
+    LoadingBar: typeof import('./components/ui/loading-bar/LoadingBar.vue')['default']
     Pagination: typeof import('./components/ui/pagination/Pagination.vue')['default']
     PaginationContent: typeof import('./components/ui/pagination/PaginationContent.vue')['default']
     PaginationEllipsis: typeof import('./components/ui/pagination/PaginationEllipsis.vue')['default']

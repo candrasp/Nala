@@ -1,13 +1,9 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { authService, type LoginCredentials, type UserProfile } from '@/services/auth.service'
+import { tokenStorage } from '@/lib/axios'
 
-export interface User {
-  id: string
-  name: string
-  email: string
-  avatar: string
-  role: string
-}
+export interface User extends UserProfile {}
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>({
@@ -16,24 +12,72 @@ export const useAuthStore = defineStore('auth', () => {
     email: 'admin@example.com',
     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
     role: 'Administrator',
+    username: 'admin',
+    timezone: 'utc-7',
+    company: 'Nala Corp',
   })
-  
-  const isAuthenticated = ref<boolean>(true)
 
-  function login(userData: User) {
+  const isLoading = ref<boolean>(false)
+  const isAuthenticated = computed<boolean>(() => !!user.value || !!tokenStorage.getAccessToken())
+
+  /**
+   * Set user data directly
+   */
+  function setUser(userData: User | null) {
     user.value = userData
-    isAuthenticated.value = true
   }
 
-  function logout() {
-    user.value = null
-    isAuthenticated.value = false
+  /**
+   * Login with email and password via auth service
+   */
+  async function login(credentials: LoginCredentials): Promise<User> {
+    isLoading.value = true
+    try {
+      const res = await authService.login(credentials)
+      user.value = res.user
+      return res.user
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  /**
+   * Logout user and clear tokens
+   */
+  async function logout() {
+    isLoading.value = true
+    try {
+      await authService.logout()
+    } finally {
+      user.value = null
+      isLoading.value = false
+    }
+  }
+
+  /**
+   * Refresh/Fetch user profile from server
+   */
+  async function fetchProfile(): Promise<User | null> {
+    if (!tokenStorage.getAccessToken()) return null
+    isLoading.value = true
+    try {
+      const profile = await authService.getProfile()
+      user.value = profile
+      return profile
+    } catch {
+      return null
+    } finally {
+      isLoading.value = false
+    }
   }
 
   return {
     user,
+    isLoading,
     isAuthenticated,
+    setUser,
     login,
     logout,
+    fetchProfile,
   }
 })

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -37,6 +37,8 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
+import { toast } from '@/components/ui/sonner'
+import { userService, type UserItem } from '@/services/user.service'
 import {
   Search,
   Plus,
@@ -55,120 +57,33 @@ import {
   ChevronRight,
   Sparkles,
   Check,
+  RefreshCw,
+  Loader2,
 } from '@lucide/vue'
 
-export interface UserItem {
-  id: string
-  name: string
-  email: string
-  role: 'Admin' | 'Developer' | 'Editor' | 'Viewer'
-  status: 'Active' | 'Pending' | 'Suspended'
-  twoFactor: boolean
-  avatar: string
-  initials: string
-  lastActive: string
-  createdAt: string
+export type { UserItem }
+
+// ─── Reactive State ───────────────────────────────────────────────────────────
+const users = ref<UserItem[]>([])
+const isLoading = ref(true)
+const isSubmitting = ref(false)
+
+// ─── Load Users from API / Service ────────────────────────────────────────────
+async function loadUsers() {
+  isLoading.value = true
+  try {
+    const data = await userService.getUsers()
+    users.value = data
+  } catch {
+    toast.error('Failed to load team members.')
+  } finally {
+    isLoading.value = false
+  }
 }
 
-// ─── Initial Mock Data ────────────────────────────────────────────────────────
-const users = ref<UserItem[]>([
-  {
-    id: 'usr-1',
-    name: 'Olivia Martin',
-    email: 'olivia.martin@supabase.io',
-    role: 'Admin',
-    status: 'Active',
-    twoFactor: true,
-    avatar: '',
-    initials: 'OM',
-    lastActive: 'Just now',
-    createdAt: 'Jan 12, 2026',
-  },
-  {
-    id: 'usr-2',
-    name: 'Jackson Lee',
-    email: 'jackson.lee@supabase.io',
-    role: 'Developer',
-    status: 'Active',
-    twoFactor: true,
-    avatar: '',
-    initials: 'JL',
-    lastActive: '5 mins ago',
-    createdAt: 'Feb 03, 2026',
-  },
-  {
-    id: 'usr-3',
-    name: 'Isabella Nguyen',
-    email: 'isabella.nguyen@supabase.io',
-    role: 'Editor',
-    status: 'Pending',
-    twoFactor: false,
-    avatar: '',
-    initials: 'IN',
-    lastActive: 'Never',
-    createdAt: 'Mar 01, 2026',
-  },
-  {
-    id: 'usr-4',
-    name: 'William Kim',
-    email: 'william.kim@partner.io',
-    role: 'Viewer',
-    status: 'Suspended',
-    twoFactor: false,
-    avatar: '',
-    initials: 'WK',
-    lastActive: '3 days ago',
-    createdAt: 'Dec 18, 2025',
-  },
-  {
-    id: 'usr-5',
-    name: 'Sofia Davis',
-    email: 'sofia.davis@supabase.io',
-    role: 'Developer',
-    status: 'Active',
-    twoFactor: true,
-    avatar: '',
-    initials: 'SD',
-    lastActive: '2 hours ago',
-    createdAt: 'Jan 28, 2026',
-  },
-  {
-    id: 'usr-6',
-    name: 'Marcus Vance',
-    email: 'marcus.v@supabase.io',
-    role: 'Admin',
-    status: 'Active',
-    twoFactor: true,
-    avatar: '',
-    initials: 'MV',
-    lastActive: '1 day ago',
-    createdAt: 'Nov 14, 2025',
-  },
-  {
-    id: 'usr-7',
-    name: 'Elena Rostova',
-    email: 'elena.rostova@supabase.io',
-    role: 'Editor',
-    status: 'Active',
-    twoFactor: true,
-    avatar: '',
-    initials: 'ER',
-    lastActive: '4 hours ago',
-    createdAt: 'Feb 19, 2026',
-  },
-  {
-    id: 'usr-8',
-    name: 'Arthur Pendelton',
-    email: 'arthur.p@client.org',
-    role: 'Viewer',
-    status: 'Pending',
-    twoFactor: false,
-    avatar: '',
-    initials: 'AP',
-    lastActive: 'Never',
-    createdAt: 'Mar 10, 2026',
-  },
-])
+onMounted(() => {
+  loadUsers()
+})
 
 // ─── Filter & Search States ───────────────────────────────────────────────────
 const searchQuery = ref('')
@@ -235,37 +150,33 @@ const editStatus = ref<'Active' | 'Pending' | 'Suspended'>('Active')
 const deletingUser = ref<UserItem | null>(null)
 
 // ─── Actions ──────────────────────────────────────────────────────────────────
-function handleAddUser() {
+async function handleAddUser() {
   if (!newUserName.value || !newUserEmail.value) return
 
-  const initials = newUserName.value
-    .split(' ')
-    .map((n) => n[0])
-    .slice(0, 2)
-    .join('')
-    .toUpperCase()
+  isSubmitting.value = true
+  try {
+    const newUser = await userService.createUser({
+      name: newUserName.value,
+      email: newUserEmail.value,
+      role: newUserRole.value,
+      status: sendInviteEmail.value ? 'Pending' : 'Active',
+      twoFactor: false,
+    })
 
-  const newUser: UserItem = {
-    id: `usr-${Date.now()}`,
-    name: newUserName.value,
-    email: newUserEmail.value,
-    role: newUserRole.value,
-    status: sendInviteEmail.value ? 'Pending' : 'Active',
-    twoFactor: false,
-    avatar: '',
-    initials,
-    lastActive: 'Never',
-    createdAt: 'Just now',
+    users.value.unshift(newUser)
+    toast.success(`Member "${newUser.name}" added successfully!`)
+
+    // Reset & close
+    newUserName.value = ''
+    newUserEmail.value = ''
+    newUserRole.value = 'Developer'
+    sendInviteEmail.value = true
+    isAddModalOpen.value = false
+  } catch {
+    toast.error('Failed to create new user.')
+  } finally {
+    isSubmitting.value = false
   }
-
-  users.value.unshift(newUser)
-
-  // Reset & close
-  newUserName.value = ''
-  newUserEmail.value = ''
-  newUserRole.value = 'Developer'
-  sendInviteEmail.value = true
-  isAddModalOpen.value = false
 }
 
 function openEditModal(user: UserItem) {
@@ -277,16 +188,28 @@ function openEditModal(user: UserItem) {
   isEditModalOpen.value = true
 }
 
-function handleSaveEdit() {
+async function handleSaveEdit() {
   if (!editingUser.value) return
-  const idx = users.value.findIndex((u) => u.id === editingUser.value?.id)
-  if (idx !== -1) {
-    users.value[idx].name = editName.value
-    users.value[idx].email = editEmail.value
-    users.value[idx].role = editRole.value
-    users.value[idx].status = editStatus.value
+  isSubmitting.value = true
+  try {
+    const updated = await userService.updateUser(editingUser.value.id, {
+      name: editName.value,
+      email: editEmail.value,
+      role: editRole.value,
+      status: editStatus.value,
+    })
+
+    const idx = users.value.findIndex((u) => u.id === editingUser.value?.id)
+    if (idx !== -1) {
+      users.value[idx] = updated
+    }
+    toast.success(`User "${updated.name}" updated!`)
+    isEditModalOpen.value = false
+  } catch {
+    toast.error('Failed to save changes.')
+  } finally {
+    isSubmitting.value = false
   }
-  isEditModalOpen.value = false
 }
 
 function openDeleteModal(user: UserItem) {
@@ -294,20 +217,37 @@ function openDeleteModal(user: UserItem) {
   isDeleteModalOpen.value = true
 }
 
-function handleConfirmDelete() {
+async function handleConfirmDelete() {
   if (!deletingUser.value) return
-  users.value = users.value.filter((u) => u.id !== deletingUser.value?.id)
-  isDeleteModalOpen.value = false
-  deletingUser.value = null
+  isSubmitting.value = true
+  try {
+    await userService.deleteUser(deletingUser.value.id)
+    users.value = users.value.filter((u) => u.id !== deletingUser.value?.id)
+    toast.success(`Member "${deletingUser.value.name}" removed.`)
+    isDeleteModalOpen.value = false
+    deletingUser.value = null
+  } catch {
+    toast.error('Failed to delete member.')
+  } finally {
+    isSubmitting.value = false
+  }
 }
 
-function toggleUserStatus(user: UserItem) {
-  user.status = user.status === 'Active' ? 'Suspended' : 'Active'
+async function toggleUserStatus(user: UserItem) {
+  const newStatus = user.status === 'Active' ? 'Suspended' : 'Active'
+  try {
+    await userService.updateUser(user.id, { status: newStatus })
+    user.status = newStatus
+    toast.success(`Status updated to ${newStatus}`)
+  } catch {
+    toast.error('Failed to toggle status.')
+  }
 }
 
 function copyEmail(email: string, id: string) {
   navigator.clipboard.writeText(email)
   copiedId.value = id
+  toast.success('Email copied to clipboard')
   setTimeout(() => {
     copiedId.value = null
   }, 2000)
@@ -355,6 +295,16 @@ const statusConfig: Record<string, { label: string; dotClass: string; badgeClass
         </p>
       </div>
       <div class="flex items-center gap-2 pt-2 sm:pt-0 shrink-0">
+        <Button
+          variant="outline"
+          size="sm"
+          class="gap-1.5 text-xs"
+          :disabled="isLoading"
+          @click="loadUsers"
+        >
+          <RefreshCw class="h-3.5 w-3.5" :class="[isLoading && 'animate-spin']" />
+          Refresh
+        </Button>
         <Button variant="outline" size="sm" class="gap-1.5 text-xs">
           <Download class="h-3.5 w-3.5" />
           Export Users
@@ -481,7 +431,29 @@ const statusConfig: Record<string, { label: string; dotClass: string; badgeClass
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow v-if="paginatedUsers.length === 0">
+            <!-- Loading Skeletons -->
+            <template v-if="isLoading">
+              <TableRow v-for="i in 5" :key="`skeleton-${i}`" class="animate-pulse">
+                <TableCell class="pl-4">
+                  <div class="flex items-center gap-3">
+                    <div class="h-8 w-8 rounded-full bg-muted shrink-0" />
+                    <div class="space-y-1">
+                      <div class="h-3 w-28 rounded bg-muted" />
+                      <div class="h-2.5 w-40 rounded bg-muted/60" />
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell><div class="h-5 w-16 rounded bg-muted" /></TableCell>
+                <TableCell><div class="h-5 w-14 rounded-full bg-muted" /></TableCell>
+                <TableCell><div class="h-4 w-16 rounded bg-muted" /></TableCell>
+                <TableCell><div class="h-3.5 w-20 rounded bg-muted" /></TableCell>
+                <TableCell><div class="h-3.5 w-20 rounded bg-muted" /></TableCell>
+                <TableCell><div class="h-6 w-6 rounded bg-muted ml-auto" /></TableCell>
+              </TableRow>
+            </template>
+
+            <!-- Empty State -->
+            <TableRow v-else-if="paginatedUsers.length === 0">
               <TableCell colspan="7" class="h-32 text-center text-muted-foreground text-xs">
                 No users found matching your search and filter criteria.
               </TableCell>
@@ -704,10 +676,11 @@ const statusConfig: Record<string, { label: string; dotClass: string; badgeClass
           </div>
 
           <DialogFooter class="pt-2">
-            <Button type="button" variant="outline" size="sm" @click="isAddModalOpen = false">
+            <Button type="button" variant="outline" size="sm" :disabled="isSubmitting" @click="isAddModalOpen = false">
               Cancel
             </Button>
-            <Button type="submit" size="sm">
+            <Button type="submit" size="sm" :disabled="isSubmitting">
+              <Loader2 v-if="isSubmitting" class="h-3.5 w-3.5 animate-spin mr-1.5" />
               Add Member
             </Button>
           </DialogFooter>
@@ -782,10 +755,11 @@ const statusConfig: Record<string, { label: string; dotClass: string; badgeClass
           </div>
 
           <DialogFooter class="pt-2">
-            <Button type="button" variant="outline" size="sm" @click="isEditModalOpen = false">
+            <Button type="button" variant="outline" size="sm" :disabled="isSubmitting" @click="isEditModalOpen = false">
               Cancel
             </Button>
-            <Button type="submit" size="sm">
+            <Button type="submit" size="sm" :disabled="isSubmitting">
+              <Loader2 v-if="isSubmitting" class="h-3.5 w-3.5 animate-spin mr-1.5" />
               Save Changes
             </Button>
           </DialogFooter>
@@ -807,10 +781,11 @@ const statusConfig: Record<string, { label: string; dotClass: string; badgeClass
         </DialogHeader>
 
         <DialogFooter class="pt-2">
-          <Button type="button" variant="outline" size="sm" @click="isDeleteModalOpen = false">
+          <Button type="button" variant="outline" size="sm" :disabled="isSubmitting" @click="isDeleteModalOpen = false">
             Cancel
           </Button>
-          <Button variant="destructive" size="sm" @click="handleConfirmDelete">
+          <Button variant="destructive" size="sm" :disabled="isSubmitting" @click="handleConfirmDelete">
+            <Loader2 v-if="isSubmitting" class="h-3.5 w-3.5 animate-spin mr-1.5" />
             Yes, Delete
           </Button>
         </DialogFooter>
