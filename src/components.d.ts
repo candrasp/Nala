@@ -83,7 +83,6 @@ declare module 'vue' {
     FormItem: typeof import('./components/ui/form/FormItem.vue')['default']
     FormLabel: typeof import('./components/ui/form/FormLabel.vue')['default']
     FormMessage: typeof import('./components/ui/form/FormMessage.vue')['default']
-    HelloWorld: typeof import('./components/HelloWorld.vue')['default']
     Input: typeof import('./components/ui/input/Input.vue')['default']
     Kbd: typeof import('./components/ui/kbd/Kbd.vue')['default']
     Label: typeof import('./components/ui/label/Label.vue')['default']
