@@ -283,18 +283,12 @@ const statusConfig: Record<string, { label: string; dotClass: string; badgeClass
 <template>
   <div class="space-y-6 max-w-[1920px] mx-auto pb-12">
     <!-- Page Header -->
-    <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <div class="flex items-center gap-2">
-          <span class="label-mono">System Module</span>
-          <span class="status-dot"></span>
-        </div>
-        <h1 class="text-2xl font-bold tracking-tight text-foreground mt-1">User Management</h1>
-        <p class="text-sm text-muted-foreground">
-          Manage team member credentials, security roles, two-factor status, and platform access.
-        </p>
-      </div>
-      <div class="flex items-center gap-2 pt-2 sm:pt-0 shrink-0">
+    <PageHeader
+      title="User Management"
+      description="Manage team member credentials, security roles, two-factor status, and platform access."
+      badge="System Module"
+    >
+      <template #actions>
         <Button
           variant="outline"
           size="sm"
@@ -313,12 +307,12 @@ const statusConfig: Record<string, { label: string; dotClass: string; badgeClass
           <Plus class="h-3.5 w-3.5" />
           Add Member
         </Button>
-      </div>
-    </div>
+      </template>
+    </PageHeader>
 
     <!-- 1. Stats Summary Cards -->
     <div class="grid gap-4 grid-cols-2 lg:grid-cols-4">
-      <Card class="overflow-hidden py-0 gap-0 shadow-sm">
+      <Card flush class="shadow-sm">
         <CardContent class="p-4 flex items-center justify-between">
           <div>
             <span class="text-xs font-medium text-muted-foreground">Total Members</span>
@@ -331,7 +325,7 @@ const statusConfig: Record<string, { label: string; dotClass: string; badgeClass
         </CardContent>
       </Card>
 
-      <Card class="overflow-hidden py-0 gap-0 shadow-sm">
+      <Card flush class="shadow-sm">
         <CardContent class="p-4 flex items-center justify-between">
           <div>
             <span class="text-xs font-medium text-muted-foreground">Active Now</span>
@@ -344,7 +338,7 @@ const statusConfig: Record<string, { label: string; dotClass: string; badgeClass
         </CardContent>
       </Card>
 
-      <Card class="overflow-hidden py-0 gap-0 shadow-sm">
+      <Card flush class="shadow-sm">
         <CardContent class="p-4 flex items-center justify-between">
           <div>
             <span class="text-xs font-medium text-muted-foreground">Pending Invites</span>
@@ -357,7 +351,7 @@ const statusConfig: Record<string, { label: string; dotClass: string; badgeClass
         </CardContent>
       </Card>
 
-      <Card class="overflow-hidden py-0 gap-0 shadow-sm">
+      <Card flush class="shadow-sm">
         <CardContent class="p-4 flex items-center justify-between">
           <div>
             <span class="text-xs font-medium text-muted-foreground">Suspended</span>
@@ -372,7 +366,7 @@ const statusConfig: Record<string, { label: string; dotClass: string; badgeClass
     </div>
 
     <!-- 2. Main Data Table Card -->
-    <Card class="overflow-hidden py-0 gap-0 shadow-sm border">
+    <Card flush class="shadow-sm border">
       <!-- Filter Bar Header -->
       <div class="p-4 border-b border-border bg-muted/20 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <!-- Search Input -->

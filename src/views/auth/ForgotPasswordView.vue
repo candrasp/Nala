@@ -53,7 +53,7 @@ const handleResend = () => {
 </script>
 
 <template>
-  <Card class="w-full max-w-md shadow-xl border-border/80 bg-card overflow-hidden py-0 gap-0">
+  <Card flush class="w-full max-w-md shadow-xl border-border/80 bg-card">
     <!-- Success State -->
     <template v-if="isSubmitted">
       <CardHeader class="pt-8 pb-6 px-6 sm:px-8 space-y-2 text-center">
@@ -113,8 +113,10 @@ const handleResend = () => {
             <FormItem class="space-y-1.5">
               <FormLabel class="text-xs font-semibold">Email address</FormLabel>
               <FormControl>
-                <div class="relative">
-                  <Mail class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <InputGroup>
+                  <InputIcon>
+                    <Mail />
+                  </InputIcon>
                   <Input
                     type="email"
                     placeholder="name@example.com"
@@ -122,7 +124,7 @@ const handleResend = () => {
                     class="pl-9"
                     v-bind="componentField"
                   />
-                </div>
+                </InputGroup>
               </FormControl>
               <FormMessage class="text-xs" />
             </FormItem>

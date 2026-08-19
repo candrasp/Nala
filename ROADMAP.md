@@ -102,4 +102,141 @@
 - [x] All TypeScript interfaces and types strictly defined
 - [x] License file (`MIT` License in `LICENSE`)
 - [x] GitHub repository setup: issue templates (`bug_report.md`, `feature_request.md`), PR template (`PULL_REQUEST_TEMPLATE.md`), CI workflow (`.github/workflows/ci.yml`)
-- [ ] Live demo deployment (Vercel / Netlify / Cloudflare Pages)
+- [x] Live demo deployment — **[https://nala.kenvano.web.id](https://nala.kenvano.web.id)** (Cloudflare Pages)
+
+---
+
+## ✅ v1.1 — In-App Interactive Documentation
+
+> Target: Every component showcase page has live preview + copy-ready code snippets via the `CodePreview` component
+
+### Core Infrastructure
+
+- [x] `CodePreview.vue` reusable component (`src/components/CodePreview.vue`)
+  - [x] View Code / Hide Code expandable toggle
+  - [x] One Dark Pro syntax highlighting (tag, attribute, string, directive, interpolation, comment)
+  - [x] Line number gutter with hover highlight
+  - [x] Copy to clipboard with toast notification feedback
+
+### Component Showcase Pages
+
+- [x] **Buttons** (`ButtonView.vue`) — 9 sections fully wrapped in `CodePreview`
+  - [x] Button Variants (default, secondary, destructive, outline, ghost, link)
+  - [x] Outline Variants (semantic colors, muted, dashed, icon-only)
+  - [x] Button Sizes (xs, sm, default, lg)
+  - [x] Buttons with Icons (leading, trailing, icon-only square)
+  - [x] States & Feedbacks (disabled, async loading spinner)
+  - [x] Interactive Micro-actions (copy toggle, like toggle, segmented control)
+  - [x] Button Groups (toolbar, split action)
+  - [x] Full-Width Buttons
+  - [x] Danger Confirm Pattern
+- [x] **Cards & Surfaces** (`CardView.vue`)
+  - [x] Basic card (header, content, footer)
+  - [x] Stats / KPI card with indicator icons
+  - [x] Flush edge-to-edge card with header/footer
+  - [x] Interactive action card with hover lift
+  - [x] Ambient glow (.glow-area) & Mesh background pattern
+- [x] **Form & Inputs** (`FormView.vue`)
+  - [x] Text input variants (with leading icon, password toggle, prefix/suffix addon, readonly)
+  - [x] Select & Textarea (region group select, database select, multi-line auto textarea)
+  - [x] Radio group & Plan card selectors
+  - [x] Range sliders, number stepper & multi-select tags
+  - [x] Searchable combobox & Drag-and-drop file upload zone
+  - [x] Zero-dependency Date & Range picker
+  - [x] Switches & Checkbox options list
+- [x] **Badges & Avatars** (`BadgeAvatarView.vue`)
+  - [x] Semantic badge variants (solid, outline, pills, color tints)
+  - [x] Live status indicators with pulse dots
+  - [x] Icon & Feature badges
+  - [x] Interactive removable tags
+  - [x] Avatar size scale (24px to 64px)
+  - [x] Avatars with real-time presence indicators (online, DND, away, offline)
+  - [x] Avatar group stack (overlapping team avatars)
+- [x] **Modals & Dialogs** (`ModalView.vue`)
+  - [x] Basic information dialog
+  - [x] Confirm / alert dialog (destructive)
+  - [x] Form in dialog
+  - [x] Drawer/Sheet panel
+- [x] **Overlays & Drawers** (`OverlayView.vue`)
+  - [x] Tooltip (all four positions)
+  - [x] Popover with rich content
+  - [x] Hover card
+  - [x] Sheet panel (left, right)
+- [x] **Feedback & Loading** (`FeedbackView.vue`)
+  - [x] Alert banner (info, success, warning, destructive)
+  - [x] Skeleton loaders (text, card, table row)
+  - [x] Progress bar (determinate & indeterminate)
+  - [x] Spinner variants
+- [x] **Toast Notifications** (`ToastView.vue`)
+  - [x] Success / error / info / warning toast
+  - [x] Promise toast (loading → success/error)
+  - [x] Toast with action button
+- [x] **Navigation & Flow** (`NavigationView.vue`)
+  - [x] Tabs (default, underline, pill)
+  - [x] Breadcrumb
+  - [x] Pagination (numbered, prev/next)
+  - [x] Stepper / multi-step wizard
+- [x] **Data Tables** (`TableView.vue`)
+  - [x] Basic table with headers
+  - [x] Sortable columns
+  - [x] Row selection & bulk actions toolbar
+  - [x] Pagination + search filter combo
+- [x] **Charts & Analytics** (`ChartView.vue`)
+  - [x] Area chart (SVG)
+  - [x] Bar chart (SVG)
+  - [x] Donut / pie chart (SVG)
+  - [x] Sparkline inline chart
+- [x] **Typography Scale** (`TypographyView.vue`)
+  - [x] Heading scale (h1–h6)
+  - [x] Body text, lead, small, muted
+  - [x] Inline code & code block
+  - [x] Lists (ordered, unordered) & blockquote
+
+---
+
+## 🎨 v1.2 — Design System Ergonomics & Component Encapsulation
+
+> **Audit Result (2026-08-19):** Repetitive utility class patterns found across the entire project — not just showcase views, but also production views (Dashboard, Settings, Users, Auth). Prioritized by severity (occurrence count & blast radius).
+
+### 🔴 Priority 1 — Critical (Production views affected)
+
+- [x] **`<PageHeader>` Reusable Component** (`src/components/PageHeader.vue`)
+  - **18 views** currently repeat the same ~12-line boilerplate (`flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between` + `label-mono` + `h1` + `p` structure)
+  - Affected: ALL 14 showcase views + Dashboard, Settings, Users, BlankView
+  - [x] Create `<PageHeader title description badge statusDot>` component with `#actions` slot
+  - [x] Migrate all 18 views to use `<PageHeader>`
+
+- [x] **`<Card flush>` Variant** (`src/components/ui/card/Card.vue`)
+  - **50+ occurrences** of `class="overflow-hidden py-0 gap-0"` written manually across the entire codebase
+  - Affected: Dashboard (5x), Settings (7x), Users (5x), Auth (4x), all showcase views
+  - [x] Add `flush` boolean prop or `variant="flush"` to `Card.vue` via CVA
+  - [x] Migrate all flush card usages to `<Card flush>`
+
+### 🟡 Priority 2 — High (Inconsistency risk across multiple files)
+
+- [x] **`<CardHeader>` Section Style Standardization** (`src/components/ui/card/CardHeader.vue`)
+  - **30+ occurrences** of `class="p-6 border-b border-border bg-muted/10"` written manually
+  - Affected: Settings (8x), Navigation (8x), Chart (4x), Typography (5x), Colors (3x), and others
+  - [x] Add `section` boolean prop to `CardHeader.vue` that applies `p-6 border-b border-border bg-muted/10` automatically
+  - [x] Migrate all section-style `CardHeader` usages
+
+- [x] **`<InputIcon>` / `<InputGroup>` Primitives** (`src/components/ui/input/`)
+  - **12 occurrences** of `class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"` for icon positioning
+  - Affected: FormView (5x), RegisterView, LoginView, ForgotPasswordView, ResetPasswordView, VerifyOtpView (7x)
+  - [x] Create `<InputGroup>` wrapper + `<InputIcon side="left|right">` slot primitive
+  - [x] Create `<InputAddon side="left|right">` for prefix/suffix text addons (e.g. `https://`, `.supabase.co`)
+  - [x] Migrate auth forms and FormView
+
+### 🟢 Priority 3 — Medium (Scoped to showcase views)
+
+- [x] **Badge Semantic Color Variants & Shape** (`src/components/ui/badge/index.ts`)
+  - ~~Currently 6 inline `<span>` pill badges and 2 status dot badges in `BadgeAvatarView.vue` only~~
+  - [x] Add color variants to `badgeVariants` CVA: `success` (emerald), `info` (blue), `warning` (amber)
+  - [x] Add `shape` variant: `default` (rounded-md), `pill` (rounded-full px-2.5)
+  - [x] Add integrated live status `dot` + `pulse` prop support
+
+- [x] **`<AvatarGroup>` & Avatar Presence Props** (`src/components/ui/avatar/`)
+  - ~~Currently 6 inline `<span class="absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full ...">` presence dots in `BadgeAvatarView.vue`~~
+  - [x] Add `status: 'online' | 'busy' | 'away' | 'offline'` prop to `Avatar.vue`
+  - [x] Create `<AvatarGroup max overlap>` component for stacked overlapping avatars
+

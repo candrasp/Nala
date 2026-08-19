@@ -13,10 +13,10 @@ import { loadingBar } from '@/lib/loading-bar'
   >
     <div
       v-if="loadingBar.visible.value"
-      class="fixed top-0 left-0 right-0 z-[9999] h-[2.5px] pointer-events-none overflow-hidden"
+      class="fixed top-0 left-0 right-0 z-9999 h-[2.5px] pointer-events-none overflow-hidden"
     >
       <div
-        class="h-full transition-all duration-200 ease-out shadow-sm"
+        class="relative h-full transition-all duration-200 ease-out shadow-sm"
         :class="[
           loadingBar.status.value === 'error'
             ? 'bg-destructive shadow-destructive/50'

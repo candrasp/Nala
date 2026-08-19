@@ -49,7 +49,7 @@ const profileEmail = ref('alex.morgan@supabase.io')
 const profileBio = ref('Staff Systems Engineer building real-time databases and serverless edge functions.')
 const profileTimezone = ref('utc-7')
 const profileCompany = ref('Supabase Cloud Technologies')
-const avatarSrc = ref('')
+const avatarSrc = ref('/img/avatar.webp')
 
 // ─── Security State ───────────────────────────────────────────────────────────
 const currentPassword = ref('')
@@ -213,20 +213,12 @@ function deleteApiKey(id: string) {
 <template>
   <div class="space-y-6 max-w-[1920px] mx-auto pb-12">
     <!-- Page Header -->
-    <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <div class="flex items-center gap-2">
-          <span class="label-mono">Settings &amp; Configuration</span>
-          <span class="status-dot"></span>
-        </div>
-        <h1 class="text-2xl font-bold tracking-tight text-foreground mt-1">Preferences</h1>
-        <p class="text-sm text-muted-foreground">
-          Manage personal identity, security credentials, notification channels, and API tokens.
-        </p>
-      </div>
-
-      <!-- Quick Save Toast / Feedback -->
-      <div class="flex items-center gap-2 pt-2 sm:pt-0">
+    <PageHeader
+      title="Preferences"
+      description="Manage personal identity, security credentials, notification channels, and API tokens."
+      badge="Settings & Configuration"
+    >
+      <template #actions>
         <transition
           enter-active-class="transition duration-200 ease-out"
           enter-from-class="opacity-0 translate-y-1"
@@ -246,8 +238,8 @@ function deleteApiKey(id: string) {
         <Button size="sm" class="gap-1.5 text-xs" @click="triggerSaveSuccess">
           Save Changes
         </Button>
-      </div>
-    </div>
+      </template>
+    </PageHeader>
 
     <!-- Tabbed Settings Navigation -->
     <Tabs default-value="profile" class="w-full space-y-6">
@@ -275,8 +267,8 @@ function deleteApiKey(id: string) {
       <!-- ═════════════════════════════════════════════════════════════════════ -->
       <TabsContent value="profile" class="space-y-6 focus-visible:outline-none">
         <!-- 1. Avatar & Identity -->
-        <Card class="overflow-hidden py-0 gap-0 shadow-sm border">
-          <CardHeader class="p-6 border-b border-border bg-muted/10">
+        <Card flush class="shadow-sm border">
+          <CardHeader section>
             <CardTitle class="text-base font-semibold">Avatar &amp; Identity</CardTitle>
             <CardDescription class="text-xs">This profile picture is displayed across team projects and audit logs.</CardDescription>
           </CardHeader>
@@ -316,8 +308,8 @@ function deleteApiKey(id: string) {
         </Card>
 
         <!-- 2. Personal Information -->
-        <Card class="overflow-hidden py-0 gap-0 shadow-sm border">
-          <CardHeader class="p-6 border-b border-border bg-muted/10">
+        <Card flush class="shadow-sm border">
+          <CardHeader section>
             <CardTitle class="text-base font-semibold">Personal Information</CardTitle>
             <CardDescription class="text-xs">Manage your public name, contact email, and workspace handle.</CardDescription>
           </CardHeader>
@@ -392,8 +384,8 @@ function deleteApiKey(id: string) {
       <!-- ═════════════════════════════════════════════════════════════════════ -->
       <TabsContent value="security" class="space-y-6 focus-visible:outline-none">
         <!-- 1. Password Management -->
-        <Card class="overflow-hidden py-0 gap-0 shadow-sm border">
-          <CardHeader class="p-6 border-b border-border bg-muted/10">
+        <Card flush class="shadow-sm border">
+          <CardHeader section>
             <CardTitle class="text-base font-semibold">Password Management</CardTitle>
             <CardDescription class="text-xs">Ensure your account uses a strong, random password with at least 12 characters.</CardDescription>
           </CardHeader>
@@ -462,8 +454,8 @@ function deleteApiKey(id: string) {
         </Card>
 
         <!-- 2. Two-Factor Authentication -->
-        <Card class="overflow-hidden py-0 gap-0 shadow-sm border">
-          <CardHeader class="p-6 border-b border-border bg-muted/10">
+        <Card flush class="shadow-sm border">
+          <CardHeader section>
             <CardTitle class="text-base font-semibold">Two-Factor Authentication (2FA)</CardTitle>
             <CardDescription class="text-xs">Add an additional security layer requiring a time-based TOTP code during login.</CardDescription>
           </CardHeader>
@@ -501,8 +493,8 @@ function deleteApiKey(id: string) {
         </Card>
 
         <!-- 3. Active Sessions -->
-        <Card class="overflow-hidden py-0 gap-0 shadow-sm border">
-          <CardHeader class="p-6 border-b border-border bg-muted/10 flex flex-row items-center justify-between">
+        <Card flush class="shadow-sm border">
+          <CardHeader section class="flex flex-row items-center justify-between">
             <div>
               <CardTitle class="text-base font-semibold">Active Login Sessions</CardTitle>
               <CardDescription class="text-xs">Devices that are currently signed into your administrative console.</CardDescription>
@@ -559,8 +551,8 @@ function deleteApiKey(id: string) {
       <!-- TAB 3: NOTIFICATIONS                                                  -->
       <!-- ═════════════════════════════════════════════════════════════════════ -->
       <TabsContent value="notifications" class="space-y-6 focus-visible:outline-none">
-        <Card class="overflow-hidden py-0 gap-0 shadow-sm border">
-          <CardHeader class="p-6 border-b border-border bg-muted/10">
+        <Card flush class="shadow-sm border">
+          <CardHeader section>
             <CardTitle class="text-base font-semibold">Email &amp; System Alerts</CardTitle>
             <CardDescription class="text-xs">Configure how and when you receive automated security notices and performance digests.</CardDescription>
           </CardHeader>
@@ -639,8 +631,8 @@ function deleteApiKey(id: string) {
         </div>
 
         <!-- API Tokens Card -->
-        <Card class="overflow-hidden py-0 gap-0 shadow-sm border">
-          <CardHeader class="p-6 border-b border-border bg-muted/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <Card flush class="shadow-sm border">
+          <CardHeader section class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
               <CardTitle class="text-base font-semibold">Project API Tokens</CardTitle>
               <CardDescription class="text-xs">Generate scoped credentials for backend servers, CLI tools, and automation workers.</CardDescription>

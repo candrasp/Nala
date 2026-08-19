@@ -104,7 +104,7 @@ const onSubmit = form.handleSubmit(() => {
 </script>
 
 <template>
-  <Card class="w-full max-w-md shadow-xl border-border/80 bg-card overflow-hidden py-0 gap-0">
+  <Card flush class="w-full max-w-md shadow-xl border-border/80 bg-card">
     <!-- Success State -->
     <template v-if="isResetComplete">
       <CardHeader class="pt-8 pb-6 px-6 sm:px-8 space-y-2 text-center">
@@ -146,8 +146,10 @@ const onSubmit = form.handleSubmit(() => {
             <FormItem class="space-y-1.5">
               <FormLabel class="text-xs font-semibold">New Password</FormLabel>
               <FormControl>
-                <div class="relative">
-                  <Lock class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <InputGroup>
+                  <InputIcon>
+                    <Lock class="h-4 w-4" />
+                  </InputIcon>
                   <Input
                     :type="showPassword ? 'text' : 'password'"
                     placeholder="Enter new password"
@@ -164,7 +166,7 @@ const onSubmit = form.handleSubmit(() => {
                     <EyeOff v-if="showPassword" class="h-4 w-4" />
                     <Eye v-else class="h-4 w-4" />
                   </button>
-                </div>
+                </InputGroup>
               </FormControl>
 
               <!-- Password Strength Bar & Label -->
@@ -207,8 +209,10 @@ const onSubmit = form.handleSubmit(() => {
             <FormItem class="space-y-1.5">
               <FormLabel class="text-xs font-semibold">Confirm New Password</FormLabel>
               <FormControl>
-                <div class="relative">
-                  <Lock class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <InputGroup>
+                  <InputIcon>
+                    <Lock class="h-4 w-4" />
+                  </InputIcon>
                   <Input
                     :type="showConfirmPassword ? 'text' : 'password'"
                     placeholder="Confirm new password"
@@ -225,7 +229,7 @@ const onSubmit = form.handleSubmit(() => {
                     <EyeOff v-if="showConfirmPassword" class="h-4 w-4" />
                     <Eye v-else class="h-4 w-4" />
                   </button>
-                </div>
+                </InputGroup>
               </FormControl>
               <FormMessage class="text-xs" />
             </FormItem>

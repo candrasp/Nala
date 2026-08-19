@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
   TrendingUp,
@@ -83,7 +82,7 @@ function generateSpline(
   data: TimeSeriesPoint[],
   key: 'current' | 'previous',
   svgWidth: number,
-  svgHeight: number
+  svgHeight: number,
 ) {
   const maxVal = Math.max(...data.map((d) => Math.max(d.current, d.previous))) * 1.12 || 1
   const step = svgWidth / (data.length - 1)
@@ -136,7 +135,6 @@ function onChartMouseMove(e: MouseEvent) {
   const percentX = mouseX / rect.width
   const points = svgChart.value.primary.points
 
-  // Find closest point by index
   const index = Math.round(percentX * (points.length - 1))
   const pt = points[index]
   if (pt) {
@@ -167,14 +165,14 @@ const barData = ref([
 ])
 
 const maxBarValue = computed(() => Math.max(...barData.value.map((b) => b.requests)) * 1.15)
-const activeBarIndex = ref<number | null>(4) // default Friday active
+const activeBarIndex = ref<number | null>(4)
 
 // ─── 3. Segmented Donut Chart (Storage Usage) ─────────────────────────────────
 const storageData = ref([
   { label: 'Postgres Core DB', size: '52.4 GB', percent: 45, strokeColor: 'oklch(0.696 0.17 162.48)', colorClass: 'bg-emerald-500' },
-  { label: 'Media & File Storage', size: '34.8 GB', percent: 30, strokeColor: 'oklch(0.6 0.16 240)', colorClass: 'bg-blue-500' },
+  { label: 'Media & Files', size: '34.8 GB', percent: 30, strokeColor: 'oklch(0.6 0.16 240)', colorClass: 'bg-blue-500' },
   { label: 'WAL Logs & PITR', size: '17.4 GB', percent: 15, strokeColor: 'oklch(0.75 0.16 70)', colorClass: 'bg-amber-500' },
-  { label: 'Index & Read Cache', size: '11.6 GB', percent: 10, strokeColor: 'oklch(0.65 0.2 300)', colorClass: 'bg-purple-500' },
+  { label: 'Read Cache', size: '11.6 GB', percent: 10, strokeColor: 'oklch(0.65 0.2 300)', colorClass: 'bg-purple-500' },
 ])
 
 const donutRadius = 42
@@ -183,7 +181,7 @@ const activeDonutIndex = ref<number | null>(null)
 
 const donutSegments = computed(() => {
   let offset = 0
-  const gap = 3 // visual separation gap between segments
+  const gap = 3
   return storageData.value.map((item, idx) => {
     const rawLen = (item.percent / 100) * donutCircumference
     const strokeDasharray = `${Math.max(0, rawLen - gap)} ${donutCircumference}`
@@ -221,23 +219,96 @@ const smoothWavePath = computed(() => {
   const fill = `${path} L ${w} ${h} L 0 ${h} Z`
   return { path, fill }
 })
+
+// ─── Code Documentation Snippets ─────────────────────────────────────────────
+
+const areaChartSnippet = `<!-- Pure SVG Multi-Series Area Spline Chart -->
+<svg viewBox="0 0 900 260" preserveAspectRatio="none" class="w-full h-72 cursor-crosshair">
+  <defs>
+    <!-- Lush Gradient Fill -->
+    <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="oklch(0.696 0.17 162.48)" stop-opacity="0.38" />
+      <stop offset="100%" stop-color="oklch(0.696 0.17 162.48)" stop-opacity="0.0" />
+    </linearGradient>
+  </defs>
+
+  <!-- Previous Period Comparison (Dashed) -->
+  <path :d="svgChart.comparison.path" fill="none" stroke="currentColor" stroke-dasharray="4 4" class="text-muted-foreground/45" />
+
+  <!-- Primary Series Fill Area -->
+  <path :d="svgChart.primary.fillPath" fill="url(#areaGrad)" />
+
+  <!-- Primary Series Stroke Line -->
+  <path :d="svgChart.primary.path" fill="none" stroke="oklch(0.696 0.17 162.48)" stroke-width="2.5" stroke-linecap="round" />
+</svg>`
+
+const barChartSnippet = `<!-- Responsive Dynamic Bar Distribution Chart -->
+<div class="flex items-end justify-between gap-4 h-56">
+  <div
+    v-for="(bar, idx) in barData"
+    :key="bar.day"
+    class="flex-1 flex flex-col items-center gap-2 group cursor-pointer h-full justify-end"
+  >
+    <!-- Bar Pillar -->
+    <div
+      class="w-full max-w-12 rounded-t-lg bg-primary/70 hover:bg-primary transition-all duration-300 relative group-hover:scale-105 origin-bottom"
+      :style="{ height: \`\${(bar.requests / maxVal) * 100}%\` }"
+    >
+      <!-- Glowing Top Cap -->
+      <div class="absolute inset-x-0 top-0 h-1 bg-white/40 rounded-t-lg" />
+    </div>
+
+    <!-- Day Label -->
+    <span class="text-xs font-mono text-muted-foreground">{{ bar.day }}</span>
+  </div>
+</div>`
+
+const donutChartSnippet = `<!-- Segmented Pure SVG Donut Chart -->
+<svg viewBox="0 0 100 100" class="w-48 h-48 -rotate-90">
+  <!-- Track -->
+  <circle cx="50" cy="50" r="42" fill="transparent" stroke="currentColor" stroke-width="9" class="text-muted/30" />
+
+  <!-- Segments via stroke-dasharray and stroke-dashoffset -->
+  <circle
+    v-for="seg in donutSegments"
+    :key="seg.label"
+    cx="50"
+    cy="50"
+    r="42"
+    fill="transparent"
+    :stroke="seg.strokeColor"
+    stroke-width="9"
+    stroke-linecap="round"
+    :stroke-dasharray="seg.strokeDasharray"
+    :stroke-dashoffset="seg.strokeDashoffset"
+    class="transition-all duration-300 cursor-pointer"
+  />
+</svg>`
+
+const sparklineSnippet = `<!-- Inline Sparkline / Live Telemetry Wave Path -->
+<div class="w-full h-20">
+  <svg viewBox="0 0 500 70" preserveAspectRatio="none" class="w-full h-full">
+    <defs>
+      <linearGradient id="waveGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="oklch(0.696 0.17 162.48)" stop-opacity="0.25" />
+        <stop offset="100%" stop-color="oklch(0.696 0.17 162.48)" stop-opacity="0.0" />
+      </linearGradient>
+    </defs>
+    <path :d="smoothWavePath.fill" fill="url(#waveGrad)" />
+    <path :d="smoothWavePath.path" fill="none" stroke="oklch(0.696 0.17 162.48)" stroke-width="2.25" stroke-linecap="round" />
+  </svg>
+</div>`
 </script>
 
 <template>
   <div class="space-y-8 max-w-[1920px] mx-auto pb-12">
     <!-- Page Header -->
-    <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <div class="flex items-center gap-2">
-          <span class="label-mono">Telemetry &amp; Insights</span>
-          <span class="status-dot"></span>
-        </div>
-        <h1 class="text-2xl font-bold tracking-tight text-foreground mt-1">Charts &amp; Visualizations</h1>
-        <p class="text-sm text-muted-foreground">
-          Fluid, hardware-accelerated SVG graphs with multi-series curves and interactive hover tracking.
-        </p>
-      </div>
-      <div class="flex items-center gap-2 pt-2 sm:pt-0 shrink-0">
+    <PageHeader
+      title="Charts & Visualizations"
+      description="Zero-dependency, hardware-accelerated SVG graphs with multi-series curves and interactive hover crosshairs."
+      badge="Telemetry & Insights"
+    >
+      <template #actions>
         <Button variant="outline" size="sm" class="gap-1.5 text-xs">
           <Calendar class="h-3.5 w-3.5" />
           Select Range
@@ -246,72 +317,70 @@ const smoothWavePath = computed(() => {
           <Download class="h-3.5 w-3.5" />
           Export Dataset
         </Button>
-      </div>
-    </div>
+      </template>
+    </PageHeader>
 
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <!-- 1. FLUID INTERACTIVE AREA WAVE GRAPH                                  -->
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <Card class="overflow-hidden py-0 gap-0 shadow-sm border">
-      <!-- Chart Card Header -->
-      <div class="p-6 border-b border-border bg-muted/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
+    <!-- 1. FLUID INTERACTIVE AREA WAVE GRAPH -->
+    <CodePreview
+      title="Area Chart (SVG Spline with Period Switcher)"
+      description="Multi-series spline chart powered by Catmull-Rom smoothing, dynamic timeframe switching, and magnetic hover tracking."
+      :code="areaChartSnippet"
+    >
+      <div class="space-y-4 select-none">
+        <!-- Control Header & Timeframe Switcher -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-2 border-b border-border/60">
+          <div>
+            <div class="flex items-center gap-3">
+              <span class="text-sm font-semibold text-foreground">Traffic Volume &amp; Ingress</span>
+              <span class="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+                <TrendingUp class="h-3 w-3" />
+                +28.4% vs baseline
+              </span>
+            </div>
+            <p class="text-xs text-muted-foreground mt-0.5">Comparing active period against previous benchmark.</p>
+          </div>
+
           <div class="flex items-center gap-3">
-            <CardTitle class="text-base font-semibold">Total Revenue &amp; Traffic Volume</CardTitle>
-            <span class="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
-              <TrendingUp class="h-3 w-3" />
-              +28.4% vs prev period
-            </span>
-          </div>
-          <CardDescription class="text-xs mt-1">
-            Comparing current active timeframe against preceding baseline metrics.
-          </CardDescription>
-        </div>
+            <div class="hidden sm:flex items-center gap-3 text-xs mr-2">
+              <span class="flex items-center gap-1.5 text-foreground font-medium">
+                <span class="h-2 w-5 rounded-full bg-primary inline-block"></span>
+                Current
+              </span>
+              <span class="flex items-center gap-1.5 text-muted-foreground">
+                <span class="h-0.5 w-4 border-t border-dashed border-muted-foreground/70 inline-block"></span>
+                Previous
+              </span>
+            </div>
 
-        <div class="flex items-center gap-3">
-          <!-- Series Legend -->
-          <div class="hidden sm:flex items-center gap-3 text-xs mr-2">
-            <span class="flex items-center gap-1.5 text-foreground font-medium">
-              <span class="h-2 w-5 rounded-full bg-primary inline-block"></span>
-              Current
-            </span>
-            <span class="flex items-center gap-1.5 text-muted-foreground">
-              <span class="h-0.5 w-4 border-t border-dashed border-muted-foreground/70 inline-block"></span>
-              Previous
-            </span>
-          </div>
-
-          <!-- Period Buttons -->
-          <div class="flex items-center gap-1 bg-muted/40 p-1 rounded-lg border border-border">
-            <Button
-              v-for="p in (['7d', '30d', '90d'] as const)"
-              :key="p"
-              variant="ghost"
-              size="sm"
-              class="h-7 px-3 text-xs transition-all duration-200"
-              :class="{ 'bg-background text-foreground shadow-xs font-semibold': selectedPeriod === p }"
-              @click="selectedPeriod = p"
-            >
-              {{ p.toUpperCase() }}
-            </Button>
+            <div class="flex items-center gap-1 bg-muted/40 p-1 rounded-lg border border-border">
+              <Button
+                v-for="p in (['7d', '30d', '90d'] as const)"
+                :key="p"
+                variant="ghost"
+                size="sm"
+                class="h-7 px-3 text-xs transition-all"
+                :class="{ 'bg-background text-foreground shadow-xs font-semibold': selectedPeriod === p }"
+                @click="selectedPeriod = p"
+              >
+                {{ p.toUpperCase() }}
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Area Chart SVG Container -->
-      <CardContent class="p-6">
-        <div class="relative w-full h-80 select-none">
-          <!-- Background Grid Matrix & Axis Scale -->
+        <!-- Area Chart Graphic Canvas -->
+        <div class="relative w-full h-80">
+          <!-- Background Grid Matrix -->
           <div class="absolute inset-0 flex flex-col justify-between pointer-events-none pb-8 text-muted-foreground/40 text-[10px] font-mono">
             <div class="border-b border-border/40 w-full flex justify-between">
               <span>${{ (svgChart.primary.maxVal / 1000).toFixed(1) }}k</span>
               <span class="hidden sm:inline">100% Volume</span>
             </div>
             <div class="border-b border-border/25 w-full flex justify-between">
-              <span>${{ (svgChart.primary.maxVal * 0.66 / 1000).toFixed(1) }}k</span>
+              <span>${{ ((svgChart.primary.maxVal * 0.66) / 1000).toFixed(1) }}k</span>
             </div>
             <div class="border-b border-border/25 w-full flex justify-between">
-              <span>${{ (svgChart.primary.maxVal * 0.33 / 1000).toFixed(1) }}k</span>
+              <span>${{ ((svgChart.primary.maxVal * 0.33) / 1000).toFixed(1) }}k</span>
             </div>
             <div class="border-b border-border/40 w-full flex justify-between">
               <span>$0k</span>
@@ -327,18 +396,11 @@ const smoothWavePath = computed(() => {
             @mouseleave="onChartMouseLeave"
           >
             <defs>
-              <!-- Multi-Stop Lush Emerald Gradient -->
-              <linearGradient id="emeraldLushGradient" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="emeraldAreaGrad" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stop-color="oklch(0.696 0.17 162.48)" stop-opacity="0.38" />
                 <stop offset="60%" stop-color="oklch(0.696 0.17 162.48)" stop-opacity="0.10" />
                 <stop offset="100%" stop-color="oklch(0.696 0.17 162.48)" stop-opacity="0.0" />
               </linearGradient>
-
-              <!-- Soft Glow Filter for Primary Stroke -->
-              <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="3" result="blur" />
-                <feComposite in="SourceGraphic" in2="blur" operator="over" />
-              </filter>
             </defs>
 
             <!-- Comparison Series (Dashed Line) -->
@@ -354,7 +416,7 @@ const smoothWavePath = computed(() => {
             <!-- Primary Series Area Fill -->
             <path
               :d="svgChart.primary.fillPath"
-              fill="url(#emeraldLushGradient)"
+              fill="url(#emeraldAreaGrad)"
               class="transition-all duration-500 ease-out"
             />
 
@@ -382,16 +444,14 @@ const smoothWavePath = computed(() => {
                 class="text-primary/70 pointer-events-none"
               />
 
-              <!-- Comparison Intersect Dot -->
               <circle
                 :cx="hoveredPoint.x"
-                :cy="svgChart.comparison.points.find(p => p.label === hoveredPoint?.label)?.y || 0"
+                :cy="svgChart.comparison.points.find((p) => p.label === hoveredPoint?.label)?.y || 0"
                 r="3.5"
                 fill="currentColor"
                 class="text-muted-foreground stroke-background stroke-2 pointer-events-none"
               />
 
-              <!-- Static Soft Ambient Halo -->
               <circle
                 :cx="hoveredPoint.x"
                 :cy="hoveredPoint.y"
@@ -401,7 +461,6 @@ const smoothWavePath = computed(() => {
                 class="pointer-events-none"
               />
 
-              <!-- Primary Active Intersect Dot -->
               <circle
                 :cx="hoveredPoint.x"
                 :cy="hoveredPoint.y"
@@ -443,188 +502,186 @@ const smoothWavePath = computed(() => {
           </div>
         </div>
 
-        <!-- Dynamic X-Axis Periodic Timeline Labels -->
+        <!-- X-Axis Periodic Timeline Labels -->
         <div class="flex justify-between items-center pt-2 text-[11px] text-muted-foreground font-mono">
           <span v-for="d in currentSeries.filter((_, idx) => idx % Math.ceil(currentSeries.length / 7) === 0)" :key="d.label">
             {{ d.label }}
           </span>
           <span>{{ currentSeries[currentSeries.length - 1]?.label }}</span>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </CodePreview>
 
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <!-- 2. BAR DISTRIBUTION & SEGMENTED DONUT                                 -->
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
+    <!-- 2. BAR CHART & DONUT CHART (2-COL) -->
     <div class="grid gap-6 grid-cols-1 lg:grid-cols-3">
-
       <!-- Smooth Bar Distribution (2/3 width) -->
-      <Card class="overflow-hidden py-0 gap-0 shadow-sm border lg:col-span-2">
-        <CardHeader class="p-6 border-b border-border bg-muted/10 flex flex-row items-center justify-between">
-          <div>
-            <CardTitle class="text-base font-semibold">API Traffic Invocations</CardTitle>
-            <CardDescription class="text-xs">Peak requests throughput per weekday.</CardDescription>
-          </div>
-          <span class="label-mono text-primary font-bold">99.98% SUCCESS</span>
-        </CardHeader>
-        <CardContent class="p-6">
-          <div class="flex items-end justify-between gap-2 sm:gap-4 h-56 pt-6">
-            <div
-              v-for="(bar, idx) in barData"
-              :key="bar.day"
-              class="flex-1 flex flex-col items-center gap-2 group cursor-pointer relative h-full justify-end"
-              @mouseenter="activeBarIndex = idx"
-            >
-              <!-- Bar Pillar with Top Highlight Cap -->
-              <div class="w-full max-w-12 flex flex-col justify-end h-full">
-                <div
-                  class="w-full rounded-t-lg transition-all duration-300 ease-out relative group-hover:scale-105 origin-bottom"
-                  :class="[
-                    activeBarIndex === idx
-                      ? 'bg-primary shadow-md shadow-primary/20'
-                      : 'bg-primary/60 hover:bg-primary/80'
-                  ]"
-                  :style="{ height: `${(bar.requests / maxBarValue) * 100}%` }"
+      <div class="lg:col-span-2">
+        <CodePreview
+          title="Bar Chart (SVG & CSS Height Distribution)"
+          description="Interactive column chart featuring top glowing highlight caps and hover tooltips."
+          :code="barChartSnippet"
+        >
+          <div class="space-y-4">
+            <div class="flex justify-between items-center pb-2 border-b border-border/60">
+              <span class="text-sm font-semibold">Weekly Requests Throughput</span>
+              <span class="label-mono text-primary font-bold">99.98% SUCCESS</span>
+            </div>
+            <div class="flex items-end justify-between gap-2 sm:gap-4 h-56 pt-6">
+              <div
+                v-for="(bar, idx) in barData"
+                :key="bar.day"
+                class="flex-1 flex flex-col items-center gap-2 group cursor-pointer relative h-full justify-end"
+                @mouseenter="activeBarIndex = idx"
+              >
+                <!-- Bar Pillar with Top Highlight Cap -->
+                <div class="w-full max-w-12 flex flex-col justify-end h-full">
+                  <div
+                    class="w-full rounded-t-lg transition-all duration-300 ease-out relative group-hover:scale-105 origin-bottom"
+                    :class="[
+                      activeBarIndex === idx
+                        ? 'bg-primary shadow-md shadow-primary/20'
+                        : 'bg-primary/60 hover:bg-primary/80',
+                    ]"
+                    :style="{ height: `${(bar.requests / maxBarValue) * 100}%` }"
+                  >
+                    <div class="absolute inset-x-0 top-0 h-1 bg-white/40 rounded-t-lg"></div>
+                  </div>
+                </div>
+
+                <!-- Day Label -->
+                <span
+                  class="text-xs font-mono transition-colors duration-150"
+                  :class="activeBarIndex === idx ? 'text-foreground font-bold' : 'text-muted-foreground'"
                 >
-                  <!-- Glowing top cap edge -->
-                  <div class="absolute inset-x-0 top-0 h-1 bg-white/40 rounded-t-lg"></div>
+                  {{ bar.day }}
+                </span>
+
+                <!-- Hover Tooltip -->
+                <div
+                  v-if="activeBarIndex === idx"
+                  class="absolute -top-12 z-20 whitespace-nowrap rounded-md border bg-popover px-2.5 py-1 text-[11px] font-medium text-popover-foreground shadow-lg pointer-events-none animate-in fade-in zoom-in-95 duration-150"
+                >
+                  <strong class="font-bold text-foreground">{{ bar.requests }}k</strong> calls ({{ bar.growth }})
                 </div>
               </div>
-
-              <!-- Day Label -->
-              <span
-                class="text-xs font-mono transition-colors duration-150"
-                :class="activeBarIndex === idx ? 'text-foreground font-bold' : 'text-muted-foreground'"
-              >
-                {{ bar.day }}
-              </span>
-
-              <!-- Hover Tooltip -->
-              <div
-                v-if="activeBarIndex === idx"
-                class="absolute -top-12 z-20 whitespace-nowrap rounded-md border bg-popover px-2.5 py-1 text-[11px] font-medium text-popover-foreground shadow-lg pointer-events-none animate-in fade-in zoom-in-95 duration-150"
-              >
-                <strong class="font-bold text-foreground">{{ bar.requests }}k</strong> calls ({{ bar.growth }})
-              </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </CodePreview>
+      </div>
 
       <!-- Segmented Donut Ring (1/3 width) -->
-      <Card class="overflow-hidden py-0 gap-0 shadow-sm border">
-        <CardHeader class="p-6 border-b border-border bg-muted/10">
-          <CardTitle class="text-base font-semibold">Storage Breakdown</CardTitle>
-          <CardDescription class="text-xs">Database capacity &amp; assets partition.</CardDescription>
-        </CardHeader>
-        <CardContent class="p-6 flex flex-col items-center justify-center">
-          <!-- Donut SVG Ring with Smooth Linecaps -->
-          <div class="relative w-48 h-48 flex items-center justify-center my-2 select-none">
-            <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
-              <!-- Background Track -->
-              <circle
-                cx="50"
-                cy="50"
-                :r="donutRadius"
-                fill="transparent"
-                stroke="currentColor"
-                stroke-width="9"
-                class="text-muted/30"
-              />
+      <div>
+        <CodePreview
+          title="Donut / Pie Chart (SVG)"
+          description="Segmented SVG donut ring with linecaps, stroke-dashoffset math, and interactive breakdown legend."
+          :code="donutChartSnippet"
+        >
+          <div class="flex flex-col items-center justify-center">
+            <!-- Donut SVG Ring -->
+            <div class="relative w-44 h-44 flex items-center justify-center my-2 select-none">
+              <svg viewBox="0 0 100 100" class="w-full h-full -rotate-90">
+                <circle
+                  cx="50"
+                  cy="50"
+                  :r="donutRadius"
+                  fill="transparent"
+                  stroke="currentColor"
+                  stroke-width="9"
+                  class="text-muted/30"
+                />
+                <circle
+                  v-for="seg in donutSegments"
+                  :key="seg.label"
+                  cx="50"
+                  cy="50"
+                  :r="donutRadius"
+                  fill="transparent"
+                  :stroke="seg.strokeColor"
+                  stroke-width="9"
+                  stroke-linecap="round"
+                  :stroke-dasharray="seg.strokeDasharray"
+                  :stroke-dashoffset="seg.strokeDashoffset"
+                  class="transition-all duration-300 ease-out cursor-pointer"
+                  :class="{
+                    'stroke-12 opacity-100': activeDonutIndex === seg.idx,
+                    'opacity-85 hover:opacity-100': activeDonutIndex !== seg.idx,
+                  }"
+                  @mouseenter="activeDonutIndex = seg.idx"
+                  @mouseleave="activeDonutIndex = null"
+                />
+              </svg>
 
-              <!-- Segment Curves -->
-              <circle
-                v-for="seg in donutSegments"
-                :key="seg.label"
-                cx="50"
-                cy="50"
-                :r="donutRadius"
-                fill="transparent"
-                :stroke="seg.strokeColor"
-                stroke-width="9"
-                stroke-linecap="round"
-                :stroke-dasharray="seg.strokeDasharray"
-                :stroke-dashoffset="seg.strokeDashoffset"
-                class="transition-all duration-300 ease-out cursor-pointer"
-                :class="{
-                  'stroke-12 opacity-100': activeDonutIndex === seg.idx,
-                  'opacity-85 hover:opacity-100': activeDonutIndex !== seg.idx
-                }"
-                @mouseenter="activeDonutIndex = seg.idx"
-                @mouseleave="activeDonutIndex = null"
-              />
-            </svg>
-
-            <!-- Center Metric Summary -->
-            <div class="absolute flex flex-col items-center justify-center text-center pointer-events-none">
-              <span class="text-2xl font-bold tracking-tight text-foreground font-mono">116.2 GB</span>
-              <span class="text-[11px] text-muted-foreground">of 250 GB Quota</span>
-            </div>
-          </div>
-
-          <!-- Interactive Legend List -->
-          <div class="w-full divide-y divide-border/60 text-xs mt-3">
-            <div
-              v-for="seg in storageData"
-              :key="seg.label"
-              class="flex items-center justify-between py-2 cursor-pointer transition-colors"
-              :class="{ 'text-foreground font-semibold': activeDonutIndex === storageData.indexOf(seg), 'text-muted-foreground': activeDonutIndex !== null && activeDonutIndex !== storageData.indexOf(seg) }"
-              @mouseenter="activeDonutIndex = storageData.indexOf(seg)"
-              @mouseleave="activeDonutIndex = null"
-            >
-              <div class="flex items-center gap-2">
-                <span :class="['h-2.5 w-2.5 rounded-full shrink-0', seg.colorClass]"></span>
-                <span class="text-xs truncate max-w-36">{{ seg.label }}</span>
+              <!-- Center Metric Summary -->
+              <div class="absolute flex flex-col items-center justify-center text-center pointer-events-none">
+                <span class="text-xl font-bold tracking-tight text-foreground font-mono">116.2 GB</span>
+                <span class="text-[10px] text-muted-foreground">of 250 GB Quota</span>
               </div>
-              <span class="font-mono text-xs">{{ seg.size }} ({{ seg.percent }}%)</span>
+            </div>
+
+            <!-- Interactive Legend List -->
+            <div class="w-full divide-y divide-border/60 text-xs mt-3">
+              <div
+                v-for="seg in storageData"
+                :key="seg.label"
+                class="flex items-center justify-between py-1.5 cursor-pointer transition-colors"
+                :class="{
+                  'text-foreground font-semibold': activeDonutIndex === storageData.indexOf(seg),
+                  'text-muted-foreground':
+                    activeDonutIndex !== null && activeDonutIndex !== storageData.indexOf(seg),
+                }"
+                @mouseenter="activeDonutIndex = storageData.indexOf(seg)"
+                @mouseleave="activeDonutIndex = null"
+              >
+                <div class="flex items-center gap-2">
+                  <span :class="['h-2.5 w-2.5 rounded-full shrink-0', seg.colorClass]"></span>
+                  <span class="text-xs truncate max-w-32">{{ seg.label }}</span>
+                </div>
+                <span class="font-mono text-xs">{{ seg.size }} ({{ seg.percent }}%)</span>
+              </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </CodePreview>
+      </div>
     </div>
 
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <!-- 3. LIVE CONTINUOUS TELEMETRY STREAM                                   -->
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <Card class="overflow-hidden py-0 gap-0 shadow-sm border">
-      <CardHeader class="p-6 border-b border-border bg-muted/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-        <div>
+    <!-- 3. LIVE SPARKLINE WAVE PATH -->
+    <CodePreview
+      title="Sparkline Inline Chart (Continuous Telemetry Stream)"
+      description="Lightweight continuous SVG spline wave suitable for KPI cards, real-time latencies, and mini dashboards."
+      :code="sparklineSnippet"
+    >
+      <div class="space-y-4">
+        <div class="flex items-center justify-between pb-2 border-b border-border/60">
           <div class="flex items-center gap-2">
-            <CardTitle class="text-base font-semibold">Live Edge Gateway Latency</CardTitle>
+            <span class="text-sm font-semibold">Live Edge Gateway Latency</span>
             <span class="status-dot"></span>
           </div>
-          <CardDescription class="text-xs mt-0.5">
-            Continuous streaming ping responses across all worldwide edge POP locations.
-          </CardDescription>
+          <div class="flex items-center gap-6 text-xs">
+            <div class="text-right">
+              <span class="text-[11px] text-muted-foreground">Current: </span>
+              <span class="font-bold text-foreground font-mono">{{ currentPing }} ms</span>
+            </div>
+            <div class="text-right">
+              <span class="text-[11px] text-muted-foreground">P95: </span>
+              <span class="font-bold text-foreground font-mono">18.4 ms</span>
+            </div>
+            <div class="text-right">
+              <span class="font-bold text-emerald-500">Optimal</span>
+            </div>
+          </div>
         </div>
 
-        <div class="flex items-center gap-6 text-xs">
-          <div class="text-right">
-            <span class="text-[11px] text-muted-foreground">Current</span>
-            <p class="font-bold text-foreground font-mono">{{ currentPing }} ms</p>
-          </div>
-          <div class="text-right">
-            <span class="text-[11px] text-muted-foreground">Global P95</span>
-            <p class="font-bold text-foreground font-mono">18.4 ms</p>
-          </div>
-          <div class="text-right">
-            <span class="text-[11px] text-muted-foreground">Status</span>
-            <p class="font-bold text-emerald-500">Optimal</p>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent class="p-6">
         <div class="relative w-full h-20 overflow-hidden">
           <svg viewBox="0 0 500 70" preserveAspectRatio="none" class="w-full h-full">
             <defs>
-              <linearGradient id="liveWaveGrad" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="liveWaveGradPreview" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stop-color="oklch(0.696 0.17 162.48)" stop-opacity="0.25" />
                 <stop offset="100%" stop-color="oklch(0.696 0.17 162.48)" stop-opacity="0.0" />
               </linearGradient>
             </defs>
 
             <!-- Fill Area -->
-            <path :d="smoothWavePath.fill" fill="url(#liveWaveGrad)" />
+            <path :d="smoothWavePath.fill" fill="url(#liveWaveGradPreview)" />
 
             <!-- Smooth Curved Wave -->
             <path
@@ -637,7 +694,7 @@ const smoothWavePath = computed(() => {
             />
           </svg>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </CodePreview>
   </div>
 </template>

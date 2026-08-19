@@ -218,6 +218,18 @@
     overflow: auto !important;
     padding-right: 0px !important;
   }
+
+  /* Disable spinner buttons / arrows on type="number" inputs globally */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
 }
 
 /* Custom Minimalist & Modern Scrollbar Style */

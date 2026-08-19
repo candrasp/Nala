@@ -2,6 +2,10 @@
 
 > A modern, production-ready admin dashboard template built with Vue 3, Vite, TypeScript, and Tailwind CSS v4.
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-nala.kenvano.web.id-10b981?style=for-the-badge&logo=cloudflare&logoColor=white)](https://nala.kenvano.web.id)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](./LICENSE)
+[![Vue 3](https://img.shields.io/badge/Vue-3.x-42b883?style=for-the-badge&logo=vue.js&logoColor=white)](https://vuejs.org/)
+
 ![Nala Dashboard Preview](./public/screenshot.png)
 
 ---
@@ -39,6 +43,12 @@
 | Utilities | `@vueuse/core`, `axios`, `clsx`, `tailwind-merge`, `class-variance-authority` |
 | Type System | TypeScript 6 + `vue-tsc` |
 | Notifications / Toast | `vue-sonner` |
+
+---
+
+## 🔗 Live Demo
+
+**[https://nala.kenvano.web.id](https://nala.kenvano.web.id)**
 
 ---
 

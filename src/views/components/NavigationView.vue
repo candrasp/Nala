@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref, computed } from 'vue'
 import {
   ChevronLeft,
   ChevronRight,
@@ -15,6 +16,11 @@ import {
   Globe,
   Search,
 } from '@lucide/vue'
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Stepper } from '@/components/ui/stepper'
+import { Timeline } from '@/components/ui/timeline'
+import { Kbd } from '@/components/ui/kbd'
 
 // ─── 1. Stepper / Wizard State ────────────────────────────────────────────────
 const currentStep = ref(2)
@@ -28,6 +34,7 @@ const wizardSteps = [
 
 // ─── 2. Vertical Tabs State ──────────────────────────────────────────────────
 const activeVerticalTab = ref('general')
+const activeUnderlineTab = ref('analytics')
 
 // ─── 3. Accordions State ─────────────────────────────────────────────────────
 const activeAccordion = ref<string | null>('item-1')
@@ -63,7 +70,7 @@ const deploymentEvents = [
   {
     id: 3,
     title: 'SSL Certificate Auto-Renewed',
-    description: 'Let\'s Encrypt wildcard certificate for *.supabase.co renewed for 90 days.',
+    description: "Let's Encrypt wildcard certificate for *.supabase.co renewed for 90 days.",
     time: '3 hours ago',
     icon: Shield,
     status: 'neutral' as const,
@@ -81,7 +88,7 @@ const deploymentEvents = [
   {
     id: 5,
     title: 'Git Commit Synced to Main Branch',
-    description: 'Commit 8f19da2: "refactor: upgrade to tailwind v4 and smooth splines" pushed by @developer.',
+    description: 'Commit 8f19da2: "refactor: upgrade to tailwind v4" pushed by @developer.',
     time: '8 hours ago',
     icon: GitCommit,
     status: 'neutral' as const,
@@ -92,16 +99,22 @@ const deploymentEvents = [
 // ─── 6. Command Search Demo State ────────────────────────────────────────────
 const commandSearch = ref('')
 const commandList = [
-  { group: 'Navigation', items: [
-    { title: 'Go to Dashboard', shortcut: 'G D', icon: Activity },
-    { title: 'User Management', shortcut: 'G U', icon: Settings2 },
-    { title: 'Project Settings', shortcut: 'G S', icon: Key },
-  ]},
-  { group: 'Actions', items: [
-    { title: 'Create New Database Table', shortcut: '⌘ N', icon: Database },
-    { title: 'Generate API Secret Key', shortcut: '⌥ K', icon: Key },
-    { title: 'Deploy to Staging', shortcut: '⇧ ⌘ D', icon: Rocket },
-  ]},
+  {
+    group: 'Navigation',
+    items: [
+      { title: 'Go to Dashboard', shortcut: 'G D', icon: Activity },
+      { title: 'User Management', shortcut: 'G U', icon: Settings2 },
+      { title: 'Project Settings', shortcut: 'G S', icon: Key },
+    ],
+  },
+  {
+    group: 'Actions',
+    items: [
+      { title: 'Create New Database Table', shortcut: '⌘ N', icon: Database },
+      { title: 'Generate API Secret Key', shortcut: '⌥ K', icon: Key },
+      { title: 'Deploy to Staging', shortcut: '⇧ ⌘ D', icon: Rocket },
+    ],
+  },
 ]
 
 const filteredCommandList = computed(() => {
@@ -110,50 +123,182 @@ const filteredCommandList = computed(() => {
   return commandList
     .map((g) => ({
       ...g,
-      items: g.items.filter((i) => i.title.toLowerCase().includes(q) || i.shortcut.toLowerCase().includes(q)),
+      items: g.items.filter(
+        (i) => i.title.toLowerCase().includes(q) || i.shortcut.toLowerCase().includes(q),
+      ),
     }))
     .filter((g) => g.items.length > 0)
 })
+
+// ─── Code Documentation Snippets ─────────────────────────────────────────────
+
+const stepperSnippet = `<!-- Multi-Step Wizard / Stepper Flow -->
+<script setup lang="ts">
+const currentStep = ref(2)
+const steps = [
+  { id: 1, title: 'Project Details', description: 'Name & repository' },
+  { id: 2, title: 'Environment Config', description: 'Database & secrets' },
+  { id: 3, title: 'Compute & Scaling', description: 'Nodes & memory' },
+  { id: 4, title: 'Review & Deploy', description: 'Final verification' },
+]
+<\/script>
+
+<div class="space-y-6">
+  <Stepper :steps="steps" v-model="currentStep" />
+
+  <!-- Step Content Container -->
+  <div class="p-6 rounded-xl border border-border bg-muted/10">
+    <p class="text-sm font-semibold">Active Step: {{ currentStep }}</p>
+  </div>
+
+  <!-- Navigation Action Buttons -->
+  <div class="flex justify-between">
+    <Button
+      variant="outline"
+      size="sm"
+      :disabled="currentStep === 1"
+      @click="currentStep = Math.max(1, currentStep - 1)"
+    >
+      Previous
+    </Button>
+    <Button
+      size="sm"
+      :disabled="currentStep === steps.length"
+      @click="currentStep = Math.min(steps.length, currentStep + 1)"
+    >
+      Continue Next
+    </Button>
+  </div>
+</div>`
+
+const tabsSnippet = `<!-- Standard Horizontal Tabs & Underline Tabs -->
+
+<!-- 1. Default Pill Tabs -->
+<Tabs default-value="overview">
+  <TabsList class="grid grid-cols-3 w-full">
+    <TabsTrigger value="overview">Overview</TabsTrigger>
+    <TabsTrigger value="schema">Schema</TabsTrigger>
+    <TabsTrigger value="security">Security</TabsTrigger>
+  </TabsList>
+  <TabsContent value="overview" class="p-4 border rounded-lg">
+    <p class="text-xs">Cluster health: 99.99% uptime.</p>
+  </TabsContent>
+  <TabsContent value="schema" class="p-4 border rounded-lg">
+    <p class="text-xs">24 active tables configured.</p>
+  </TabsContent>
+  <TabsContent value="security" class="p-4 border rounded-lg">
+    <p class="text-xs">TLS 1.3 encryption enabled.</p>
+  </TabsContent>
+</Tabs>
+
+<!-- 2. Clean Underline Tabs -->
+<div class="flex border-b border-border gap-6">
+  <button
+    class="pb-2 text-xs font-medium border-b-2 transition-colors"
+    :class="activeTab === 'tab1' ? 'border-primary text-foreground font-semibold' : 'border-transparent text-muted-foreground'"
+  >
+    Analytics
+  </button>
+</div>`
+
+const verticalTabsSnippet = `<!-- Vertical Tabs Navigation Layout -->
+<div class="flex flex-col sm:flex-row gap-6">
+  <!-- Tab Trigger List (Sidebar) -->
+  <div class="w-full sm:w-48 flex flex-col gap-1 border-r border-border sm:pr-4">
+    <button
+      @click="activeTab = 'general'"
+      class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-left transition-colors"
+      :class="activeTab === 'general' ? 'bg-primary text-primary-foreground font-semibold' : 'text-muted-foreground hover:bg-accent'"
+    >
+      <Settings2 class="h-4 w-4" />
+      General Settings
+    </button>
+  </div>
+
+  <!-- Tab Body View -->
+  <div class="flex-1 p-2">
+    <p class="text-xs text-muted-foreground">Manage organization profile & preferences.</p>
+  </div>
+</div>`
+
+const breadcrumbsSnippet = `<!-- Hierarchical Breadcrumb Navigation Trail -->
+<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink to="/">Dashboard</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink to="/components/navigation">Components</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Navigation &amp; Flow</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>`
+
+const paginationSnippet = `<!-- Numbered & Previous/Next Pagination -->
+<script setup lang="ts">
+const currentPage = ref(3)
+const totalPages = ref(10)
+<\/script>
+
+<div class="flex items-center gap-1">
+  <Button
+    variant="outline"
+    size="icon"
+    class="h-8 w-8"
+    :disabled="currentPage === 1"
+    @click="currentPage = Math.max(1, currentPage - 1)"
+  >
+    <ChevronLeft class="h-4 w-4" />
+  </Button>
+
+  <Button
+    v-for="p in [1, 2, 3, 4, 5]"
+    :key="p"
+    variant="ghost"
+    size="sm"
+    class="h-8 w-8 p-0 text-xs font-mono"
+    :class="{ 'bg-primary text-primary-foreground font-semibold': currentPage === p }"
+    @click="currentPage = p"
+  >
+    {{ p }}
+  </Button>
+
+  <Button
+    variant="outline"
+    size="icon"
+    class="h-8 w-8"
+    :disabled="currentPage === totalPages"
+    @click="currentPage = Math.min(totalPages, currentPage + 1)"
+  >
+    <ChevronRight class="h-4 w-4" />
+  </Button>
+</div>`
+
+const timelineSnippet = `<!-- Chronological Activity Timeline Component -->
+<Timeline :items="deploymentEvents" />`
 </script>
 
 <template>
   <div class="space-y-8 max-w-[1920px] mx-auto pb-12">
     <!-- Page Header -->
-    <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <div class="flex items-center gap-2">
-          <span class="label-mono">Component Showcase</span>
-          <span class="status-dot"></span>
-        </div>
-        <h1 class="text-2xl font-bold tracking-tight text-foreground mt-1">Navigation &amp; Flow</h1>
-        <p class="text-sm text-muted-foreground">
-          Steppers, vertical tabs, timeline audit logs, collapsible accordions, and keyboard shortcut triggers.
-        </p>
-      </div>
-    </div>
+    <PageHeader
+      title="Navigation & Flow"
+      description="Multi-step wizards, tab navigations, hierarchical breadcrumbs, numbered paginations, and audit timelines."
+      badge="Component Showcase"
+    />
 
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <!-- 1. MULTI-STEP WIZARD / STEPPER                                        -->
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <Card class="shadow-sm overflow-hidden py-0 gap-0">
-      <CardHeader class="p-6 border-b border-border bg-muted/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <CardTitle class="text-base font-semibold">Multi-Step Flow / Stepper</CardTitle>
-          <CardDescription class="text-xs">
-            Interactive progress indicators with step status, numbers, and validation flow.
-          </CardDescription>
-        </div>
-        <span class="label-mono text-primary font-bold">
-          STEP {{ currentStep }} OF {{ wizardSteps.length }}
-        </span>
-      </CardHeader>
-      <CardContent class="p-6 space-y-6">
-        <!-- Stepper Component -->
-        <Stepper
-          :steps="wizardSteps"
-          v-model="currentStep"
-          class="pb-2"
-        />
+    <!-- 1. MULTI-STEP WIZARD / STEPPER -->
+    <CodePreview
+      title="Multi-Step Flow / Stepper"
+      description="Interactive multi-step progress indicator with step status, labels, numbers, and validation controls."
+      :code="stepperSnippet"
+    >
+      <div class="space-y-6">
+        <Stepper :steps="wizardSteps" v-model="currentStep" class="pb-2" />
 
         <!-- Step Content Area Card -->
         <div class="rounded-xl border border-border bg-muted/10 p-6 min-h-36 flex flex-col justify-between">
@@ -232,95 +377,68 @@ const filteredCommandList = computed(() => {
             </div>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </CodePreview>
 
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <!-- 2. VERTICAL TABS & HORIZONTAL TABS (2-COL)                            -->
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <!-- Vertical Tabs Variant -->
-      <Card class="shadow-sm overflow-hidden py-0 gap-0">
-        <CardHeader class="p-6 border-b border-border bg-muted/10">
-          <CardTitle class="text-base font-semibold">Vertical Tabs Layout</CardTitle>
-          <CardDescription class="text-xs">
-            Side navigation tab triggers ideal for settings panels and nested dashboards.
-          </CardDescription>
-        </CardHeader>
-        <CardContent class="p-6">
-          <div class="flex flex-col sm:flex-row gap-6 min-h-56">
-            <!-- Vertical Tab Sidebar Trigger List -->
-            <div class="w-full sm:w-48 flex flex-col gap-1 border-r border-border sm:pr-4">
-              <button
-                type="button"
-                @click="activeVerticalTab = 'general'"
-                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-left transition-colors cursor-pointer"
-                :class="activeVerticalTab === 'general' ? 'bg-primary text-primary-foreground font-semibold shadow-xs' : 'text-muted-foreground hover:bg-accent hover:text-foreground'"
-              >
-                <Settings2 class="h-4 w-4 shrink-0" />
-                General Settings
-              </button>
-              <button
-                type="button"
-                @click="activeVerticalTab = 'database'"
-                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-left transition-colors cursor-pointer"
-                :class="activeVerticalTab === 'database' ? 'bg-primary text-primary-foreground font-semibold shadow-xs' : 'text-muted-foreground hover:bg-accent hover:text-foreground'"
-              >
-                <Database class="h-4 w-4 shrink-0" />
-                Database Engine
-              </button>
-              <button
-                type="button"
-                @click="activeVerticalTab = 'security'"
-                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-left transition-colors cursor-pointer"
-                :class="activeVerticalTab === 'security' ? 'bg-primary text-primary-foreground font-semibold shadow-xs' : 'text-muted-foreground hover:bg-accent hover:text-foreground'"
-              >
-                <Shield class="h-4 w-4 shrink-0" />
-                Security &amp; SSL
-              </button>
-              <button
-                type="button"
-                @click="activeVerticalTab = 'domains'"
-                class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-left transition-colors cursor-pointer"
-                :class="activeVerticalTab === 'domains' ? 'bg-primary text-primary-foreground font-semibold shadow-xs' : 'text-muted-foreground hover:bg-accent hover:text-foreground'"
-              >
-                <Globe class="h-4 w-4 shrink-0" />
-                Custom Domains
-              </button>
-            </div>
-
-            <!-- Vertical Tab Body Content -->
-            <div class="flex-1 space-y-2 p-2">
-              <div v-if="activeVerticalTab === 'general'" class="space-y-2">
-                <h4 class="text-sm font-semibold text-foreground">Project General Preferences</h4>
-                <p class="text-xs text-muted-foreground">Manage organization profile, timezone default (UTC+7), and team collaboration permissions.</p>
-              </div>
-              <div v-else-if="activeVerticalTab === 'database'" class="space-y-2">
-                <h4 class="text-sm font-semibold text-foreground">PostgreSQL Engine 16.3</h4>
-                <p class="text-xs text-muted-foreground">Connection pooler (PgBouncer) running at 98.4% efficiency with 120 max concurrent connections.</p>
-              </div>
-              <div v-else-if="activeVerticalTab === 'security'" class="space-y-2">
-                <h4 class="text-sm font-semibold text-foreground">Hardware 2FA &amp; Passkeys</h4>
-                <p class="text-xs text-muted-foreground">Enforce WebAuthn passkeys across all organization administrators and developer roles.</p>
-              </div>
-              <div v-else class="space-y-2">
-                <h4 class="text-sm font-semibold text-foreground">Cloudflare CNAME Records</h4>
-                <p class="text-xs text-muted-foreground">Your custom domain api.nala-admin.com is verified and serving traffic over HTTPS.</p>
-              </div>
-            </div>
+    <!-- 2. TABS: HORIZONTAL & UNDERLINE -->
+    <CodePreview
+      title="Tabs (Pill, Underline & Default Variants)"
+      description="Tabbed view switches supporting standard pill triggers, custom border underline indicators, and nested content panels."
+      :code="tabsSnippet"
+    >
+      <div class="space-y-6">
+        <!-- Underline Tabs Demo -->
+        <div class="space-y-3">
+          <span class="label-mono">Underline Tab Bar</span>
+          <div class="flex border-b border-border gap-6">
+            <button
+              type="button"
+              @click="activeUnderlineTab = 'analytics'"
+              class="pb-2 text-xs font-medium border-b-2 transition-colors cursor-pointer"
+              :class="
+                activeUnderlineTab === 'analytics'
+                  ? 'border-primary text-foreground font-semibold'
+                  : 'border-transparent text-muted-foreground hover:text-foreground'
+              "
+            >
+              Analytics &amp; Queries
+            </button>
+            <button
+              type="button"
+              @click="activeUnderlineTab = 'traffic'"
+              class="pb-2 text-xs font-medium border-b-2 transition-colors cursor-pointer"
+              :class="
+                activeUnderlineTab === 'traffic'
+                  ? 'border-primary text-foreground font-semibold'
+                  : 'border-transparent text-muted-foreground hover:text-foreground'
+              "
+            >
+              Network Ingress
+            </button>
+            <button
+              type="button"
+              @click="activeUnderlineTab = 'backups'"
+              class="pb-2 text-xs font-medium border-b-2 transition-colors cursor-pointer"
+              :class="
+                activeUnderlineTab === 'backups'
+                  ? 'border-primary text-foreground font-semibold'
+                  : 'border-transparent text-muted-foreground hover:text-foreground'
+              "
+            >
+              WAL Backups
+            </button>
           </div>
-        </CardContent>
-      </Card>
 
-      <!-- Standard Horizontal Tabs -->
-      <Card class="shadow-sm overflow-hidden py-0 gap-0">
-        <CardHeader class="p-6 border-b border-border bg-muted/10">
-          <CardTitle class="text-base font-semibold">Standard Horizontal Tabs</CardTitle>
-          <CardDescription class="text-xs">
-            Smooth pill tab triggers with icons and animated view switching.
-          </CardDescription>
-        </CardHeader>
-        <CardContent class="p-6">
+          <div class="p-4 rounded-lg border border-border bg-muted/10 text-xs text-muted-foreground">
+            <p v-if="activeUnderlineTab === 'analytics'">Active queries: 14 running across 2 worker pools.</p>
+            <p v-else-if="activeUnderlineTab === 'traffic'">Peak ingress bandwidth: 4.8 Gbps via Frankfurt POP.</p>
+            <p v-else>Latest snapshot created 18 mins ago (RPO 1 second).</p>
+          </div>
+        </div>
+
+        <!-- Standard Pill Tabs -->
+        <div class="space-y-3 pt-2">
+          <span class="label-mono">Standard Pill Tabs</span>
           <Tabs default-value="overview" class="w-full space-y-4">
             <TabsList class="grid w-full grid-cols-3">
               <TabsTrigger value="overview" class="gap-1.5 text-xs">
@@ -358,230 +476,112 @@ const filteredCommandList = computed(() => {
               </p>
             </TabsContent>
           </Tabs>
-        </CardContent>
-      </Card>
-    </div>
+        </div>
+      </div>
+    </CodePreview>
 
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <!-- 3. TIMELINE AUDIT LOG & ACCORDIONS (2-COL)                            -->
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <!-- Activity Timeline Component -->
-      <Card class="shadow-sm overflow-hidden py-0 gap-0">
-        <CardHeader class="p-6 border-b border-border bg-muted/10 flex flex-row items-center justify-between">
-          <div>
-            <CardTitle class="text-base font-semibold">Chronological Activity Timeline</CardTitle>
-            <CardDescription class="text-xs">Live deployment logs &amp; system audit trail.</CardDescription>
+    <!-- 3. VERTICAL TABS LAYOUT -->
+    <CodePreview
+      title="Vertical Tabs Navigation"
+      description="Sidebar tab triggers stacked vertically, ideal for dense settings consoles and account management."
+      :code="verticalTabsSnippet"
+    >
+      <div class="flex flex-col sm:flex-row gap-6 min-h-56">
+        <!-- Vertical Tab Sidebar Trigger List -->
+        <div class="w-full sm:w-48 flex flex-col gap-1 border-r border-border sm:pr-4">
+          <button
+            type="button"
+            @click="activeVerticalTab = 'general'"
+            class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-left transition-colors cursor-pointer"
+            :class="
+              activeVerticalTab === 'general'
+                ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
+                : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+            "
+          >
+            <Settings2 class="h-4 w-4 shrink-0" />
+            General Settings
+          </button>
+          <button
+            type="button"
+            @click="activeVerticalTab = 'database'"
+            class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-left transition-colors cursor-pointer"
+            :class="
+              activeVerticalTab === 'database'
+                ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
+                : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+            "
+          >
+            <Database class="h-4 w-4 shrink-0" />
+            Database Engine
+          </button>
+          <button
+            type="button"
+            @click="activeVerticalTab = 'security'"
+            class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-left transition-colors cursor-pointer"
+            :class="
+              activeVerticalTab === 'security'
+                ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
+                : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+            "
+          >
+            <Shield class="h-4 w-4 shrink-0" />
+            Security &amp; SSL
+          </button>
+          <button
+            type="button"
+            @click="activeVerticalTab = 'domains'"
+            class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-left transition-colors cursor-pointer"
+            :class="
+              activeVerticalTab === 'domains'
+                ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
+                : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+            "
+          >
+            <Globe class="h-4 w-4 shrink-0" />
+            Custom Domains
+          </button>
+        </div>
+
+        <!-- Vertical Tab Body Content -->
+        <div class="flex-1 space-y-2 p-2">
+          <div v-if="activeVerticalTab === 'general'" class="space-y-2">
+            <h4 class="text-sm font-semibold text-foreground">Project General Preferences</h4>
+            <p class="text-xs text-muted-foreground">
+              Manage organization profile, timezone default (UTC+7), and team collaboration permissions.
+            </p>
           </div>
-          <span class="status-dot"></span>
-        </CardHeader>
-        <CardContent class="p-6">
-          <Timeline :items="deploymentEvents" />
-        </CardContent>
-      </Card>
-
-      <!-- Smooth Collapsible Accordions -->
-      <Card class="shadow-sm overflow-hidden py-0 gap-0">
-        <CardHeader class="p-6 border-b border-border bg-muted/10">
-          <CardTitle class="text-base font-semibold">Collapsible Accordions</CardTitle>
-          <CardDescription class="text-xs">
-            Hardware-accelerated CSS Grid 60fps expandable panels with rotated caret highlights.
-          </CardDescription>
-        </CardHeader>
-        <CardContent class="p-6 space-y-3">
-          <!-- Item 1 -->
-          <div class="border border-border rounded-lg overflow-hidden transition-colors" :class="{ 'bg-muted/10 border-primary/40': activeAccordion === 'item-1' }">
-            <button
-              @click="toggleAccordion('item-1')"
-              class="w-full flex items-center justify-between p-4 text-left font-medium text-sm text-foreground hover:bg-muted/40 transition-colors cursor-pointer"
-            >
-              <span>What is the query rate limit on serverless edge functions?</span>
-              <ChevronDown
-                class="h-4 w-4 text-muted-foreground transition-transform duration-300 ease-out shrink-0"
-                :class="{ 'rotate-180 text-primary': activeAccordion === 'item-1' }"
-              />
-            </button>
-            <div
-              class="grid transition-[grid-template-rows,opacity] duration-300 ease-out"
-              :class="activeAccordion === 'item-1' ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'"
-            >
-              <div class="overflow-hidden">
-                <div class="p-4 pt-0 text-xs text-muted-foreground leading-relaxed border-t border-border/40 mt-1">
-                  Serverless functions allow up to 10,000 invocations per minute on the Pro Tier, with automatic bursting capabilities during high-traffic spikes without cold-starts.
-                </div>
-              </div>
-            </div>
+          <div v-else-if="activeVerticalTab === 'database'" class="space-y-2">
+            <h4 class="text-sm font-semibold text-foreground">PostgreSQL Engine 16.3</h4>
+            <p class="text-xs text-muted-foreground">
+              Connection pooler (PgBouncer) running at 98.4% efficiency with 120 max concurrent connections.
+            </p>
           </div>
-
-          <!-- Item 2 -->
-          <div class="border border-border rounded-lg overflow-hidden transition-colors" :class="{ 'bg-muted/10 border-primary/40': activeAccordion === 'item-2' }">
-            <button
-              @click="toggleAccordion('item-2')"
-              class="w-full flex items-center justify-between p-4 text-left font-medium text-sm text-foreground hover:bg-muted/40 transition-colors cursor-pointer"
-            >
-              <span>How does Point-in-Time Recovery (PITR) work?</span>
-              <ChevronDown
-                class="h-4 w-4 text-muted-foreground transition-transform duration-300 ease-out shrink-0"
-                :class="{ 'rotate-180 text-primary': activeAccordion === 'item-2' }"
-              />
-            </button>
-            <div
-              class="grid transition-[grid-template-rows,opacity] duration-300 ease-out"
-              :class="activeAccordion === 'item-2' ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'"
-            >
-              <div class="overflow-hidden">
-                <div class="p-4 pt-0 text-xs text-muted-foreground leading-relaxed border-t border-border/40 mt-1">
-                  PITR creates continuous WAL log archives, allowing you to restore your database state to any specific second in the past 7 days with zero loss.
-                </div>
-              </div>
-            </div>
+          <div v-else-if="activeVerticalTab === 'security'" class="space-y-2">
+            <h4 class="text-sm font-semibold text-foreground">Hardware 2FA &amp; Passkeys</h4>
+            <p class="text-xs text-muted-foreground">
+              Enforce WebAuthn passkeys across all organization administrators and developer roles.
+            </p>
           </div>
-
-          <!-- Item 3 -->
-          <div class="border border-border rounded-lg overflow-hidden transition-colors" :class="{ 'bg-muted/10 border-primary/40': activeAccordion === 'item-3' }">
-            <button
-              @click="toggleAccordion('item-3')"
-              class="w-full flex items-center justify-between p-4 text-left font-medium text-sm text-foreground hover:bg-muted/40 transition-colors cursor-pointer"
-            >
-              <span>Are read replicas synchronized in real time?</span>
-              <ChevronDown
-                class="h-4 w-4 text-muted-foreground transition-transform duration-300 ease-out shrink-0"
-                :class="{ 'rotate-180 text-primary': activeAccordion === 'item-3' }"
-              />
-            </button>
-            <div
-              class="grid transition-[grid-template-rows,opacity] duration-300 ease-out"
-              :class="activeAccordion === 'item-3' ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'"
-            >
-              <div class="overflow-hidden">
-                <div class="p-4 pt-0 text-xs text-muted-foreground leading-relaxed border-t border-border/40 mt-1">
-                  Yes, read replicas utilize streaming physical replication with typical replication lag under 25 milliseconds globally.
-                </div>
-              </div>
-            </div>
+          <div v-else class="space-y-2">
+            <h4 class="text-sm font-semibold text-foreground">Cloudflare CNAME Records</h4>
+            <p class="text-xs text-muted-foreground">
+              Your custom domain api.nala-admin.com is verified and serving traffic over HTTPS.
+            </p>
           </div>
-        </CardContent>
-      </Card>
-    </div>
+        </div>
+      </div>
+    </CodePreview>
 
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <!-- 4. COMMAND PALETTE DEMO & KEYBOARD SHORTCUTS <KBD>                    -->
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <!-- Command Palette Inline Demo -->
-      <Card class="shadow-sm overflow-hidden py-0 gap-0">
-        <CardHeader class="p-6 border-b border-border bg-muted/10">
-          <CardTitle class="text-base font-semibold">Command Palette Showcase</CardTitle>
-          <CardDescription class="text-xs">
-            Searchable command executor built on the Command primitive with hotkey mapping.
-          </CardDescription>
-        </CardHeader>
-        <CardContent class="p-6 space-y-4">
-          <!-- Command box wrapper -->
-          <div class="rounded-xl border border-border bg-background shadow-xs overflow-hidden">
-            <div class="flex items-center border-b border-border px-3 py-2">
-              <Search class="mr-2 h-4 w-4 shrink-0 text-muted-foreground opacity-50" />
-              <input
-                v-model="commandSearch"
-                placeholder="Type a command or jump to page..."
-                class="flex h-8 w-full rounded-md bg-transparent text-xs outline-none placeholder:text-muted-foreground"
-              />
-            </div>
-
-            <!-- Command items list -->
-            <div class="max-h-52 overflow-y-auto p-2 space-y-3">
-              <div v-if="filteredCommandList.length === 0" class="py-4 text-center text-xs text-muted-foreground">
-                No matching command found.
-              </div>
-
-              <div v-for="group in filteredCommandList" :key="group.group" class="space-y-1">
-                <div class="px-2 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                  {{ group.group }}
-                </div>
-                <button
-                  v-for="item in group.items"
-                  :key="item.title"
-                  type="button"
-                  class="w-full flex items-center justify-between rounded-lg px-2.5 py-1.5 text-xs text-foreground hover:bg-accent hover:text-accent-foreground cursor-pointer transition-colors"
-                >
-                  <div class="flex items-center gap-2">
-                    <component :is="item.icon" class="h-3.5 w-3.5 text-muted-foreground" />
-                    <span>{{ item.title }}</span>
-                  </div>
-                  <Kbd size="sm">{{ item.shortcut }}</Kbd>
-                </button>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <!-- Keyboard Shortcuts Reference Table -->
-      <Card class="shadow-sm overflow-hidden py-0 gap-0">
-        <CardHeader class="p-6 border-b border-border bg-muted/10">
-          <CardTitle class="text-base font-semibold">Keyboard Shortcuts (`&lt;Kbd&gt;`)</CardTitle>
-          <CardDescription class="text-xs">
-            Clean, accessible keyboard key badges for hotkey tooltips and cheat-sheets.
-          </CardDescription>
-        </CardHeader>
-        <CardContent class="p-6">
-          <div class="space-y-3">
-            <div class="flex items-center justify-between py-1.5 border-b border-border/60 text-xs">
-              <span class="text-muted-foreground">Quick Search Palette</span>
-              <div class="flex items-center gap-1">
-                <Kbd>Ctrl</Kbd>
-                <span>+</span>
-                <Kbd>K</Kbd>
-              </div>
-            </div>
-
-            <div class="flex items-center justify-between py-1.5 border-b border-border/60 text-xs">
-              <span class="text-muted-foreground">Toggle Collapsible Sidebar</span>
-              <div class="flex items-center gap-1">
-                <Kbd>⌘</Kbd>
-                <span>+</span>
-                <Kbd>B</Kbd>
-              </div>
-            </div>
-
-            <div class="flex items-center justify-between py-1.5 border-b border-border/60 text-xs">
-              <span class="text-muted-foreground">Open Notification Panel</span>
-              <div class="flex items-center gap-1">
-                <Kbd>⇧</Kbd>
-                <span>+</span>
-                <Kbd>N</Kbd>
-              </div>
-            </div>
-
-            <div class="flex items-center justify-between py-1.5 border-b border-border/60 text-xs">
-              <span class="text-muted-foreground">Save Configuration Form</span>
-              <div class="flex items-center gap-1">
-                <Kbd>Ctrl</Kbd>
-                <span>+</span>
-                <Kbd>S</Kbd>
-              </div>
-            </div>
-
-            <div class="flex items-center justify-between py-1.5 text-xs">
-              <span class="text-muted-foreground">Close Active Modal / Drawer</span>
-              <Kbd>Esc</Kbd>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <!-- 5. BREADCRUMBS & PAGINATION                                           -->
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <!-- Breadcrumbs Card -->
-      <Card class="shadow-sm overflow-hidden py-0 gap-0">
-        <CardHeader class="p-6 border-b border-border bg-muted/10">
-          <CardTitle class="text-base font-semibold">Hierarchical Breadcrumbs</CardTitle>
-          <CardDescription class="text-xs">Location trails and deep route context.</CardDescription>
-        </CardHeader>
-        <CardContent class="p-6 space-y-4">
+    <!-- 4. BREADCRUMBS & PAGINATION (2-COL) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Breadcrumbs -->
+      <CodePreview
+        title="Hierarchical Breadcrumbs"
+        description="Location trail that displays deep navigation hierarchy and clickable parent routes."
+        :code="breadcrumbsSnippet"
+      >
+        <div class="p-2">
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -597,19 +597,16 @@ const filteredCommandList = computed(() => {
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
-        </CardContent>
-      </Card>
+        </div>
+      </CodePreview>
 
-      <!-- Pagination Card -->
-      <Card class="shadow-sm overflow-hidden py-0 gap-0">
-        <CardHeader class="p-6 border-b border-border bg-muted/10 flex flex-row items-center justify-between">
-          <div>
-            <CardTitle class="text-base font-semibold">Pagination Controls</CardTitle>
-            <CardDescription class="text-xs">Page switching with numeric buttons.</CardDescription>
-          </div>
-          <span class="font-mono text-xs text-muted-foreground">Page {{ currentPage }} of {{ totalPages }}</span>
-        </CardHeader>
-        <CardContent class="p-6 flex items-center justify-center">
+      <!-- Pagination -->
+      <CodePreview
+        title="Pagination Controls"
+        description="Numbered page switcher with active states and previous/next navigation buttons."
+        :code="paginationSnippet"
+      >
+        <div class="flex flex-col items-center justify-center gap-3 py-2">
           <div class="flex items-center gap-1">
             <Button
               variant="outline"
@@ -643,8 +640,91 @@ const filteredCommandList = computed(() => {
               <ChevronRight class="h-4 w-4" />
             </Button>
           </div>
-        </CardContent>
-      </Card>
+          <span class="font-mono text-xs text-muted-foreground">Page {{ currentPage }} of {{ totalPages }}</span>
+        </div>
+      </CodePreview>
+    </div>
+
+    <!-- 5. TIMELINE & ACCORDIONS (2-COL) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Activity Timeline -->
+      <CodePreview
+        title="Activity Audit Timeline"
+        description="Chronological event list with status badges, icons, and relative timestamps."
+        :code="timelineSnippet"
+      >
+        <Timeline :items="deploymentEvents" />
+      </CodePreview>
+
+      <!-- Collapsible Accordions -->
+      <CodePreview
+        title="Collapsible Accordions"
+        description="CSS Grid animated expanding accordions with smooth caret rotation."
+        code="<!-- Accordion Item -->
+<div class='border rounded-lg overflow-hidden'>
+  <button @click='toggle' class='w-full flex justify-between p-4'>
+    <span>Question Title</span>
+    <ChevronDown :class='{ &quot;rotate-180&quot;: isOpen }' />
+  </button>
+  <div v-show='isOpen' class='p-4 pt-0 text-xs text-muted-foreground'>
+    Answer details...
+  </div>
+</div>"
+      >
+        <div class="space-y-3">
+          <div
+            class="border border-border rounded-lg overflow-hidden transition-colors"
+            :class="{ 'bg-muted/10 border-primary/40': activeAccordion === 'item-1' }"
+          >
+            <button
+              @click="toggleAccordion('item-1')"
+              class="w-full flex items-center justify-between p-4 text-left font-medium text-sm text-foreground hover:bg-muted/40 transition-colors cursor-pointer"
+            >
+              <span>What is the query rate limit on edge functions?</span>
+              <ChevronDown
+                class="h-4 w-4 text-muted-foreground transition-transform duration-300 ease-out shrink-0"
+                :class="{ 'rotate-180 text-primary': activeAccordion === 'item-1' }"
+              />
+            </button>
+            <div
+              class="grid transition-[grid-template-rows,opacity] duration-300 ease-out"
+              :class="activeAccordion === 'item-1' ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'"
+            >
+              <div class="overflow-hidden">
+                <div class="p-4 pt-0 text-xs text-muted-foreground leading-relaxed border-t border-border/40 mt-1">
+                  Serverless functions allow up to 10,000 invocations per minute on the Pro Tier, with automatic bursting capabilities.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="border border-border rounded-lg overflow-hidden transition-colors"
+            :class="{ 'bg-muted/10 border-primary/40': activeAccordion === 'item-2' }"
+          >
+            <button
+              @click="toggleAccordion('item-2')"
+              class="w-full flex items-center justify-between p-4 text-left font-medium text-sm text-foreground hover:bg-muted/40 transition-colors cursor-pointer"
+            >
+              <span>How does Point-in-Time Recovery (PITR) work?</span>
+              <ChevronDown
+                class="h-4 w-4 text-muted-foreground transition-transform duration-300 ease-out shrink-0"
+                :class="{ 'rotate-180 text-primary': activeAccordion === 'item-2' }"
+              />
+            </button>
+            <div
+              class="grid transition-[grid-template-rows,opacity] duration-300 ease-out"
+              :class="activeAccordion === 'item-2' ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'"
+            >
+              <div class="overflow-hidden">
+                <div class="p-4 pt-0 text-xs text-muted-foreground leading-relaxed border-t border-border/40 mt-1">
+                  PITR creates continuous WAL log archives, allowing you to restore your database state to any specific second in the past 7 days.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </CodePreview>
     </div>
   </div>
 </template>

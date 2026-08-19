@@ -13,7 +13,7 @@ function handleLogin() {
 </script>
 
 <template>
-  <Card class="w-full max-w-md shadow-xl border-border/80 bg-card overflow-hidden py-0 gap-0">
+  <Card flush class="w-full max-w-md shadow-xl border-border/80 bg-card">
     <CardHeader class="pt-8 pb-6 px-6 sm:px-8 space-y-1.5 text-center">
       <CardTitle class="text-2xl font-bold tracking-tight">Sign in</CardTitle>
       <CardDescription class="text-sm">Enter your credentials to access Nala Admin panel</CardDescription>

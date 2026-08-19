@@ -5,6 +5,118 @@ All notable changes to **Nala** — Vue 3 Admin Dashboard Template — are docum
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [Semantic Versioning](https://semver.org/).
 
+## [1.2.2] — 2026-08-19
+
+### Added
+
+#### 🎨 v1.2 Design System Ergonomics — Priority 3 (Badge & Avatar Primitives)
+
+- **`<Badge>` Semantic Color Variants** (`src/components/ui/badge/index.ts`):
+  - Extended `badgeVariants` CVA with three semantic color intent variants:
+    - `success` — emerald tint (`bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400`)
+    - `info` — blue tint (`bg-blue-500/10 border-blue-500/20 text-blue-600 dark:text-blue-400`)
+    - `warning` — amber tint (`bg-amber-500/10 border-amber-500/20 text-amber-600 dark:text-amber-400`)
+  - Added `shape` variant axis: `default` (rounded-md, existing behavior) and `pill` (rounded-full px-2.5).
+  - Removes 6+ raw inline `<span>` pill elements from `BadgeAvatarView.vue`.
+
+- **`<Badge dot pulse>` Live Status Props** (`src/components/ui/badge/Badge.vue`):
+  - `dot` boolean prop renders a `bg-current` status indicator dot inside the badge, inheriting the variant's text color.
+  - `pulse` boolean prop adds `animate-pulse` to the dot for live-operational status use cases.
+  - Replaces 4+ manually assembled status-dot badge patterns.
+
+- **`<Avatar status>` Presence Prop** (`src/components/ui/avatar/Avatar.vue`):
+  - Added `status: 'online' | 'busy' | 'away' | 'offline'` prop.
+  - Automatically renders a colored presence pip (`absolute bottom-0 right-0`) inside a built-in `relative` wrapper.
+  - Color mapping: `online` → emerald-500, `busy` → red-500, `away` → amber-500, `offline` → muted-foreground/60.
+  - Removes 4× manual `<div class="relative"><span class="absolute bottom-0 right-0 ...">` patterns from `BadgeAvatarView.vue`.
+
+- **`<AvatarGroup>` Component** (`src/components/ui/avatar/AvatarGroup.vue`):
+  - New compound component for stacked overlapping team avatar rows.
+  - Props: `max` (clips visible avatars + shows `+N` overflow chip), `overlap` (`2 | 3 | 4` maps to Tailwind `-space-x-*` classes).
+  - Replaces the manual `div.-space-x-3.overflow-hidden.p-1` pattern with a configurable, reusable primitive.
+  - Exported via `src/components/ui/avatar/index.ts`.
+
+### Migrated
+
+- **`BadgeAvatarView.vue`**: All 7 showcase sections updated to use new primitives:
+  - Inline `<span>` pill badges → `<Badge variant="success|info|warning" shape="pill">`
+  - Inline status dot badges → `<Badge ... dot pulse>`
+  - Manual `div.relative` + `span.absolute` presence combos → `<Avatar status="...">`
+  - Manual `div.-space-x-3` avatar stack → `<AvatarGroup :max="4" :overlap="3">`
+  - Code snippets within `CodePreview` blocks updated to match.
+
+---
+
+## [1.1.0] — 2026-08-19
+
+
+### Added
+
+#### 📚 In-App Interactive Documentation Suite
+- **`<CodePreview>` Interactive Documentation Component** (`src/components/CodePreview.vue`):
+  - Expandable "View Code / Hide Code" toggle.
+  - One Dark Pro / VS Code inspired syntax highlighter (HTML tags, Vue directives, attributes, strings, mustache interpolations, comments).
+  - Unselectable line-number gutter with hover highlights.
+  - One-click "Copy Code" button with clipboard integration and Sonner toast feedback.
+
+- **Full Showcase View Migration (100% Milestone v1.1 Completion)**:
+  - **Buttons** (`ButtonView.vue`): 9 sections covering standard variants, outline tints, size scale, icon alignments, async spinners, toggle micro-actions, toolbars, full-width, and danger confirmation patterns.
+  - **Cards & Surfaces** (`CardView.vue`): Basic cards, KPI metric widgets, flush edge-to-edge containers, action cards with hover lift, ambient glow (`.glow-area`) & mesh patterns.
+  - **Form & Inputs** (`FormView.vue`): Text inputs with icons/password toggles, selects, auto-expanding textareas, radio groups, range sliders, number stepper, searchable combobox, zero-dependency date & range picker, switches, and checkboxes.
+  - **Badges & Avatars** (`BadgeAvatarView.vue`): Semantic badge variants, live pulse radar dots, dismissible tags, avatar scale (24px–64px), real-time presence indicators, and avatar group stack.
+  - **Modals & Dialogs** (`ModalView.vue`): Wide information dialogs, destructive confirmation alerts, modal action forms with async provisioning feedback, scrollable SLA dialogs, and slideover drawer sheets.
+  - **Overlays & Drawers** (`OverlayView.vue`): Tooltips across all four positions (`top`, `right`, `bottom`, `left`), contextual query filter popovers, hover cards with rich entity preview, dual-edge sheet panels (`left`, `right`), and dropdown action menus.
+  - **Feedback & Loading** (`FeedbackView.vue`): Semantic alert banners (`info`, `success`, `warning`, `destructive`), shimmer skeleton placeholders with loading simulation, determinate & high-load progress bars, button spinners, and radar status dots.
+  - **Toast Notifications** (`ToastView.vue`): Contextual semantic toasts, promise loading tracking, interactive undo action buttons, and custom-duration multi-action toasts.
+  - **Navigation & Flow** (`NavigationView.vue`): Multi-step stepper wizard, horizontal & underline tabs, vertical sidebar tabs, hierarchical breadcrumbs, numbered pagination controls, activity audit timeline, and collapsible accordions.
+  - **Data Tables** (`TableView.vue`): Standard tabular layout, sortable columns (asc/desc), row checkbox selection with dynamic bulk actions toolbar, and instant search filter + pagination combo.
+  - **Charts & Analytics** (`ChartView.vue`): Pure SVG Catmull-Rom area spline with period switcher (`7D`, `30D`, `90D`), bar chart distribution, segmented SVG donut ring, and live streaming latency sparkline.
+  - **Typography Scale** (`TypographyView.vue`): H1–H6 scale hierarchy with optical tracking, lead/body/muted paragraph variants, blockquotes & callouts, formatted code blocks, and structured lists.
+
+#### 📦 New UI Primitives
+- **Hover Card** (`src/components/ui/hover-card/`): `HoverCard.vue`, `HoverCardTrigger.vue`, `HoverCardContent.vue` built on `reka-ui`.
+- **Progress Bar** (`src/components/ui/progress/`): `Progress.vue` primitive with smooth transition indicator.
+- **Enhanced Alert Variants** (`src/components/ui/alert/`): Added `info`, `success`, `warning`, and `destructive` semantic color variants in CVA definitions.
+- Exported all new primitives via central barrel `src/components/ui/index.ts`.
+
+#### 🎨 v1.2 Design System Ergonomics — Priority 2 (Component Encapsulation & Form Primitives)
+- **`<CardHeader section>` Prop Standardization** (`src/components/ui/card/CardHeader.vue`):
+  - Added `section` boolean prop to `CardHeader.vue` applying standard section styling (`p-6 border-b border-border bg-muted/10`) automatically without repetitive inline utility classes.
+  - Migrated all section headers across `Settings`, `BlankView`, `ColorsView`, `CardView`, and `CodePreview`.
+
+- **`<InputGroup>`, `<InputIcon>`, and `<InputAddon>` Primitives** (`src/components/ui/input/`):
+  - `<InputGroup>`: Relative flex container coordinating inputs, icons, and text addons.
+  - `<InputIcon side="left|right">`: Centered icon slot primitive replacing manual `absolute left-3 top-1/2 -translate-y-1/2` utility class boilerplate across form fields.
+  - `<InputAddon side="left|right">`: Styled URL/domain text prefix and suffix badges (e.g. `https://`, `.supabase.co`).
+  - Migrated all auth views (`RegisterView`, `ForgotPasswordView`, `ResetPasswordView`, `VerifyOtpView`) and `FormView` showcase + snippets.
+  - Re-exported in `src/components/ui/input/index.ts` and `src/components/ui/index.ts`.
+
+---
+
+## [0.8.0] — 2026-08-19
+
+### Added
+
+#### 🎨 v1.2 Design System Ergonomics — Priority 1 (Component Encapsulation)
+
+- **`<PageHeader>` Reusable Component** (`src/components/PageHeader.vue`):
+  - Encapsulates the ~12-line page header boilerplate (`flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between` + `label-mono` badge + `h1` + description paragraph) that was previously repeated verbatim across **18 views**.
+  - Props: `title` (required), `description`, `badge` (label-mono chip text), `statusDot` (live/idle pulse indicator).
+  - Named slot `#actions` for right-side CTAs (buttons, dropdowns, etc.).
+  - Migrated all **18 affected views**: `Dashboard`, `Users`, `Settings`, `BlankView`, and all **14 showcase views** (`ButtonView`, `CardView`, `FormView`, `BadgeAvatarView`, `ModalView`, `OverlayView`, `FeedbackView`, `ToastView`, `NavigationView`, `TableView`, `ChartView`, `ColorsView`, `IconsView`, `TypographyView`).
+
+- **`<Card flush>` Variant** (`src/components/ui/card/Card.vue`):
+  - Added `flush` boolean prop via CVA that automatically applies `overflow-hidden py-0 gap-0` — previously written manually in **50+ locations** across the codebase.
+  - Affected areas: Dashboard (5×), Settings (7×), Users (5×), Auth pages (4×), and all showcase views.
+  - Migrated all flush card usages from `class="overflow-hidden py-0 gap-0"` to `<Card flush>`.
+  - Updated `<CodePreview>` component to use `<Card flush>` internally.
+
+### Fixed
+
+- **`CardView.vue`**: Removed orphaned unclosed markup block (`<!-- Metric Card 3 -->`) caused by a partial template replacement in the previous session — resolved the "Element is missing end tag" IDE error on line 255.
+- **`CardView.vue`**: Removed duplicate `highlight-card` metric cards (old style) that were left alongside the new `shadow-sm` metric cards in the same `<CodePreview>` block.
+- **`CardView.vue`**: Cleaned up unused imports (`TrendingDown`, `FolderLock`, `Layers`, `TrendingUp`, `Users`). Added `Server` and `ArrowDownRight` imports required by the new metric cards.
+
 ---
 
 ## [0.7.0] — 2026-08-18

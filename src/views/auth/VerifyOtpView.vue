@@ -122,7 +122,7 @@ const handleProceed = () => {
 </script>
 
 <template>
-  <Card class="w-full max-w-md shadow-xl border-border/80 bg-card overflow-hidden py-0 gap-0">
+  <Card flush class="w-full max-w-md shadow-xl border-border/80 bg-card">
     <!-- Success State -->
     <template v-if="isVerified">
       <CardHeader class="pt-8 pb-6 px-6 sm:px-8 space-y-2 text-center">
@@ -167,8 +167,10 @@ const handleProceed = () => {
         <!-- Recovery Code Input -->
         <div v-if="isRecoveryMode" class="space-y-2">
           <Label for="recoveryCode" class="text-xs font-semibold">Recovery Code</Label>
-          <div class="relative">
-            <KeyRound class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <InputGroup>
+            <InputIcon>
+              <KeyRound />
+            </InputIcon>
             <Input
               id="recoveryCode"
               v-model="recoveryCode"
@@ -177,7 +179,7 @@ const handleProceed = () => {
               class="pl-9 font-mono uppercase"
               autocomplete="off"
             />
-          </div>
+          </InputGroup>
         </div>
 
         <!-- 6-Digit OTP Inputs -->

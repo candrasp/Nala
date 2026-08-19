@@ -29,6 +29,12 @@ import {
   FileText,
   Clock,
   Search,
+  LogIn,
+  UserRound,
+  KeyRound,
+  ScanLine,
+  LockKeyhole,
+  MailCheck,
 } from '@lucide/vue'
 import { useAuthStore } from '@/stores/auth'
 
@@ -77,6 +83,15 @@ const designSystemNav = [
   { name: 'Icons Directory', routeName: 'components-icons', href: '/components/icons', icon: Sparkles },
 ]
 
+const authNav = [
+  { name: 'Login', routeName: 'login', href: '/auth/login', icon: LogIn },
+  { name: 'Register', routeName: 'register', href: '/auth/register', icon: UserRound },
+  { name: 'Forgot Password', routeName: 'forgot-password', href: '/auth/forgot-password', icon: KeyRound },
+  { name: 'Verify OTP', routeName: 'verify-otp', href: '/auth/verify-otp', icon: ScanLine },
+  { name: 'Reset Password', routeName: 'reset-password', href: '/auth/reset-password', icon: LockKeyhole },
+  { name: 'Confirm Email', routeName: 'confirm-email', href: '/auth/confirm-email', icon: MailCheck },
+]
+
 const pagesNav = [
   { name: 'Blank Page', routeName: 'starter-blank', href: '/starter/blank', icon: FileCode2 },
   { name: '404 Not Found', routeName: 'not-found', href: '/errors/404', icon: FileQuestion },
@@ -109,6 +124,12 @@ const searchItems = [
   { title: '404 Not Found Page', href: '/errors/404', icon: FileQuestion, category: 'Pages' },
   { title: '500 Server Error Page', href: '/errors/500', icon: ServerCrash, category: 'Pages' },
   { title: '403 Access Denied', href: '/errors/403', icon: ShieldAlert, category: 'Pages' },
+  { title: 'Login', href: '/auth/login', icon: LogIn, category: 'Auth' },
+  { title: 'Register', href: '/auth/register', icon: UserRound, category: 'Auth' },
+  { title: 'Forgot Password', href: '/auth/forgot-password', icon: KeyRound, category: 'Auth' },
+  { title: 'Verify OTP', href: '/auth/verify-otp', icon: ScanLine, category: 'Auth' },
+  { title: 'Reset Password', href: '/auth/reset-password', icon: LockKeyhole, category: 'Auth' },
+  { title: 'Confirm Email', href: '/auth/confirm-email', icon: MailCheck, category: 'Auth' },
   { title: 'Settings', href: '/settings', icon: Settings, category: 'System' },
 ]
 
@@ -206,6 +227,12 @@ const pageTitle = computed(() => {
   if (route.name === 'not-found' || route.name === 'catch-all-not-found') return '404 Not Found'
   if (route.name === 'server-error') return '500 Server Error'
   if (route.name === 'unauthorized') return '403 Access Denied'
+  if (route.name === 'login') return 'Login'
+  if (route.name === 'register') return 'Register'
+  if (route.name === 'forgot-password') return 'Forgot Password'
+  if (route.name === 'verify-otp') return 'Verify OTP'
+  if (route.name === 'reset-password') return 'Reset Password'
+  if (route.name === 'confirm-email') return 'Confirm Email'
   return 'Admin'
 })
 </script>
@@ -381,7 +408,7 @@ const pageTitle = computed(() => {
           <DropdownMenuTrigger as-child>
             <button class="flex items-center gap-2 rounded-full p-1 hover:bg-accent transition-colors">
               <Avatar class="h-8 w-8 border">
-                <AvatarImage :src="authStore.user?.avatar ?? ''" />
+                <AvatarImage :src="authStore.user?.avatar || '/img/avatar.webp'" alt="User profile" />
                 <AvatarFallback>AU</AvatarFallback>
               </Avatar>
               <ChevronDown class="h-4 w-4 text-muted-foreground" />
@@ -475,6 +502,27 @@ const pageTitle = computed(() => {
             </SidebarGroupLabel>
             <SidebarMenu class="gap-0.5">
               <SidebarMenuItem v-for="item in designSystemNav" :key="item.name">
+                <SidebarMenuButton
+                  as-child
+                  :is-active="route.name === item.routeName"
+                  :tooltip="item.name"
+                >
+                  <router-link :to="item.href" @click="closeMobileSidebar">
+                    <component :is="item.icon" class="h-4 w-4 shrink-0" />
+                    <span>{{ item.name }}</span>
+                  </router-link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroup>
+
+          <!-- Auth Pages Group -->
+          <SidebarGroup class="py-1 px-2">
+            <SidebarGroupLabel class="text-[11px] font-medium tracking-wider uppercase text-muted-foreground/70">
+              Authentication
+            </SidebarGroupLabel>
+            <SidebarMenu class="gap-0.5">
+              <SidebarMenuItem v-for="item in authNav" :key="item.name">
                 <SidebarMenuButton
                   as-child
                   :is-active="route.name === item.routeName"

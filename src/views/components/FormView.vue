@@ -169,202 +169,344 @@ function handleSave() {
     }, 2500)
   }, 800)
 }
+
+// ─── Code Documentation Snippets ─────────────────────────────────────────────
+const textInputsSnippet = `<!-- Input with Leading Icon -->
+<div class="space-y-1.5">
+  <Label for="email">Email Address</Label>
+  <InputGroup>
+    <InputIcon><Mail class="h-4 w-4 text-muted-foreground" /></InputIcon>
+    <Input id="email" v-model="email" type="email" placeholder="name@example.com" class="pl-9" />
+  </InputGroup>
+</div>
+
+<!-- Password with Visibility Toggle -->
+<div class="space-y-1.5">
+  <Label for="password">Project Secret Key</Label>
+  <InputGroup>
+    <InputIcon><Key class="h-4 w-4 text-muted-foreground" /></InputIcon>
+    <Input id="password" v-model="password" :type="showPassword ? 'text' : 'password'" class="pl-9 pr-10 font-mono text-xs" />
+    <button type="button" @click="showPassword = !showPassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+      <EyeOff v-if="showPassword" class="h-4 w-4" />
+      <Eye v-else class="h-4 w-4" />
+    </button>
+  </InputGroup>
+</div>
+
+<!-- Prefix & Suffix URL Addon -->
+<div class="space-y-1.5">
+  <Label for="slug">Custom Domain / Subdomain</Label>
+  <InputGroup>
+    <InputAddon side="left">https://</InputAddon>
+    <Input id="slug" v-model="slug" placeholder="my-project" class="rounded-none border-x-0" />
+    <InputAddon side="right">.supabase.co</InputAddon>
+  </InputGroup>
+</div>`
+
+const selectsTextareaSnippet = `<!-- Accessible Select Dropdown -->
+<div class="space-y-1.5">
+  <Label for="region">Database Region</Label>
+  <Select v-model="selectedRegion">
+    <SelectTrigger id="region">
+      <div class="flex items-center gap-2">
+        <Globe class="h-3.5 w-3.5 text-muted-foreground" />
+        <SelectValue placeholder="Select region" />
+      </div>
+    </SelectTrigger>
+    <SelectContent>
+      <SelectGroup>
+        <SelectLabel>Europe</SelectLabel>
+        <SelectItem value="eu-central-1">Frankfurt (eu-central-1)</SelectItem>
+        <SelectItem value="eu-west-1">Ireland (eu-west-1)</SelectItem>
+      </SelectGroup>
+      <SelectGroup>
+        <SelectLabel>North America</SelectLabel>
+        <SelectItem value="us-east-1">N. Virginia (us-east-1)</SelectItem>
+      </SelectGroup>
+    </SelectContent>
+  </Select>
+</div>
+
+<!-- Textarea -->
+<div class="space-y-1.5">
+  <Label for="bio">Project Description</Label>
+  <Textarea id="bio" v-model="bio" rows="4" placeholder="Describe your project architecture..." />
+</div>`
+
+const radioGroupSnippet = `<!-- Interactive Plan Radio Cards -->
+<RadioGroup v-model="selectedPlan" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+  <label
+    for="plan-pro"
+    class="relative flex flex-col justify-between p-4 rounded-xl border-2 transition-all cursor-pointer hover:border-primary/50"
+    :class="selectedPlan === 'pro' ? 'border-primary bg-primary/5 shadow-xs' : 'border-border bg-card'"
+  >
+    <div class="flex items-start justify-between">
+      <div class="space-y-1">
+        <div class="flex items-center gap-2">
+          <Zap class="h-4 w-4 text-primary" />
+          <span class="font-semibold text-sm text-foreground">Pro Scale</span>
+          <span class="rounded-full bg-primary/10 text-primary border border-primary/20 px-1.5 py-0.2 text-[10px] font-semibold">Popular</span>
+        </div>
+        <p class="text-xs text-muted-foreground">Production databases with automatic scaling.</p>
+      </div>
+      <RadioGroupItem id="plan-pro" value="pro" class="mt-0.5" />
+    </div>
+    <div class="mt-4 pt-3 border-t border-border/60 flex items-baseline gap-1">
+      <span class="text-xl font-bold font-mono text-foreground">$25</span>
+      <span class="text-xs text-muted-foreground">/ month</span>
+    </div>
+  </label>
+</RadioGroup>`
+
+const slidersStepperSnippet = `<!-- Range Slider -->
+<div class="space-y-3">
+  <div class="flex items-center justify-between">
+    <Label class="text-sm font-medium">NVMe Disk Storage</Label>
+    <span class="font-mono text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-md">{{ storage[0] }} GB</span>
+  </div>
+  <Slider v-model="storage" :min="10" :max="1024" :step="10" class="w-full" />
+</div>
+
+<!-- Number Stepper -->
+<div class="flex items-center gap-2 max-w-xs">
+  <Button variant="outline" size="icon" class="h-9 w-9" :disabled="nodes <= 1" @click="nodes--">
+    <Minus class="h-4 w-4" />
+  </Button>
+  <Input v-model.number="nodes" class="h-9 text-center font-mono font-bold" />
+  <Button variant="outline" size="icon" class="h-9 w-9" :disabled="nodes >= 32" @click="nodes++">
+    <Plus class="h-4 w-4" />
+  </Button>
+</div>`
+
+const comboboxUploadSnippet = `<!-- Searchable Combobox -->
+<Popover v-model:open="isComboboxOpen">
+  <PopoverTrigger as-child>
+    <button type="button" role="combobox" class="flex h-9 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm shadow-xs hover:bg-accent/40">
+      <span class="font-medium text-foreground">{{ selectedFrameworkLabel }}</span>
+      <ChevronsUpDown class="h-4 w-4 shrink-0 text-muted-foreground opacity-50" />
+    </button>
+  </PopoverTrigger>
+  <PopoverContent class="w-80 p-0 shadow-lg" align="start">
+    <div class="flex items-center border-b border-border px-3 py-2">
+      <Search class="mr-2 h-4 w-4 text-muted-foreground" />
+      <input v-model="comboboxSearch" placeholder="Search framework..." class="flex h-8 w-full bg-transparent text-xs outline-none" />
+    </div>
+    <div class="max-h-60 overflow-y-auto p-1.5 space-y-0.5">
+      <button v-for="item in filtered" :key="item.value" @click="selected = item.value; isComboboxOpen = false" class="w-full flex items-center justify-between rounded-md px-2.5 py-1.5 text-xs hover:bg-accent">
+        <span>{{ item.label }}</span>
+        <span class="text-[10px] font-mono bg-muted/60 px-1.5 py-0.5 rounded">{{ item.category }}</span>
+      </button>
+    </div>
+  </PopoverContent>
+</Popover>
+
+<!-- Drag & Drop File Upload Zone -->
+<div class="relative rounded-xl border-2 border-dashed p-6 text-center cursor-pointer flex flex-col items-center justify-center border-muted-foreground/25 hover:border-primary/60 bg-muted/10">
+  <input type="file" multiple class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" />
+  <div class="h-10 w-10 rounded-full bg-primary/10 text-primary flex items-center justify-center mb-2">
+    <UploadCloud class="h-5 w-5" />
+  </div>
+  <p class="text-sm font-semibold text-foreground"><span class="text-primary hover:underline">Click to upload</span> or drag and drop</p>
+  <p class="text-xs text-muted-foreground mt-0.5">SQL, JSON, CSV, or PDF schemas (up to 10MB each)</p>
+</div>`
+
+const datePickerSnippet = `<!-- Zero-dependency Date & Range Selector -->
+<DatePicker />`
+
+const switchesCheckboxesSnippet = `<!-- Switches -->
+<div class="flex items-center justify-between gap-4 p-4 rounded-lg border border-border bg-muted/20">
+  <div class="space-y-0.5">
+    <Label for="backup-switch" class="text-sm font-medium cursor-pointer">Daily Automated Backups</Label>
+    <p class="text-xs text-muted-foreground">Create point-in-time recovery snapshots every 24 hours.</p>
+  </div>
+  <Switch id="backup-switch" v-model="enableBackups" />
+</div>
+
+<!-- Checkboxes -->
+<div class="flex items-start gap-3 p-4 rounded-lg border border-border bg-muted/20">
+  <Checkbox id="terms" v-model="selectedTerms" class="mt-1" />
+  <div class="space-y-0.5">
+    <Label for="terms" class="text-sm font-medium cursor-pointer">Accept Platform Terms of Service</Label>
+    <p class="text-xs text-muted-foreground">By checking this box, you agree to our Enterprise SLA.</p>
+  </div>
+</div>`
 </script>
 
 <template>
   <div class="space-y-8 max-w-[1920px] mx-auto pb-12">
     <!-- Page Header -->
-    <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <div class="flex items-center gap-2">
-          <span class="label-mono">Component Showcase</span>
-          <span class="status-dot"></span>
-        </div>
-        <h1 class="text-2xl font-bold tracking-tight text-foreground mt-1">Form &amp; Inputs</h1>
-        <p class="text-sm text-muted-foreground">
-          Comprehensive controls suite: text inputs, custom selects, radio groups, sliders, comboboxes, tags, and file upload.
-        </p>
-      </div>
-      <div class="flex items-center gap-2 pt-2 sm:pt-0 shrink-0">
+    <PageHeader
+      title="Form & Inputs"
+      description="Comprehensive controls suite: text inputs, custom selects, radio groups, sliders, comboboxes, tags, and file upload with live preview & copyable code snippets."
+      badge="UI Component"
+    >
+      <template #actions>
         <Button size="sm" :disabled="isSubmitting" @click="handleSave" class="gap-1.5">
           <Check v-if="isSaved" class="h-3.5 w-3.5" />
           <Sparkles v-else class="h-3.5 w-3.5" />
           {{ isSaved ? 'Saved Successfully' : isSubmitting ? 'Saving Changes...' : 'Save Configuration' }}
         </Button>
-      </div>
-    </div>
+      </template>
+    </PageHeader>
 
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <!-- 1. TEXT INPUTS & SELECTS (2-COL)                                      -->
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <!-- 1. Text Inputs & Affixes -->
-      <Card class="shadow-sm overflow-hidden py-0 gap-0">
-        <CardHeader class="p-6 border-b border-border bg-muted/10">
-          <CardTitle class="text-base font-semibold">Text Inputs &amp; Icon Affixes</CardTitle>
-          <CardDescription class="text-xs">
-            Inputs with leading and trailing icons, helper texts, and custom addon borders.
-          </CardDescription>
-        </CardHeader>
-        <CardContent class="p-6 space-y-4">
-          <!-- Leading Icon -->
-          <div class="space-y-1.5">
-            <Label for="email">Email Address</Label>
-            <div class="relative">
-              <Mail class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                id="email"
-                v-model="emailInput"
-                type="email"
-                placeholder="name@example.com"
-                class="pl-9"
-              />
-            </div>
-            <p class="text-xs text-muted-foreground">We will never share your email with third parties.</p>
-          </div>
-
-          <!-- Password with Toggle Visibility -->
-          <div class="space-y-1.5">
-            <Label for="password">Project Secret Key</Label>
-            <div class="relative">
-              <Key class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                id="password"
-                v-model="passwordInput"
-                :type="showPassword ? 'text' : 'password'"
-                placeholder="Enter password..."
-                class="pl-9 pr-10 font-mono text-xs"
-              />
-              <button
-                type="button"
-                @click="showPassword = !showPassword"
-                class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer focus:outline-none"
-                aria-label="Toggle password visibility"
-              >
-                <EyeOff v-if="showPassword" class="h-4 w-4" />
-                <Eye v-else class="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-
-          <!-- Prefix URL Addon Group -->
-          <div class="space-y-1.5">
-            <Label for="slug">Custom Domain / Subdomain</Label>
-            <div class="flex rounded-md border border-input shadow-xs overflow-hidden focus-within:ring-1 focus-within:ring-ring focus-within:border-ring">
-              <span class="inline-flex items-center px-3 text-xs bg-muted/60 text-muted-foreground border-r border-input font-mono select-none">
-                https://
-              </span>
-              <input
-                id="slug"
-                v-model="projectSlug"
-                type="text"
-                class="flex-1 bg-transparent px-3 py-2 text-sm outline-none placeholder:text-muted-foreground"
-                placeholder="my-project"
-              />
-              <span class="inline-flex items-center px-3 text-xs bg-muted/60 text-muted-foreground border-l border-input font-mono select-none">
-                .supabase.co
-              </span>
-            </div>
-          </div>
-
-          <!-- Disabled & Readonly State -->
-          <div class="space-y-1.5">
-            <Label for="readonly">Project ID (Immutable)</Label>
+    <!-- 1. Text Inputs & Icon Affixes -->
+    <CodePreview
+      title="Text Inputs & Icon Affixes"
+      description="Inputs with leading/trailing icons, password toggle, prefix/suffix addons, and readonly states."
+      :code="textInputsSnippet"
+    >
+      <div class="max-w-2xl space-y-4">
+        <!-- Leading Icon -->
+        <div class="space-y-1.5">
+          <Label for="email">Email Address</Label>
+          <InputGroup>
+            <InputIcon><Mail class="h-4 w-4 text-muted-foreground" /></InputIcon>
             <Input
-              id="readonly"
-              value="prj_eu_fra_9876241a"
-              readonly
-              disabled
-              class="font-mono text-xs bg-muted/40 cursor-not-allowed"
+              id="email"
+              v-model="emailInput"
+              type="email"
+              placeholder="name@example.com"
+              class="pl-9"
             />
-          </div>
-        </CardContent>
-      </Card>
+          </InputGroup>
+          <p class="text-xs text-muted-foreground">We will never share your email with third parties.</p>
+        </div>
 
-      <!-- 2. Selects & Textarea -->
-      <Card class="shadow-sm overflow-hidden py-0 gap-0">
-        <CardHeader class="p-6 border-b border-border bg-muted/10">
-          <CardTitle class="text-base font-semibold">Select Dropdowns &amp; Textarea</CardTitle>
-          <CardDescription class="text-xs">
-            Custom accessible Select primitives and auto-scaling multi-line textareas.
-          </CardDescription>
-        </CardHeader>
-        <CardContent class="p-6 space-y-4">
-          <!-- Region Select -->
-          <div class="space-y-1.5">
-            <Label for="region">Database Region</Label>
-            <Select v-model="selectedRegion">
-              <SelectTrigger id="region">
-                <div class="flex items-center gap-2">
-                  <Globe class="h-3.5 w-3.5 text-muted-foreground" />
-                  <SelectValue placeholder="Select region" />
-                </div>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Europe</SelectLabel>
-                  <SelectItem value="eu-central-1">Frankfurt (eu-central-1)</SelectItem>
-                  <SelectItem value="eu-west-1">Ireland (eu-west-1)</SelectItem>
-                  <SelectItem value="eu-west-2">London (eu-west-2)</SelectItem>
-                </SelectGroup>
-                <SelectGroup>
-                  <SelectLabel>North America</SelectLabel>
-                  <SelectItem value="us-east-1">N. Virginia (us-east-1)</SelectItem>
-                  <SelectItem value="us-west-1">Oregon (us-west-1)</SelectItem>
-                </SelectGroup>
-                <SelectGroup>
-                  <SelectLabel>Asia Pacific</SelectLabel>
-                  <SelectItem value="ap-southeast-1">Singapore (ap-southeast-1)</SelectItem>
-                  <SelectItem value="ap-northeast-1">Tokyo (ap-northeast-1)</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <!-- Engine Select -->
-          <div class="space-y-1.5">
-            <Label for="db">PostgreSQL Version</Label>
-            <Select v-model="selectedDatabase">
-              <SelectTrigger id="db">
-                <div class="flex items-center gap-2">
-                  <Database class="h-3.5 w-3.5 text-muted-foreground" />
-                  <SelectValue placeholder="Select engine" />
-                </div>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="pg-16">PostgreSQL 16.3 (Latest Stable)</SelectItem>
-                <SelectItem value="pg-15">PostgreSQL 15.6</SelectItem>
-                <SelectItem value="pg-14">PostgreSQL 14.11 (LTS)</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <!-- Textarea -->
-          <div class="space-y-1.5">
-            <Label for="bio">Project Description</Label>
-            <Textarea
-              id="bio"
-              v-model="bioInput"
-              rows="4"
-              placeholder="Describe your project architecture..."
+        <!-- Password with Toggle Visibility -->
+        <div class="space-y-1.5">
+          <Label for="password">Project Secret Key</Label>
+          <InputGroup>
+            <InputIcon><Key class="h-4 w-4 text-muted-foreground" /></InputIcon>
+            <Input
+              id="password"
+              v-model="passwordInput"
+              :type="showPassword ? 'text' : 'password'"
+              placeholder="Enter password..."
+              class="pl-9 pr-10 font-mono text-xs"
             />
-            <p class="text-xs text-muted-foreground">Max 250 characters. Markdown supported.</p>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+            <button
+              type="button"
+              @click="showPassword = !showPassword"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground cursor-pointer focus:outline-none"
+              aria-label="Toggle password visibility"
+            >
+              <EyeOff v-if="showPassword" class="h-4 w-4" />
+              <Eye v-else class="h-4 w-4" />
+            </button>
+          </InputGroup>
+        </div>
 
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <!-- 2. RADIO GROUPS & CARD SELECTIONS                                     -->
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <Card class="shadow-sm overflow-hidden py-0 gap-0">
-      <CardHeader class="p-6 border-b border-border bg-muted/10">
-        <CardTitle class="text-base font-semibold">Radio Group &amp; Card Selectors</CardTitle>
-        <CardDescription class="text-xs">
-          Interactive single-choice radio selections formatted as styled cards and traditional inline radios.
-        </CardDescription>
-      </CardHeader>
-      <CardContent class="p-6 space-y-6">
+        <!-- Prefix URL Addon Group -->
+        <div class="space-y-1.5">
+          <Label for="slug">Custom Domain / Subdomain</Label>
+          <InputGroup>
+            <InputAddon side="left">
+              https://
+            </InputAddon>
+            <Input
+              id="slug"
+              v-model="projectSlug"
+              type="text"
+              placeholder="my-project"
+              class="rounded-none border-x-0"
+            />
+            <InputAddon side="right">
+              .supabase.co
+            </InputAddon>
+          </InputGroup>
+        </div>
+
+        <!-- Disabled & Readonly State -->
+        <div class="space-y-1.5">
+          <Label for="readonly">Project ID (Immutable)</Label>
+          <Input
+            id="readonly"
+            value="prj_eu_fra_9876241a"
+            readonly
+            disabled
+            class="font-mono text-xs bg-muted/40 cursor-not-allowed"
+          />
+        </div>
+      </div>
+    </CodePreview>
+
+    <!-- 2. Selects & Textarea -->
+    <CodePreview
+      title="Select Dropdowns & Textarea"
+      description="Custom accessible Select primitives and auto-scaling multi-line textareas."
+      :code="selectsTextareaSnippet"
+    >
+      <div class="max-w-2xl space-y-4">
+        <!-- Region Select -->
+        <div class="space-y-1.5">
+          <Label for="region">Database Region</Label>
+          <Select v-model="selectedRegion">
+            <SelectTrigger id="region">
+              <div class="flex items-center gap-2">
+                <Globe class="h-3.5 w-3.5 text-muted-foreground" />
+                <SelectValue placeholder="Select region" />
+              </div>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Europe</SelectLabel>
+                <SelectItem value="eu-central-1">Frankfurt (eu-central-1)</SelectItem>
+                <SelectItem value="eu-west-1">Ireland (eu-west-1)</SelectItem>
+                <SelectItem value="eu-west-2">London (eu-west-2)</SelectItem>
+              </SelectGroup>
+              <SelectGroup>
+                <SelectLabel>North America</SelectLabel>
+                <SelectItem value="us-east-1">N. Virginia (us-east-1)</SelectItem>
+                <SelectItem value="us-west-1">Oregon (us-west-1)</SelectItem>
+              </SelectGroup>
+              <SelectGroup>
+                <SelectLabel>Asia Pacific</SelectLabel>
+                <SelectItem value="ap-southeast-1">Singapore (ap-southeast-1)</SelectItem>
+                <SelectItem value="ap-northeast-1">Tokyo (ap-northeast-1)</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <!-- Engine Select -->
+        <div class="space-y-1.5">
+          <Label for="db">PostgreSQL Version</Label>
+          <Select v-model="selectedDatabase">
+            <SelectTrigger id="db">
+              <div class="flex items-center gap-2">
+                <Database class="h-3.5 w-3.5 text-muted-foreground" />
+                <SelectValue placeholder="Select engine" />
+              </div>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="pg-16">PostgreSQL 16.3 (Latest Stable)</SelectItem>
+              <SelectItem value="pg-15">PostgreSQL 15.6</SelectItem>
+              <SelectItem value="pg-14">PostgreSQL 14.11 (LTS)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <!-- Textarea -->
+        <div class="space-y-1.5">
+          <Label for="bio">Project Description</Label>
+          <Textarea
+            id="bio"
+            v-model="bioInput"
+            rows="4"
+            placeholder="Describe your project architecture..."
+          />
+          <p class="text-xs text-muted-foreground">Max 250 characters. Markdown supported.</p>
+        </div>
+      </div>
+    </CodePreview>
+
+    <!-- 3. Radio Group & Card Selectors -->
+    <CodePreview
+      title="Radio Group & Card Selectors"
+      description="Interactive single-choice radio selections formatted as styled cards and traditional inline radios."
+      :code="radioGroupSnippet"
+    >
+      <div class="space-y-6">
         <!-- Interactive Plan Cards (Radio Group) -->
         <div class="space-y-2">
           <Label class="text-sm font-medium">Subscription Tier</Label>
@@ -458,23 +600,18 @@ function handleSave() {
             </div>
           </RadioGroup>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </CodePreview>
 
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <!-- 3. SLIDERS & NUMBER STEPPER                                           -->
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <!-- Range Sliders -->
-      <Card class="shadow-sm overflow-hidden py-0 gap-0">
-        <CardHeader class="p-6 border-b border-border bg-muted/10">
-          <CardTitle class="text-base font-semibold">Range Sliders</CardTitle>
-          <CardDescription class="text-xs">
-            Hardware-smooth slider inputs for continuous numeric adjustments.
-          </CardDescription>
-        </CardHeader>
-        <CardContent class="p-6 space-y-6">
-          <!-- Storage Slider -->
+    <!-- 4. Sliders, Stepper & Multi-Tags -->
+    <CodePreview
+      title="Range Sliders & Number Steppers"
+      description="Hardware-smooth slider inputs, bounded numerical counters, and dismissible tag chip collections."
+      :code="slidersStepperSnippet"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Sliders -->
+        <div class="space-y-6 p-4 rounded-lg border border-border bg-muted/10">
           <div class="space-y-3">
             <div class="flex items-center justify-between">
               <Label class="text-sm font-medium">NVMe Disk Storage</Label>
@@ -496,7 +633,6 @@ function handleSave() {
             </div>
           </div>
 
-          <!-- Memory Slider -->
           <div class="space-y-3 border-t border-border pt-4">
             <div class="flex items-center justify-between">
               <Label class="text-sm font-medium">Dedicated RAM Allocation</Label>
@@ -517,19 +653,10 @@ function handleSave() {
               <span>64 GB</span>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
 
-      <!-- Number Stepper & Multi-Select Tags -->
-      <Card class="shadow-sm overflow-hidden py-0 gap-0">
-        <CardHeader class="p-6 border-b border-border bg-muted/10">
-          <CardTitle class="text-base font-semibold">Number Stepper &amp; Multi-Tags</CardTitle>
-          <CardDescription class="text-xs">
-            Bounded numerical counters and dismissible tag chip collections.
-          </CardDescription>
-        </CardHeader>
-        <CardContent class="p-6 space-y-6">
-          <!-- Number Stepper -->
+        <!-- Stepper & Tags -->
+        <div class="space-y-6 p-4 rounded-lg border border-border bg-muted/10">
           <div class="space-y-2">
             <div class="flex items-center justify-between">
               <Label class="text-sm font-medium">Cluster Worker Nodes</Label>
@@ -596,23 +723,19 @@ function handleSave() {
             </div>
             <p class="text-[11px] text-muted-foreground">Type a tag name and hit Enter or comma to insert.</p>
           </div>
-        </CardContent>
-      </Card>
-    </div>
+        </div>
+      </div>
+    </CodePreview>
 
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <!-- 4. COMBOBOX (SEARCHABLE SELECT) & FILE DROP ZONE                      -->
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <!-- Searchable Combobox -->
-      <Card class="shadow-sm overflow-hidden py-0 gap-0">
-        <CardHeader class="p-6 border-b border-border bg-muted/10">
-          <CardTitle class="text-base font-semibold">Searchable Combobox</CardTitle>
-          <CardDescription class="text-xs">
-            Autocomplete select dropdown with category filtering and keyword matching.
-          </CardDescription>
-        </CardHeader>
-        <CardContent class="p-6 space-y-4">
+    <!-- 5. Searchable Combobox & File Drop Zone -->
+    <CodePreview
+      title="Searchable Combobox & File Upload"
+      description="Autocomplete select dropdown with search filtering, alongside drag-and-drop file upload with simulated progress."
+      :code="comboboxUploadSnippet"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Searchable Combobox -->
+        <div class="space-y-4 p-4 rounded-lg border border-border bg-muted/10">
           <div class="space-y-1.5">
             <Label>Primary Framework</Label>
             <Popover v-model:open="isComboboxOpen">
@@ -666,20 +789,14 @@ function handleSave() {
             </Popover>
             <p class="text-xs text-muted-foreground">Select your stack runtime for targeted SDK compilation.</p>
           </div>
-        </CardContent>
-      </Card>
+        </div>
 
-      <!-- Drag & Drop File Upload Zone -->
-      <Card class="shadow-sm overflow-hidden py-0 gap-0">
-        <CardHeader class="p-6 border-b border-border bg-muted/10 flex flex-row items-center justify-between">
-          <div>
-            <CardTitle class="text-base font-semibold">File Upload &amp; Drop Zone</CardTitle>
-            <CardDescription class="text-xs">Drag files directly or click to browse.</CardDescription>
+        <!-- Drag & Drop File Upload Zone -->
+        <div class="space-y-4 p-4 rounded-lg border border-border bg-muted/10">
+          <div class="flex items-center justify-between">
+            <Label class="text-sm font-medium">Schema Upload</Label>
+            <span class="label-mono text-[10px]">MAX 10 MB</span>
           </div>
-          <span class="label-mono text-[10px]">MAX 10 MB</span>
-        </CardHeader>
-        <CardContent class="p-6 space-y-4">
-          <!-- Drop Area -->
           <div
             class="relative rounded-xl border-2 border-dashed p-6 text-center transition-all cursor-pointer flex flex-col items-center justify-center"
             :class="[
@@ -740,104 +857,93 @@ function handleSave() {
               </div>
             </div>
           </div>
-        </CardContent>
-      </Card>
-    </div>
+        </div>
+      </div>
+    </CodePreview>
 
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <!-- 5. DATE PICKERS (CALENDAR & RANGE)                                    -->
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <Card class="shadow-sm overflow-hidden py-0 gap-0">
-      <CardHeader class="p-6 border-b border-border bg-muted/10">
-        <CardTitle class="text-base font-semibold">Date &amp; Range Pickers</CardTitle>
-        <CardDescription class="text-xs">
-          Single date selection and period range picker built with Popover — zero external dependencies.
-        </CardDescription>
-      </CardHeader>
-      <CardContent class="p-6">
-        <DatePicker />
-      </CardContent>
-    </Card>
+    <!-- 6. Date & Range Pickers -->
+    <CodePreview
+      title="Date & Range Pickers"
+      description="Zero-dependency single date picker and range selection component with integrated presets."
+      :code="datePickerSnippet"
+    >
+      <DatePicker />
+    </CodePreview>
 
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <!-- 6. SWITCHES & CHECKBOXES                                              -->
-    <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <Card class="shadow-sm overflow-hidden py-0 gap-0">
-      <CardHeader class="p-6 border-b border-border bg-muted/10">
-        <CardTitle class="text-base font-semibold">Switches &amp; Checkbox Options</CardTitle>
-        <CardDescription class="text-xs">
-          Interactive toggle controls with descriptive labels for settings and configuration screens.
-        </CardDescription>
-      </CardHeader>
-      <CardContent class="p-6">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <!-- Switches list -->
-          <div class="space-y-4 rounded-lg border border-border p-4 bg-muted/20">
-            <div class="flex items-center justify-between gap-4">
-              <div class="space-y-0.5">
-                <Label for="backup-switch" class="text-sm font-medium cursor-pointer">Daily Automated Backups</Label>
-                <p class="text-xs text-muted-foreground">Create point-in-time recovery snapshots every 24 hours.</p>
-              </div>
-              <Switch id="backup-switch" v-model="enableBackups" />
+    <!-- 7. Switches & Checkboxes -->
+    <CodePreview
+      title="Switches & Checkbox Options"
+      description="Interactive toggle controls and multi-state checkboxes with descriptive helper text."
+      :code="switchesCheckboxesSnippet"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Switches list -->
+        <div class="space-y-4 rounded-lg border border-border p-4 bg-muted/20">
+          <div class="flex items-center justify-between gap-4">
+            <div class="space-y-0.5">
+              <Label for="backup-switch" class="text-sm font-medium cursor-pointer">Daily Automated Backups</Label>
+              <p class="text-xs text-muted-foreground">Create point-in-time recovery snapshots every 24 hours.</p>
             </div>
+            <Switch id="backup-switch" v-model="enableBackups" />
+          </div>
 
-            <div class="flex items-center justify-between gap-4 border-t border-border pt-4">
-              <div class="space-y-0.5">
-                <Label for="twofa-switch" class="text-sm font-medium cursor-pointer">Two-Factor Authentication (2FA)</Label>
-                <p class="text-xs text-muted-foreground">Enforce hardware key or TOTP app during sign in.</p>
-              </div>
-              <Switch id="twofa-switch" v-model="enable2FA" />
+          <div class="flex items-center justify-between gap-4 border-t border-border pt-4">
+            <div class="space-y-0.5">
+              <Label for="twofa-switch" class="text-sm font-medium cursor-pointer">Two-Factor Authentication (2FA)</Label>
+              <p class="text-xs text-muted-foreground">Enforce hardware key or TOTP app during sign in.</p>
             </div>
+            <Switch id="twofa-switch" v-model="enable2FA" />
+          </div>
 
-            <div class="flex items-center justify-between gap-4 border-t border-border pt-4">
-              <div class="space-y-0.5">
-                <Label for="telemetry-switch" class="text-sm font-medium cursor-pointer">Anonymous Telemetry</Label>
-                <p class="text-xs text-muted-foreground">Help improve platform performance by sharing diagnostic metrics.</p>
-              </div>
-              <Switch id="telemetry-switch" v-model="enableTelemetry" />
+          <div class="flex items-center justify-between gap-4 border-t border-border pt-4">
+            <div class="space-y-0.5">
+              <Label for="telemetry-switch" class="text-sm font-medium cursor-pointer">Anonymous Telemetry</Label>
+              <p class="text-xs text-muted-foreground">Help improve platform performance by sharing diagnostic metrics.</p>
+            </div>
+            <Switch id="telemetry-switch" v-model="enableTelemetry" />
+          </div>
+        </div>
+
+        <!-- Checkboxes list -->
+        <div class="space-y-4 rounded-lg border border-border p-4 bg-muted/20">
+          <div class="flex items-start gap-3">
+            <Checkbox id="terms" v-model="selectedTerms" class="mt-1" />
+            <div class="space-y-0.5">
+              <Label for="terms" class="text-sm font-medium cursor-pointer">
+                Accept Platform Terms of Service
+              </Label>
+              <p class="text-xs text-muted-foreground">
+                By checking this box, you agree to our Enterprise SLA and Acceptable Use Policy.
+              </p>
             </div>
           </div>
 
-          <!-- Checkboxes list -->
-          <div class="space-y-4 rounded-lg border border-border p-4 bg-muted/20">
-            <div class="flex items-start gap-3">
-              <Checkbox id="terms" v-model="selectedTerms" class="mt-1" />
-              <div class="space-y-0.5">
-                <Label for="terms" class="text-sm font-medium cursor-pointer">
-                  Accept Platform Terms of Service
-                </Label>
-                <p class="text-xs text-muted-foreground">
-                  By checking this box, you agree to our Enterprise SLA and Acceptable Use Policy.
-                </p>
-              </div>
+          <div class="flex items-start gap-3 border-t border-border pt-4">
+            <Checkbox id="newsletter" v-model="selectedNewsletter" class="mt-1" />
+            <div class="space-y-0.5">
+              <Label for="newsletter" class="text-sm font-medium cursor-pointer">
+                Product &amp; Security Changelogs
+              </Label>
+              <p class="text-xs text-muted-foreground">
+                Receive monthly email updates about new database extensions and security patches.
+              </p>
             </div>
+          </div>
 
-            <div class="flex items-start gap-3 border-t border-border pt-4">
-              <Checkbox id="newsletter" v-model="selectedNewsletter" class="mt-1" />
-              <div class="space-y-0.5">
-                <Label for="newsletter" class="text-sm font-medium cursor-pointer">
-                  Product &amp; Security Changelogs
-                </Label>
-                <p class="text-xs text-muted-foreground">
-                  Receive monthly email updates about new database extensions and security patches.
-                </p>
-              </div>
-            </div>
-
-            <div class="flex items-start gap-3 border-t border-border pt-4 opacity-50">
-              <Checkbox id="disabled-chk" :model-value="true" disabled class="mt-1" />
-              <div class="space-y-0.5">
-                <Label for="disabled-chk" class="text-sm font-medium cursor-not-allowed">
-                  SSL / TLS 1.3 Encryption (Mandatory)
-                </Label>
-                <p class="text-xs text-muted-foreground">
-                  Transport layer encryption cannot be disabled for production clusters.
-                </p>
-              </div>
+          <div class="flex items-start gap-3 border-t border-border pt-4 opacity-50">
+            <Checkbox id="disabled-chk" :model-value="true" disabled class="mt-1" />
+            <div class="space-y-0.5">
+              <Label for="disabled-chk" class="text-sm font-medium cursor-not-allowed">
+                SSL / TLS 1.3 Encryption (Mandatory)
+              </Label>
+              <p class="text-xs text-muted-foreground">
+                Transport layer encryption cannot be disabled for production clusters.
+              </p>
             </div>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </CodePreview>
   </div>
 </template>
+

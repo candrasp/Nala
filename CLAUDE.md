@@ -1,6 +1,6 @@
-# GEMINI.md — Nala Project AI Guardrails
+# CLAUDE.md — Nala Project AI Guardrails
 
-This file defines the strict, high-priority guardrails and behavioral constraints for AI agents working on the **Nala** project.
+This file defines the strict, high-priority guardrails and behavioral constraints for Claude Code working on the **Nala** project.
 
 ---
 
@@ -20,4 +20,4 @@ This file defines the strict, high-priority guardrails and behavioral constraint
 ## 📚 Deep Technical Blueprints & Component Catalog
 
 For the exhaustive 34+ UI Primitive Component Catalog, Auto-Import Matrix, Axios Service Layer, Safe DEV Mock Fallback, Pinia Store patterns, and end-to-end CRUD scaffolding blueprints, refer to the **`nala-project` skill** located at:
-👉 [`.agents/skills/nala-project/SKILL.md`](.agents/skills/nala-project/SKILL.md)
+👉 [`.claude/skills/nala-project/SKILL.md`](.claude/skills/nala-project/SKILL.md)

@@ -70,7 +70,7 @@ export const authService = {
           id: 'usr_admin_1',
           name: credentials.email.split('@')[0] || 'Admin User',
           email: credentials.email,
-          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+          avatar: '/img/avatar.webp',
           role: 'Administrator',
           username: 'admin',
           timezone: 'utc-7',

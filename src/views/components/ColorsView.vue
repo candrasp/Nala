@@ -126,24 +126,17 @@ const statusTokens = [
 <template>
   <div class="space-y-8 max-w-[1920px] mx-auto pb-12">
     <!-- Page Header -->
-    <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <div class="flex items-center gap-2">
-          <span class="label-mono">Design System</span>
-          <span class="status-dot"></span>
-        </div>
-        <h1 class="text-2xl font-bold tracking-tight text-foreground mt-1">Color Palette &amp; Tokens</h1>
-        <p class="text-sm text-muted-foreground">
-          Semantic OKLCH color token architecture tailored for high contrast, dark mode harmony, and accessibility.
-        </p>
-      </div>
-    </div>
+    <PageHeader
+      title="Color Palette & Tokens"
+      description="Semantic OKLCH color token architecture tailored for high contrast, dark mode harmony, and accessibility."
+      badge="Design System"
+    />
 
     <!-- ═════════════════════════════════════════════════════════════════════ -->
     <!-- 1. SEMANTIC COLOR TOKENS                                              -->
     <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <Card class="shadow-sm overflow-hidden py-0 gap-0">
-      <CardHeader class="p-6 border-b border-border bg-muted/10 flex flex-row items-center justify-between">
+    <Card flush class="shadow-sm">
+      <CardHeader section class="flex flex-row items-center justify-between">
         <div>
           <CardTitle class="text-base font-semibold flex items-center gap-2">
             <Palette class="h-4 w-4 text-primary" />
@@ -209,8 +202,8 @@ const statusTokens = [
     <!-- ═════════════════════════════════════════════════════════════════════ -->
     <!-- 2. SURFACE & BACKGROUND TOKENS                                        -->
     <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <Card class="shadow-sm overflow-hidden py-0 gap-0">
-      <CardHeader class="p-6 border-b border-border bg-muted/10">
+    <Card flush class="shadow-sm">
+      <CardHeader section>
         <CardTitle class="text-base font-semibold">Surface &amp; Layout Tokens</CardTitle>
         <CardDescription class="text-xs">
           Layering hierarchy for canvas, cards, floating popovers, and sidebars.
@@ -265,8 +258,8 @@ const statusTokens = [
     <!-- ═════════════════════════════════════════════════════════════════════ -->
     <!-- 3. STATUS & TELEMETRY COLOR PALETTE                                   -->
     <!-- ═════════════════════════════════════════════════════════════════════ -->
-    <Card class="shadow-sm overflow-hidden py-0 gap-0">
-      <CardHeader class="p-6 border-b border-border bg-muted/10">
+    <Card flush class="shadow-sm">
+      <CardHeader section>
         <CardTitle class="text-base font-semibold">Status &amp; Telemetry Colors</CardTitle>
         <CardDescription class="text-xs">
           Universal alert indicators, health monitors, pulse dots, and chart series categories.

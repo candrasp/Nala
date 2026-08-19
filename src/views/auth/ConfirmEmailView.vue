@@ -106,7 +106,7 @@ const handleResend = () => {
 </script>
 
 <template>
-  <Card class="w-full max-w-md shadow-xl border-border/80 bg-card overflow-hidden py-0 gap-0">
+  <Card flush class="w-full max-w-md shadow-xl border-border/80 bg-card">
     <!-- Success State -->
     <template v-if="isVerified">
       <CardHeader class="pt-8 pb-6 px-6 sm:px-8 space-y-2 text-center">

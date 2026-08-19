@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import {
   Plus,
@@ -62,19 +61,160 @@ function handleCopy() {
     isCopied.value = false
   }, 2000)
 }
+
+// Code Snippets for Documentation
+const variantsSnippet = `<Button variant="default">Default (Primary)</Button>
+<Button variant="secondary">Secondary</Button>
+<Button variant="destructive">Destructive</Button>
+<Button variant="outline">Outline</Button>
+<Button variant="ghost">Ghost</Button>
+<Button variant="link">Link Button</Button>`
+
+const outlineSnippet = `<!-- Semantic Color Outlines -->
+<Button variant="outline">Neutral</Button>
+<Button variant="outline" class="text-primary border-primary/40 hover:bg-primary/5">
+  <Zap class="h-4 w-4" /> Primary
+</Button>
+<Button variant="outline" class="text-emerald-600 border-emerald-500/40 hover:bg-emerald-50">
+  <ShieldCheck class="h-4 w-4" /> Success
+</Button>
+<Button variant="outline" class="text-amber-600 border-amber-500/40 hover:bg-amber-50">
+  <AlertTriangle class="h-4 w-4" /> Warning
+</Button>
+<Button variant="outline" class="text-destructive border-destructive/30 hover:bg-destructive/5">
+  <Trash2 class="h-4 w-4" /> Destructive
+</Button>
+
+<!-- Dashed Outlines (New/Add Actions) -->
+<Button variant="outline" class="border-dashed"><Plus class="h-4 w-4" /> Dashed</Button>`
+
+const sizesSnippet = `<!-- Size Scale (xs, sm, default, lg) -->
+<Button size="xs">Extra Small (xs)</Button>
+<Button size="sm">Small (sm)</Button>
+<Button size="default">Default</Button>
+<Button size="lg">Large (lg)</Button>
+
+<!-- Outline / Secondary Sizing -->
+<Button variant="secondary" size="xs">Extra Small</Button>
+<Button variant="outline" size="sm">Small</Button>`
+
+const iconsSnippet = `<!-- Leading & Trailing Icons -->
+<Button><Plus class="h-4 w-4" /> Create Project</Button>
+<Button variant="secondary"><Download class="h-4 w-4" /> Export CSV</Button>
+<Button variant="outline"><Mail class="h-4 w-4" /> Send Invite</Button>
+<Button variant="outline" class="group">
+  Get Started <ArrowRight class="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+</Button>
+
+<!-- Standalone Icon-Only Buttons -->
+<Button size="icon-xs" variant="outline" aria-label="Settings"><Settings class="h-3 w-3" /></Button>
+<Button size="icon-sm" variant="secondary" aria-label="Search"><Search class="h-4 w-4" /></Button>
+<Button size="icon" variant="outline" aria-label="Share"><Share2 class="h-4 w-4" /></Button>
+<Button size="icon-lg" variant="secondary" aria-label="External Link"><ExternalLink class="h-5 w-5" /></Button>`
+
+const statesSnippet = `<!-- Disabled State -->
+<Button disabled>Disabled Primary</Button>
+<Button variant="outline" disabled>Disabled Outline</Button>
+
+<!-- Async Loading State with Spin Loader -->
+<Button :disabled="isLoading" @click="handleSubmit">
+  <Loader2 v-if="isLoading" class="h-4 w-4 animate-spin" />
+  <Send v-else class="h-4 w-4" />
+  {{ isLoading ? 'Submitting...' : 'Submit Form' }}
+</Button>`
+
+const microActionsSnippet = `<!-- Copy to Clipboard Button -->
+<Button
+  variant="outline"
+  size="sm"
+  class="gap-1.5"
+  :class="isCopied ? 'text-primary border-primary/40' : ''"
+  @click="handleCopy"
+>
+  <Check v-if="isCopied" class="h-3.5 w-3.5 text-primary" />
+  <Copy v-else class="h-3.5 w-3.5" />
+  {{ isCopied ? 'Copied to Clipboard!' : 'Copy Code' }}
+</Button>
+
+<!-- Favorite / Like Toggle Button -->
+<Button
+  variant="ghost"
+  size="sm"
+  class="gap-1.5"
+  :class="liked ? 'text-red-500 hover:text-red-600' : ''"
+  @click="liked = !liked"
+>
+  <Heart class="h-3.5 w-3.5" :class="liked ? 'fill-current' : ''" />
+  {{ liked ? 'Favorited' : 'Add to Favorites' }}
+</Button>
+
+<!-- Segmented Control Button Pill -->
+<div class="inline-flex rounded-lg border border-border bg-muted/40 p-1">
+  <button
+    v-for="seg in ['day', 'week', 'month', 'year']"
+    :key="seg"
+    @click="selectedSegment = seg"
+    class="rounded-md px-3 py-1 text-xs font-medium capitalize"
+    :class="selectedSegment === seg ? 'bg-background text-foreground shadow-xs' : 'text-muted-foreground'"
+  >
+    {{ seg }}
+  </button>
+</div>`
+
+const groupsSnippet = `<!-- Connected Button Toolbar -->
+<div class="inline-flex rounded-md shadow-xs" role="group">
+  <Button variant="outline" class="rounded-r-none border-r-0">Day</Button>
+  <Button variant="outline" class="rounded-none border-r-0">Week</Button>
+  <Button variant="outline" class="rounded-none border-r-0">Month</Button>
+  <Button variant="outline" class="rounded-l-none">Year</Button>
+</div>
+
+<!-- Split Action Button -->
+<div class="inline-flex rounded-md shadow-xs" role="group">
+  <Button class="rounded-r-none border-r-0 border-r-emerald-700/40">
+    <Plus class="h-4 w-4" /> Create Project
+  </Button>
+  <Button class="rounded-l-none px-2.5 border-l border-l-emerald-700/40">
+    <ChevronDown class="h-4 w-4" />
+  </Button>
+</div>`
+
+const fullWidthSnippet = `<div class="max-w-sm space-y-3">
+  <Button class="w-full">
+    <Send class="h-4 w-4" /> Submit Form
+  </Button>
+  <Button variant="outline" class="w-full">
+    <Download class="h-4 w-4" /> Download Report
+  </Button>
+  <Button variant="destructive" class="w-full">
+    <Trash2 class="h-4 w-4" /> Delete Account
+  </Button>
+  <Button variant="ghost" class="w-full">Cancel</Button>
+</div>`
+
+const dangerSnippet = `<!-- Two-Step Inline Confirmation -->
+<div v-if="confirmStep === 'confirm'" class="flex items-center gap-2">
+  <span class="text-sm text-destructive font-medium">Are you sure?</span>
+  <Button variant="destructive" size="sm" @click="handleDangerConfirm">
+    <Trash2 class="h-3.5 w-3.5" /> Yes, Delete
+  </Button>
+  <Button variant="ghost" size="sm" @click="cancelDanger">Cancel</Button>
+</div>
+
+<Button v-else variant="outline" class="text-destructive" @click="confirmStep = 'confirm'">
+  <Trash2 class="h-4 w-4" /> Delete Record
+</Button>`
 </script>
 
 <template>
   <div class="space-y-8 max-w-[1920px] mx-auto pb-10">
     <!-- Page Header -->
-    <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <h2 class="text-2xl font-bold tracking-tight text-foreground">Buttons</h2>
-        <p class="text-sm text-muted-foreground">
-          Comprehensive showcase of all button variants, sizes, icon placements, and interactive states.
-        </p>
-      </div>
-      <div class="flex items-center gap-2 pt-2 sm:pt-0">
+    <PageHeader
+      title="Buttons"
+      description="Comprehensive showcase of all button variants, sizes, icon placements, and interactive states with ready-to-copy code snippets."
+      badge="UI Component"
+    >
+      <template #actions>
         <Button variant="outline" size="sm" @click="triggerLoading">
           <RefreshCw class="h-3.5 w-3.5" :class="{ 'animate-spin': isLoading }" />
           Test Loading
@@ -83,50 +223,44 @@ function handleCopy() {
           <Sparkles class="h-3.5 w-3.5" />
           Primary Action
         </Button>
-      </div>
-    </div>
+      </template>
+    </PageHeader>
 
     <!-- 1. Variants Showcase -->
-    <Card class="shadow-sm">
-      <CardHeader>
-        <CardTitle class="text-base font-semibold">Button Variants</CardTitle>
-        <CardDescription>
-          The 6 core design system variants styled with Supabase emerald green tokens and tactile borders.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div class="flex flex-wrap items-center gap-3">
-          <Button variant="default">
-            Default (Primary)
-          </Button>
-          <Button variant="secondary">
-            Secondary
-          </Button>
-          <Button variant="destructive">
-            Destructive
-          </Button>
-          <Button variant="outline">
-            Outline
-          </Button>
-          <Button variant="ghost">
-            Ghost
-          </Button>
-          <Button variant="link">
-            Link Button
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+    <CodePreview
+      title="Button Variants"
+      description="The 6 core design system variants styled with Supabase emerald green tokens and tactile borders."
+      :code="variantsSnippet"
+    >
+      <div class="flex flex-wrap items-center gap-3">
+        <Button variant="default">
+          Default (Primary)
+        </Button>
+        <Button variant="secondary">
+          Secondary
+        </Button>
+        <Button variant="destructive">
+          Destructive
+        </Button>
+        <Button variant="outline">
+          Outline
+        </Button>
+        <Button variant="ghost">
+          Ghost
+        </Button>
+        <Button variant="link">
+          Link Button
+        </Button>
+      </div>
+    </CodePreview>
 
     <!-- 1b. Outline Color Variants -->
-    <Card class="shadow-sm">
-      <CardHeader>
-        <CardTitle class="text-base font-semibold">Outline Variants</CardTitle>
-        <CardDescription>
-          Outline buttons with semantic color intent — neutral, primary, success, warning, and destructive.
-        </CardDescription>
-      </CardHeader>
-      <CardContent class="space-y-5">
+    <CodePreview
+      title="Outline Variants"
+      description="Outline buttons with semantic color intent — neutral, primary, success, warning, and destructive."
+      :code="outlineSnippet"
+    >
+      <div class="space-y-5">
         <!-- Semantic row -->
         <div>
           <div class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Semantic Color Outlines</div>
@@ -197,18 +331,16 @@ function handleCopy() {
             </Button>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </CodePreview>
 
     <!-- 2. Sizes Showcase -->
-    <Card class="shadow-sm">
-      <CardHeader>
-        <CardTitle class="text-base font-semibold">Button Sizes</CardTitle>
-        <CardDescription>
-          Standardized scale sizes ranging from compact micro-actions to prominent large buttons.
-        </CardDescription>
-      </CardHeader>
-      <CardContent class="space-y-6">
+    <CodePreview
+      title="Button Sizes"
+      description="Standardized scale sizes ranging from compact micro-actions (xs) to prominent large buttons (lg)."
+      :code="sizesSnippet"
+    >
+      <div class="space-y-6">
         <div>
           <div class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
             Primary Variant
@@ -232,18 +364,16 @@ function handleCopy() {
             <Button variant="outline" size="lg">Large (lg)</Button>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </CodePreview>
 
     <!-- 3. Icon Buttons & Placements -->
-    <Card class="shadow-sm">
-      <CardHeader>
-        <CardTitle class="text-base font-semibold">Buttons with Icons</CardTitle>
-        <CardDescription>
-          Leading icons, trailing icons, and standalone square icon buttons.
-        </CardDescription>
-      </CardHeader>
-      <CardContent class="space-y-6">
+    <CodePreview
+      title="Buttons with Icons"
+      description="Leading icons, trailing icons, and standalone square icon buttons with size options."
+      :code="iconsSnippet"
+    >
+      <div class="space-y-6">
         <div>
           <div class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
             Icon + Label
@@ -294,20 +424,18 @@ function handleCopy() {
             </Button>
           </div>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </CodePreview>
 
     <!-- 4. Interactive & State Showcase -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <!-- Loading & Disabled States -->
-      <Card class="shadow-sm">
-        <CardHeader>
-          <CardTitle class="text-base font-semibold">States & Feedbacks</CardTitle>
-          <CardDescription>
-            Disabled states and dynamic asynchronous loading indicators.
-          </CardDescription>
-        </CardHeader>
-        <CardContent class="space-y-4">
+      <CodePreview
+        title="States & Feedbacks"
+        description="Disabled states and dynamic asynchronous loading indicators."
+        :code="statesSnippet"
+      >
+        <div class="space-y-4">
           <div class="flex flex-wrap items-center gap-3">
             <Button disabled>
               Disabled Primary
@@ -332,18 +460,16 @@ function handleCopy() {
               <span v-else>Save Changes</span>
             </Button>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </CodePreview>
 
       <!-- Interactive Micro-actions -->
-      <Card class="shadow-sm">
-        <CardHeader>
-          <CardTitle class="text-base font-semibold">Interactive Micro-actions</CardTitle>
-          <CardDescription>
-            Clickable components with instant state transition feedback.
-          </CardDescription>
-        </CardHeader>
-        <CardContent class="space-y-4">
+      <CodePreview
+        title="Interactive Micro-actions"
+        description="Clickable components with instant state transition feedback."
+        :code="microActionsSnippet"
+      >
+        <div class="space-y-4">
           <div class="flex flex-wrap items-center gap-3">
             <Button
               variant="outline"
@@ -385,19 +511,17 @@ function handleCopy() {
               </button>
             </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </CodePreview>
     </div>
 
     <!-- 5. Button Group -->
-    <Card class="shadow-sm">
-      <CardHeader>
-        <CardTitle class="text-base font-semibold">Button Groups</CardTitle>
-        <CardDescription>
-          Grouped buttons with collapsed borders for toolbars, pagination controls, and split actions.
-        </CardDescription>
-      </CardHeader>
-      <CardContent class="space-y-6">
+    <CodePreview
+      title="Button Groups"
+      description="Grouped buttons with collapsed borders for toolbars, pagination controls, and split actions."
+      :code="groupsSnippet"
+    >
+      <div class="space-y-6">
         <!-- Standard Group -->
         <div>
           <div class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Toolbar Group</div>
@@ -422,68 +546,43 @@ function handleCopy() {
             </Button>
           </div>
         </div>
-
-        <!-- Mixed Variant Group -->
-        <div>
-          <div class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Mixed Variant Group</div>
-          <div class="inline-flex rounded-md shadow-xs" role="group">
-            <Button variant="secondary" class="rounded-r-none border-r-0">
-              <Download class="h-4 w-4" />
-              Export
-            </Button>
-            <Button variant="secondary" class="rounded-none border-r-0">
-              <Share2 class="h-4 w-4" />
-              Share
-            </Button>
-            <Button variant="destructive" class="rounded-l-none">
-              <Trash2 class="h-4 w-4" />
-              Delete
-            </Button>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+      </div>
+    </CodePreview>
 
     <!-- 6. Full-Width Buttons -->
-    <Card class="shadow-sm">
-      <CardHeader>
-        <CardTitle class="text-base font-semibold">Full-Width Buttons</CardTitle>
-        <CardDescription>
-          Block-level buttons spanning the full container width — common in forms, dialogs, and mobile layouts.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <div class="max-w-sm space-y-3">
-          <Button class="w-full">
-            <Send class="h-4 w-4" />
-            Submit Form
-          </Button>
-          <Button variant="outline" class="w-full">
-            <Download class="h-4 w-4" />
-            Download Report
-          </Button>
-          <Button variant="secondary" class="w-full">
-            <RotateCcw class="h-4 w-4" />
-            Reset to Defaults
-          </Button>
-          <Button variant="destructive" class="w-full">
-            <Trash2 class="h-4 w-4" />
-            Delete Account
-          </Button>
-          <Button variant="ghost" class="w-full">Cancel</Button>
-        </div>
-      </CardContent>
-    </Card>
+    <CodePreview
+      title="Full-Width Buttons"
+      description="Block-level buttons spanning the full container width — common in forms, dialogs, and mobile layouts."
+      :code="fullWidthSnippet"
+    >
+      <div class="max-w-sm space-y-3">
+        <Button class="w-full">
+          <Send class="h-4 w-4" />
+          Submit Form
+        </Button>
+        <Button variant="outline" class="w-full">
+          <Download class="h-4 w-4" />
+          Download Report
+        </Button>
+        <Button variant="secondary" class="w-full">
+          <RotateCcw class="h-4 w-4" />
+          Reset to Defaults
+        </Button>
+        <Button variant="destructive" class="w-full">
+          <Trash2 class="h-4 w-4" />
+          Delete Account
+        </Button>
+        <Button variant="ghost" class="w-full">Cancel</Button>
+      </div>
+    </CodePreview>
 
     <!-- 7. Danger Confirm Pattern -->
-    <Card class="shadow-sm">
-      <CardHeader>
-        <CardTitle class="text-base font-semibold">Danger Confirm Pattern</CardTitle>
-        <CardDescription>
-          Two-step confirmation for destructive actions — prevents accidental data loss.
-        </CardDescription>
-      </CardHeader>
-      <CardContent class="space-y-6">
+    <CodePreview
+      title="Danger Confirm Pattern"
+      description="Two-step confirmation for destructive actions — prevents accidental data loss."
+      :code="dangerSnippet"
+    >
+      <div class="space-y-6">
         <!-- Inline confirm -->
         <div>
           <div class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Inline Two-Step</div>
@@ -525,26 +624,8 @@ function handleCopy() {
           </div>
           <p class="mt-3 text-xs text-muted-foreground">Click <em>Delete Record</em>, then confirm — resets automatically after deletion.</p>
         </div>
-
-        <!-- Context examples -->
-        <div>
-          <div class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Common Danger Actions</div>
-          <div class="flex flex-wrap gap-3">
-            <Button variant="outline" class="text-destructive border-destructive/30 hover:bg-destructive/5 hover:text-destructive dark:border-destructive/40">
-              <Trash2 class="h-4 w-4" />
-              Remove Member
-            </Button>
-            <Button variant="outline" class="text-destructive border-destructive/30 hover:bg-destructive/5 hover:text-destructive dark:border-destructive/40">
-              <AlertTriangle class="h-4 w-4" />
-              Revoke API Key
-            </Button>
-            <Button variant="destructive">
-              <Trash2 class="h-4 w-4" />
-              Delete Project
-            </Button>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+      </div>
+    </CodePreview>
   </div>
 </template>
+

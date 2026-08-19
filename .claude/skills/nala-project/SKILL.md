@@ -245,7 +245,7 @@ export const useProductStore = defineStore('product', () => {
   async function removeProduct(id: string) {
     try {
       await productService.deleteProduct(id)
-      products.value = products.value.filter(p => p.id !== id)
+      products.value.filter(p => p.id !== id)
       toast.success('Product deleted successfully.')
     } catch {
       toast.error('Failed to delete product.')
@@ -621,7 +621,6 @@ Never write manual `div.relative` + `span.absolute` for presence indicators, and
 ```
 
 ---
-
 
 ## 🛠️ Dev Commands
 

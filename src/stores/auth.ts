@@ -10,7 +10,7 @@ export const useAuthStore = defineStore('auth', () => {
     id: '1',
     name: 'Admin User',
     email: 'admin@example.com',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+    avatar: '/img/avatar.webp',
     role: 'Administrator',
     username: 'admin',
     timezone: 'utc-7',

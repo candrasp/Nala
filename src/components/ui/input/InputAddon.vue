@@ -5,21 +5,21 @@ import { cn } from "@/lib/utils"
 const props = withDefaults(
   defineProps<{
     class?: HTMLAttributes["class"]
-    section?: boolean
+    side?: "left" | "right"
   }>(),
   {
-    section: false,
+    side: "left",
   },
 )
 </script>
 
 <template>
   <div
-    data-slot="card-header"
+    data-slot="input-addon"
     :class="
       cn(
-        '@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6',
-        props.section && 'p-6 border-b border-border bg-muted/10',
+        'inline-flex items-center px-3 text-xs text-muted-foreground bg-muted border border-input h-9 select-none shrink-0',
+        props.side === 'left' ? 'rounded-l-md border-r-0' : 'rounded-r-md border-l-0',
         props.class,
       )
     "

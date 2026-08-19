@@ -143,24 +143,18 @@ function copyImport(iconName: string) {
 <template>
   <div class="space-y-8 max-w-[1920px] mx-auto pb-12">
     <!-- Page Header -->
-    <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <div class="flex items-center gap-2">
-          <span class="label-mono">Design System</span>
-          <span class="status-dot"></span>
-        </div>
-        <h1 class="text-2xl font-bold tracking-tight text-foreground mt-1">Icon Set &amp; Glyphs</h1>
-        <p class="text-sm text-muted-foreground">
-          Curated Lucide SVG icon directory used across the Nala design system. Click any icon to copy its import snippet.
-        </p>
-      </div>
-      <div class="flex items-center gap-2 text-xs font-mono text-muted-foreground pt-2 sm:pt-0">
-        <span>{{ filteredIcons.length }} of {{ iconsList.length }} Icons</span>
-      </div>
-    </div>
+    <PageHeader
+      title="Icon Set & Glyphs"
+      description="Curated Lucide SVG icon directory used across the Nala design system. Click any icon to copy its import snippet."
+      badge="Design System"
+    >
+      <template #actions>
+        <span class="text-xs font-mono text-muted-foreground">{{ filteredIcons.length }} of {{ iconsList.length }} Icons</span>
+      </template>
+    </PageHeader>
 
     <!-- Search & Category Filters -->
-    <Card class="shadow-sm overflow-hidden py-0 gap-0">
+    <Card flush class="shadow-sm">
       <CardContent class="p-4 flex flex-col md:flex-row items-center justify-between gap-4">
         <!-- Search Input -->
         <div class="relative w-full md:w-80">
@@ -190,7 +184,7 @@ function copyImport(iconName: string) {
     </Card>
 
     <!-- Icons Grid -->
-    <Card class="shadow-sm overflow-hidden py-0 gap-0">
+    <Card flush class="shadow-sm">
       <CardContent class="p-6">
         <div v-if="filteredIcons.length === 0" class="py-12 text-center text-sm text-muted-foreground">
           No icon found matching "{{ searchQuery }}".

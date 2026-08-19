@@ -110,7 +110,7 @@ const onSubmit = form.handleSubmit(() => {
 </script>
 
 <template>
-  <Card class="w-full max-w-md shadow-xl border-border/80 bg-card overflow-hidden py-0 gap-0">
+  <Card flush class="w-full max-w-md shadow-xl border-border/80 bg-card">
     <CardHeader class="pt-8 pb-6 px-6 sm:px-8 space-y-1.5 text-center">
       <div class="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
         <ShieldCheck class="h-6 w-6" />
@@ -128,8 +128,10 @@ const onSubmit = form.handleSubmit(() => {
           <FormItem class="space-y-1.5">
             <FormLabel class="text-xs font-semibold">Email address</FormLabel>
             <FormControl>
-              <div class="relative">
-                <Mail class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <InputGroup>
+                <InputIcon>
+                  <Mail />
+                </InputIcon>
                 <Input
                   type="email"
                   placeholder="name@example.com"
@@ -137,7 +139,7 @@ const onSubmit = form.handleSubmit(() => {
                   class="pl-9"
                   v-bind="componentField"
                 />
-              </div>
+              </InputGroup>
             </FormControl>
             <FormMessage class="text-xs" />
           </FormItem>
@@ -148,8 +150,10 @@ const onSubmit = form.handleSubmit(() => {
           <FormItem class="space-y-1.5">
             <FormLabel class="text-xs font-semibold">Password</FormLabel>
             <FormControl>
-              <div class="relative">
-                <Lock class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <InputGroup>
+                <InputIcon>
+                  <Lock />
+                </InputIcon>
                 <Input
                   :type="showPassword ? 'text' : 'password'"
                   placeholder="Create a strong password"
@@ -166,7 +170,7 @@ const onSubmit = form.handleSubmit(() => {
                   <EyeOff v-if="showPassword" class="h-4 w-4" />
                   <Eye v-else class="h-4 w-4" />
                 </button>
-              </div>
+              </InputGroup>
             </FormControl>
 
             <!-- Password Strength Bar & Label -->
@@ -209,8 +213,10 @@ const onSubmit = form.handleSubmit(() => {
           <FormItem class="space-y-1.5">
             <FormLabel class="text-xs font-semibold">Confirm Password</FormLabel>
             <FormControl>
-              <div class="relative">
-                <Lock class="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <InputGroup>
+                <InputIcon>
+                  <Lock />
+                </InputIcon>
                 <Input
                   :type="showConfirmPassword ? 'text' : 'password'"
                   placeholder="Repeat your password"
@@ -227,7 +233,7 @@ const onSubmit = form.handleSubmit(() => {
                   <EyeOff v-if="showConfirmPassword" class="h-4 w-4" />
                   <Eye v-else class="h-4 w-4" />
                 </button>
-              </div>
+              </InputGroup>
             </FormControl>
             <FormMessage class="text-xs" />
           </FormItem>

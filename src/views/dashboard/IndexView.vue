@@ -221,18 +221,12 @@ const services = ref([
   <div class="space-y-6 max-w-[1920px] mx-auto pb-10">
 
     <!-- Page Header -->
-    <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-      <div>
-        <div class="flex items-center gap-2">
-          <span class="label-mono">Admin Dashboard</span>
-          <span class="status-dot"></span>
-        </div>
-        <h1 class="text-2xl font-bold tracking-tight text-foreground mt-1">Overview</h1>
-        <p class="text-sm text-muted-foreground">
-          Real-time metrics, transactions, and system health for your platform.
-        </p>
-      </div>
-      <div class="flex items-center gap-2 pt-2 sm:pt-0 shrink-0">
+    <PageHeader
+      title="Overview"
+      description="Real-time metrics, transactions, and system health for your platform."
+      badge="Admin Dashboard"
+    >
+      <template #actions>
         <Button variant="outline" size="sm" class="gap-1.5 text-xs">
           <RefreshCw class="h-3.5 w-3.5" />
           Refresh
@@ -241,15 +235,16 @@ const services = ref([
           <Download class="h-3.5 w-3.5" />
           Export Report
         </Button>
-      </div>
-    </div>
+      </template>
+    </PageHeader>
 
     <!-- KPI Cards -->
     <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
       <Card
         v-for="stat in stats"
         :key="stat.title"
-        class="overflow-hidden py-0 gap-0 shadow-sm"
+        flush
+        class="shadow-sm"
       >
         <CardContent class="p-4">
           <div class="flex items-start justify-between">
@@ -290,7 +285,7 @@ const services = ref([
     </div>
 
     <!-- Quick Metrics Banner -->
-    <Card class="overflow-hidden py-0 gap-0 shadow-sm">
+    <Card flush class="shadow-sm">
       <CardContent class="p-0">
         <div class="grid grid-cols-2 divide-x divide-y divide-border sm:grid-cols-4 sm:divide-y-0">
           <div
@@ -310,7 +305,7 @@ const services = ref([
     <div class="grid gap-4 grid-cols-1 lg:grid-cols-3">
 
       <!-- Recent Transactions -->
-      <Card class="overflow-hidden py-0 gap-0 shadow-sm lg:col-span-2">
+      <Card flush class="shadow-sm lg:col-span-2">
         <CardHeader class="border-b border-border px-4 py-3 bg-muted/20 flex flex-row items-center justify-between">
           <div>
             <CardTitle class="text-sm font-semibold">Recent Transactions</CardTitle>
@@ -376,7 +371,7 @@ const services = ref([
       </Card>
 
       <!-- Activity Feed -->
-      <Card class="overflow-hidden py-0 gap-0 shadow-sm">
+      <Card flush class="shadow-sm">
         <CardHeader class="border-b border-border px-4 py-3 bg-muted/20">
           <CardTitle class="text-sm font-semibold">Recent Activity</CardTitle>
           <CardDescription class="text-xs">System &amp; user events</CardDescription>
@@ -403,7 +398,7 @@ const services = ref([
     </div>
 
     <!-- System Health -->
-    <Card class="overflow-hidden py-0 gap-0 shadow-sm">
+    <Card flush class="shadow-sm">
       <CardHeader class="border-b border-border px-4 py-3 bg-muted/20 flex flex-row items-center justify-between">
         <div>
           <CardTitle class="text-sm font-semibold">System Health</CardTitle>
