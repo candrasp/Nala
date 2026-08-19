@@ -9,7 +9,6 @@ import {
   Sparkles,
   Zap,
   Clock,
-  ExternalLink,
 } from '@lucide/vue'
 
 // ─── Toast Trigger Handlers ───────────────────────────────────────────────────

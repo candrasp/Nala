@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import {
   ChevronLeft,
   ChevronRight,
@@ -12,15 +12,12 @@ import {
   GitCommit,
   Rocket,
   Settings2,
-  Key,
   Globe,
-  Search,
 } from '@lucide/vue'
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Stepper } from '@/components/ui/stepper'
 import { Timeline } from '@/components/ui/timeline'
-import { Kbd } from '@/components/ui/kbd'
 
 // ─── 1. Stepper / Wizard State ────────────────────────────────────────────────
 const currentStep = ref(2)
@@ -95,40 +92,6 @@ const deploymentEvents = [
     badge: 'GitHub',
   },
 ]
-
-// ─── 6. Command Search Demo State ────────────────────────────────────────────
-const commandSearch = ref('')
-const commandList = [
-  {
-    group: 'Navigation',
-    items: [
-      { title: 'Go to Dashboard', shortcut: 'G D', icon: Activity },
-      { title: 'User Management', shortcut: 'G U', icon: Settings2 },
-      { title: 'Project Settings', shortcut: 'G S', icon: Key },
-    ],
-  },
-  {
-    group: 'Actions',
-    items: [
-      { title: 'Create New Database Table', shortcut: '⌘ N', icon: Database },
-      { title: 'Generate API Secret Key', shortcut: '⌥ K', icon: Key },
-      { title: 'Deploy to Staging', shortcut: '⇧ ⌘ D', icon: Rocket },
-    ],
-  },
-]
-
-const filteredCommandList = computed(() => {
-  if (!commandSearch.value) return commandList
-  const q = commandSearch.value.toLowerCase()
-  return commandList
-    .map((g) => ({
-      ...g,
-      items: g.items.filter(
-        (i) => i.title.toLowerCase().includes(q) || i.shortcut.toLowerCase().includes(q),
-      ),
-    }))
-    .filter((g) => g.items.length > 0)
-})
 
 // ─── Code Documentation Snippets ─────────────────────────────────────────────
 

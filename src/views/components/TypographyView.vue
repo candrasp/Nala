@@ -1,33 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import {
-  Copy,
-  Check,
-  Type,
-  List,
-  Quote,
-  Code2,
-} from '@lucide/vue'
-import { Kbd } from '@/components/ui/kbd'
-
-const copiedCode = ref(false)
-const codeSnippet = ref(`// Nala Design System Component
-import { Button } from '@/components/ui/button'
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-
-const count = ref(0)
-function increment() {
-  count.value++
-}`)
-
-function copySnippet() {
-  navigator.clipboard.writeText(codeSnippet.value)
-  copiedCode.value = true
-  setTimeout(() => {
-    copiedCode.value = false
-  }, 2000)
-}
-
 // ─── Code Documentation Snippets ─────────────────────────────────────────────
 
 const headingScaleSnippet = `<!-- Modular Headings Scale (H1 to H6) -->
@@ -87,6 +58,15 @@ const codeSnippetDoc = `<!-- Code Block & Inline Code Formatting -->
 <p class="text-xs text-muted-foreground">
   Run <code class="rounded bg-muted px-1.5 py-0.5 font-mono text-[11px] text-foreground">pnpm dev</code> to start.
 </p>`
+
+const codeSnippet = `// Nala Design System Component
+import { Button } from '@/components/ui/button'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
+
+const count = ref(0)
+function increment() {
+  count.value++
+}`
 
 const listsSnippet = `<!-- Lists & Structural Layouts -->
 

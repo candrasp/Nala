@@ -7,9 +7,6 @@ import {
   AlertTriangle,
   RefreshCw,
   Loader2,
-  Terminal,
-  Database,
-  Sparkles,
   Zap,
 } from '@lucide/vue'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -292,7 +289,7 @@ const spinnersSnippet = `<!-- Spinner & Loading Indicators -->
               <span class="text-muted-foreground">Memory Usage</span>
               <span class="text-amber-500 font-semibold">88%</span>
             </div>
-            <Progress :model-value="88" class="[&>[data-slot=progress-indicator]]:bg-amber-500" />
+            <Progress :model-value="88" class="*:data-[slot=progress-indicator]:bg-amber-500" />
           </div>
 
           <div class="space-y-1.5">
@@ -300,7 +297,7 @@ const spinnersSnippet = `<!-- Spinner & Loading Indicators -->
               <span class="text-muted-foreground">CPU Load</span>
               <span class="text-red-500 font-semibold">96%</span>
             </div>
-            <Progress :model-value="96" class="[&>[data-slot=progress-indicator]]:bg-red-500" />
+            <Progress :model-value="96" class="*:data-[slot=progress-indicator]:bg-red-500" />
           </div>
         </div>
       </div>
