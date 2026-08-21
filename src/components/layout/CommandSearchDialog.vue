@@ -29,6 +29,7 @@ import {
   MailCheck,
   Settings,
   Search,
+  ExternalLink,
 } from '@lucide/vue'
 import {
   Dialog,
@@ -59,6 +60,7 @@ const searchQuery = ref('')
 const searchItems: SearchItem[] = [
   { title: 'Dashboard', href: '/', icon: LayoutDashboard, category: 'Overview' },
   { title: 'User Management', href: '/users', icon: Users, category: 'Overview' },
+  { title: 'GitHub Repository', href: 'https://github.com/candrasp/Nala', icon: ExternalLink, category: 'Links' },
   { title: 'Color Tokens', href: '/components/colors', icon: Palette, category: 'Design System' },
   { title: 'Typography', href: '/components/typography', icon: Type, category: 'Design System' },
   { title: 'Icon Directory', href: '/components/icons', icon: Sparkles, category: 'Design System' },
@@ -98,7 +100,11 @@ const filteredSearchItems = computed(() => {
 const navigateTo = (href: string) => {
   emit('update:open', false)
   searchQuery.value = ''
-  router.push(href)
+  if (href.startsWith('http')) {
+    window.open(href, '_blank', 'noopener,noreferrer')
+  } else {
+    router.push(href)
+  }
 }
 </script>
 
