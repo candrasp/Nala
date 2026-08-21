@@ -46,10 +46,20 @@ declare global {
   const eagerComputed: typeof import('@vueuse/core').eagerComputed
   const effectScope: typeof import('vue').effectScope
   const extendRef: typeof import('@vueuse/core').extendRef
+  const formatBytes: typeof import('./lib/formatters').formatBytes
+  const formatCompactNumber: typeof import('./lib/formatters').formatCompactNumber
+  const formatCurrency: typeof import('./lib/formatters').formatCurrency
+  const formatDate: typeof import('./lib/formatters').formatDate
+  const formatDateTime: typeof import('./lib/formatters').formatDateTime
+  const formatDateTimeWithTz: typeof import('./lib/formatters').formatDateTimeWithTz
+  const formatNumber: typeof import('./lib/formatters').formatNumber
+  const formatRelativeTime: typeof import('./lib/formatters').formatRelativeTime
+  const formatTime: typeof import('./lib/formatters').formatTime
   const getActivePinia: typeof import('pinia').getActivePinia
   const getCurrentInstance: typeof import('vue').getCurrentInstance
   const getCurrentScope: typeof import('vue').getCurrentScope
   const getCurrentWatcher: typeof import('vue').getCurrentWatcher
+  const getInitials: typeof import('./lib/formatters').getInitials
   const h: typeof import('vue').h
   const ignorableWatch: typeof import('@vueuse/core').ignorableWatch
   const inject: typeof import('vue').inject
@@ -126,6 +136,7 @@ declare global {
   const toValue: typeof import('vue').toValue
   const tokenStorage: typeof import('./lib/axios').tokenStorage
   const triggerRef: typeof import('vue').triggerRef
+  const truncate: typeof import('./lib/formatters').truncate
   const tryOnBeforeMount: typeof import('@vueuse/core').tryOnBeforeMount
   const tryOnBeforeUnmount: typeof import('@vueuse/core').tryOnBeforeUnmount
   const tryOnMounted: typeof import('@vueuse/core').tryOnMounted
@@ -200,6 +211,7 @@ declare global {
   const useFileSystemAccess: typeof import('@vueuse/core').useFileSystemAccess
   const useFocus: typeof import('@vueuse/core').useFocus
   const useFocusWithin: typeof import('@vueuse/core').useFocusWithin
+  const useFormatter: typeof import('./composables/useFormatter').useFormatter
   const useFps: typeof import('@vueuse/core').useFps
   const useFullscreen: typeof import('@vueuse/core').useFullscreen
   const useGamepad: typeof import('@vueuse/core').useGamepad
@@ -330,6 +342,9 @@ declare global {
   export type { CustomRequestConfig } from './lib/axios'
   import('./lib/axios')
   // @ts-ignore
+  export type { TimeFormat, CurrencyFormatOptions, DateTimeFormatOptions, TimeOnlyFormatOptions } from './lib/formatters'
+  import('./lib/formatters')
+  // @ts-ignore
   export type { LoadingBarState } from './lib/loading-bar'
   import('./lib/loading-bar')
 }
@@ -377,10 +392,20 @@ declare module 'vue' {
     readonly eagerComputed: UnwrapRef<typeof import('@vueuse/core')['eagerComputed']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
     readonly extendRef: UnwrapRef<typeof import('@vueuse/core')['extendRef']>
+    readonly formatBytes: UnwrapRef<typeof import('./lib/formatters')['formatBytes']>
+    readonly formatCompactNumber: UnwrapRef<typeof import('./lib/formatters')['formatCompactNumber']>
+    readonly formatCurrency: UnwrapRef<typeof import('./lib/formatters')['formatCurrency']>
+    readonly formatDate: UnwrapRef<typeof import('./lib/formatters')['formatDate']>
+    readonly formatDateTime: UnwrapRef<typeof import('./lib/formatters')['formatDateTime']>
+    readonly formatDateTimeWithTz: UnwrapRef<typeof import('./lib/formatters')['formatDateTimeWithTz']>
+    readonly formatNumber: UnwrapRef<typeof import('./lib/formatters')['formatNumber']>
+    readonly formatRelativeTime: UnwrapRef<typeof import('./lib/formatters')['formatRelativeTime']>
+    readonly formatTime: UnwrapRef<typeof import('./lib/formatters')['formatTime']>
     readonly getActivePinia: UnwrapRef<typeof import('pinia')['getActivePinia']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly getCurrentWatcher: UnwrapRef<typeof import('vue')['getCurrentWatcher']>
+    readonly getInitials: UnwrapRef<typeof import('./lib/formatters')['getInitials']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
     readonly ignorableWatch: UnwrapRef<typeof import('@vueuse/core')['ignorableWatch']>
     readonly inject: UnwrapRef<typeof import('vue')['inject']>
@@ -457,6 +482,7 @@ declare module 'vue' {
     readonly toValue: UnwrapRef<typeof import('vue')['toValue']>
     readonly tokenStorage: UnwrapRef<typeof import('./lib/axios')['tokenStorage']>
     readonly triggerRef: UnwrapRef<typeof import('vue')['triggerRef']>
+    readonly truncate: UnwrapRef<typeof import('./lib/formatters')['truncate']>
     readonly tryOnBeforeMount: UnwrapRef<typeof import('@vueuse/core')['tryOnBeforeMount']>
     readonly tryOnBeforeUnmount: UnwrapRef<typeof import('@vueuse/core')['tryOnBeforeUnmount']>
     readonly tryOnMounted: UnwrapRef<typeof import('@vueuse/core')['tryOnMounted']>
@@ -531,6 +557,7 @@ declare module 'vue' {
     readonly useFileSystemAccess: UnwrapRef<typeof import('@vueuse/core')['useFileSystemAccess']>
     readonly useFocus: UnwrapRef<typeof import('@vueuse/core')['useFocus']>
     readonly useFocusWithin: UnwrapRef<typeof import('@vueuse/core')['useFocusWithin']>
+    readonly useFormatter: UnwrapRef<typeof import('./composables/useFormatter')['useFormatter']>
     readonly useFps: UnwrapRef<typeof import('@vueuse/core')['useFps']>
     readonly useFullscreen: UnwrapRef<typeof import('@vueuse/core')['useFullscreen']>
     readonly useGamepad: UnwrapRef<typeof import('@vueuse/core')['useGamepad']>

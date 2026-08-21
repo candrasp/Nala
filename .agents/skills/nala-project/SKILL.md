@@ -52,7 +52,7 @@ Follow all the guidelines below strictly whenever writing, modifying, or buildin
 9. **NEVER** run `git add`, `git commit`, or `git push` without explicit instruction from the user.
 10. **Prefer Tailwind CSS v4's Built-in Sizing Scale:** Use built-in scale values (e.g. `w-75`, `max-h-75`, `max-w-120`, `gap-3`) instead of arbitrary brackets (`max-h-[300px]`).
 11. **Single SPA Repository (Non-Monorepo):** This project is a pure Single Page Application. Do not create a `pnpm-workspace.yaml`. All pnpm configuration (e.g. `ignoredBuiltDependencies`) is managed in `package.json`.
-12. **Testing Scope:** This project is a Vite-based UI template. Creating unit tests (Vitest) or E2E tests is optional and should only be done on explicit instruction from the user.
+12. **Testing Scope & Execution:** This project is a Vite-based UI template. Creating and running unit tests (`vitest`, `pnpm test`, `pnpm test:run`) or E2E tests is strictly executed ONLY upon explicit instruction from the user. NEVER run unit tests autonomously after writing or modifying code.
 
 ---
 

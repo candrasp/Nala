@@ -6,11 +6,16 @@ interface Props {
   title?: string
   description?: string
   code: string
+  defaultShowCode?: boolean
+  hidePreview?: boolean
 }
 
-const props = defineProps<Props>()
+const props = withDefaults(defineProps<Props>(), {
+  defaultShowCode: false,
+  hidePreview: false,
+})
 
-const showCode = ref(false)
+const showCode = ref(props.defaultShowCode || props.hidePreview)
 const isCopied = ref(false)
 
 function copySnippet() {
@@ -102,6 +107,7 @@ const highlightedLines = computed(() => {
       <!-- Action Buttons: Code Toggle & Copy -->
       <div class="flex items-center gap-1.5 shrink-0 self-start sm:self-auto">
         <Button
+          v-if="!hidePreview"
           variant="outline"
           size="xs"
           class="h-7 text-[11px] gap-1 px-2.5 font-mono cursor-pointer transition-colors"
@@ -124,14 +130,14 @@ const highlightedLines = computed(() => {
       </div>
     </CardHeader>
 
-    <!-- Interactive Component Preview -->
-    <CardContent class="p-6">
+    <!-- Interactive Component Preview (only when not code-only mode) -->
+    <CardContent v-if="!hidePreview" class="p-6">
       <slot />
     </CardContent>
 
-    <!-- Expandable Code Snippet Block (One Dark Pro / VS Code Aesthetic) -->
+    <!-- Expandable / Permanent Code Snippet Block (One Dark Pro / VS Code Aesthetic) -->
     <div
-      v-if="showCode"
+      v-if="showCode || hidePreview"
       class="border-t border-border bg-[#181a1f] text-[#abb2bf] transition-all font-mono"
     >
       <!-- macOS Terminal Header Bar -->

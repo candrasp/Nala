@@ -5,6 +5,78 @@ All notable changes to **Nala** — Vue 3 Admin Dashboard Template — are docum
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [Semantic Versioning](https://semver.org/).
 
+## [1.2.4] — 2026-08-21
+
+### Added
+
+#### 🌐 Enterprise Data Formatting Utilities (`src/lib/formatters.ts` & `src/composables/useFormatter.ts`)
+- **Native Intl Formatter Core (`src/lib/formatters.ts`)**:
+  - `formatCurrency()` — International and localized currency formatting with sensible defaults for IDR, USD, EUR, JPY, GBP.
+  - `formatNumber()` & `formatCompactNumber()` — Thousand separators and compact metric notations (`1.5K`, `2.4M`, `2,5 jt`).
+  - `formatDate()`, `formatDateTime()`, and `formatTime()` — Standard date styles (`short`, `medium`, `long`, `full`), timezone handling (WIB/WITA/WIT/UTC), and 12h/24h clock cycle support.
+  - `formatRelativeTime()` — Human-friendly natural relative time with locale-aware phrases (`"just now"` / `"baru saja"`).
+  - `formatBytes()` — Locale-aware storage byte sizes (`KB`, `MB`, `GB`, `TB`).
+  - `getInitials()` & `truncate()` — Safe 2-letter uppercase avatar initials and text truncation with ellipsis.
+- **Auto-imported `useFormatter()` Composable (`src/composables/useFormatter.ts`)**:
+  - Provides a single, clean access point for all formatters across any `<script setup>` or template without explicit imports.
+  - Registered `src/composables` directory in `vite.config.ts` for automated unplugin auto-import.
+- **1-Click Global Environment Configuration (`.env.example` & `README.md`)**:
+  - `VITE_DEFAULT_LOCALE` (`en-US`, `id-ID`, etc.)
+  - `VITE_DEFAULT_CURRENCY` (`USD`, `IDR`, `EUR`, etc.)
+  - `VITE_DEFAULT_TIMEZONE` (`Asia/Jakarta`, `UTC`, etc.)
+  - `VITE_DEFAULT_TIME_FORMAT` (`24h`, `12h`, `auto`)
+- **Interactive Showcase Demo Page (`src/views/components/FormatterView.vue`)**:
+  - Added new `/components/formatters` route in `src/router/index.ts`.
+  - Registered in `AdminLayout.vue` sidebar navigation and Command Palette search (`Ctrl+K`).
+  - Includes an interactive live playground and visible-by-default One Dark Pro code snippets.
+- **Component Ergonomics (`src/components/CodePreview.vue`)**:
+  - Added `hidePreview` and `defaultShowCode` props to support dedicated code-only documentation blocks.
+
+#### 🏗️ Layout Architecture & Sidebar Modularization (`src/layouts/` & `src/components/layout/`)
+- **Decomposed Monolithic `AdminLayout.vue`**:
+  - Reduced `AdminLayout.vue` from 601 lines down to ~48 lines of clean shell orchestration.
+  - Extracted modular sub-components placed under `src/components/layout/` (scanned by `unplugin-vue-components`):
+    - `AppNavbar.vue` — Top fixed header with logo, breadcrumbs, search trigger, notification bell, profile & theme switchers.
+    - `AppSidebar.vue` — Left collapsible sidebar navigation categorized by standard enterprise groups.
+    - `CommandSearchDialog.vue` — Global `Ctrl+K` / `Cmd+K` searchable modal command palette.
+    - `NotificationDrawer.vue` — Slide-out sheet notification panel with mark-all-as-read and filter states.
+- **Sidebar & Navigation Hierarchy Reorganization**:
+  - Reordered menu navigation into logical groups: **Overview** → **Design System** (Tokens, Typography, Icons, Formatters) → **UI Components** (Atomic to Complex) → **Authentication** → **Pages** → **System**.
+
+#### 🧪 Expanded Test Coverage
+- `src/services/auth.service.spec.ts` — Tests for login token persistence, dev fallback mock, logout token cleanup, and profile fetch.
+- `src/services/user.service.spec.ts` — Tests for user list query params, offline fallback, initial generation, update, and deletion.
+- `src/lib/axios.spec.ts` — Tests for token storage management and Axios instance default configurations.
+- `src/lib/validation.spec.ts` — Schema validation tests for login and user management forms using Zod.
+- `src/lib/formatters.spec.ts` — Full unit test suite for all formatter functions and boundary edge cases.
+
+### Changed
+- **AI Agent Guardrails (`GEMINI.md`, `CLAUDE.md`, `.agents/skills/`, `.claude/skills/`)**:
+  - Enforced strict rule: Never run unit tests (`vitest`, `pnpm test`, `pnpm test:run`) autonomously without explicit user instruction.
+- **Documentation & Roadmaps (`README.md`, `ROADMAP.md`)**:
+  - Refactored `ROADMAP.md` to be realistic and focused on core Vue 3 SPA template requirements.
+  - Updated `README.md` Project Structure and Available Pages tables to match the new layout modularization and menu order.
+
+---
+
+## [1.2.3] — 2026-08-21
+
+### Added
+
+#### 🧪 Unit Testing Framework & CI Pipeline Integration
+- **Vitest & Testing Suite Setup**:
+  - Integrated **Vitest** v4 with `@vue/test-utils` and `happy-dom` for fast, lightweight in-memory DOM unit testing.
+  - Added test configuration to `vite.config.ts` and `"vitest/globals"` types in `tsconfig.app.json`.
+  - Added npm scripts `"test"` (watch mode) and `"test:run"` (single CI run) to `package.json`.
+- **Core Unit Test Suites**:
+  - `src/lib/utils.spec.ts` — Comprehensive unit tests for `cn()` utility (class merging, conditionals, Tailwind conflict resolution, and objects/arrays).
+  - `src/components/ui/button/Button.spec.ts` — Component tests for `Button.vue` (default slots, variant classes, data attributes, custom styles, and click emissions).
+  - `src/stores/auth.spec.ts` — State management tests for `useAuthStore` Pinia store (initial state, `setUser`, isolated mock `logout`, and computed `isAuthenticated`).
+- **GitHub Actions CI Integration** (`.github/workflows/ci.yml`):
+  - Added automated `pnpm test:run` step prior to TypeScript checking and production build.
+
+---
+
 ## [1.2.2] — 2026-08-19
 
 ### Added

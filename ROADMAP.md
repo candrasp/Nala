@@ -240,3 +240,74 @@
   - [x] Add `status: 'online' | 'busy' | 'away' | 'offline'` prop to `Avatar.vue`
   - [x] Create `<AvatarGroup max overlap>` component for stacked overlapping avatars
 
+---
+
+## ✅ v1.2.3 — Unit Testing Infrastructure
+
+- [x] **Vitest + Testing Framework** (`vite.config.ts`, `tsconfig.app.json`, `package.json`)
+  - Integrated Vitest v4 with `@vue/test-utils` and `happy-dom`
+  - Added `test` (watch) and `test:run` (CI) npm scripts
+- [x] **Core Test Suites**:
+  - `src/lib/utils.spec.ts` — `cn()` utility class merging
+  - `src/components/ui/button/Button.spec.ts` — Component behavior tests
+  - `src/stores/auth.spec.ts` — Pinia store state management
+
+---
+
+## ✅ v1.2.4 — Enterprise Data Formatting Utilities
+
+- [x] **Formatter Core** (`src/lib/formatters.ts`) — Native Intl API-based formatting:
+  - Currency (multi-locale: IDR, USD, EUR, JPY, GBP)
+  - Number, Compact number (1.5K, 2.4M, 2,5 jt)
+  - Date & DateTime with date styles (`short` | `medium` | `long` | `full`)
+  - Time-only (`fmt.time`) with `24h` / `12h` / `auto` clock options
+  - Timezone support (WIB/WITA/WIT/UTC) via IANA string
+  - Relative time (`"baru saja"`, `"5 menit yang lalu"`) with locale-aware "just now" phrase
+  - Byte sizes with locale-aware decimal separator
+  - Avatar initials & text truncation
+- [x] **`useFormatter()` Auto-Imported Composable** (`src/composables/useFormatter.ts`)
+- [x] **`.env`-based Global Defaults** (`VITE_DEFAULT_LOCALE`, `VITE_DEFAULT_CURRENCY`, `VITE_DEFAULT_TIMEZONE`, `VITE_DEFAULT_TIME_FORMAT`)
+- [x] **Interactive Formatter Showcase** (`src/views/components/FormatterView.vue`) — `/components/formatters`
+- [x] **`CodePreview` `hidePreview` & `defaultShowCode` Props** — Code-only doc blocks always visible
+- [x] **Expanded Unit Tests** — `formatters.spec.ts`, `axios.spec.ts`, `validation.spec.ts`, `auth.service.spec.ts`, `user.service.spec.ts`
+
+---
+
+## 🚧 v1.3 — Core Admin Application Views
+
+> **Target:** Essential real-world administrative pages that every production dashboard requires.
+
+### Pages & Workflows
+- [ ] **Profile & Account View** (`/profile`) — Personal user profile, avatar change, personal info, and account deletion safeguard
+- [ ] **Notifications Center** (`/notifications`) — Dedicated full inbox view with filter by type (unread, system, mention) and bulk mark as read
+- [ ] **Activity Log / Audit Trail** (`/activity`) — Filterable log table showing administrative actions, timestamps, and user events
+- [ ] **Roles & Permissions Matrix** (`/roles`) — Visual permission table/checkbox grid for managing role-based access control (RBAC)
+- [ ] **Billing & Invoices Sample** (`/billing`) — Subscription tier cards, payment method card, and invoice download history table
+
+---
+
+## 🚧 v1.4 — Component Catalog Polish & Primitives
+
+> **Target:** Complete UI primitive gaps and showcase remaining built-in components.
+
+### UI Primitives & Showcase Gaps
+- [ ] **`<Accordion>` / Collapsible Primitive** — For FAQ sections, expandable settings groups, and collapsible filters
+- [ ] **`<Calendar>` Full Month View** — Event-ready calendar grid (expanding upon the single Date Picker)
+- [ ] **`<Kbd>` & Keyboard Shortcuts Showcase** — Demonstrate keyboard shortcut combinations in command palettes and dialogs
+- [ ] **`<Timeline>` Component Showcase** — Dedicated demo section for order tracking and milestone flows
+- [ ] **`<HoverCard>` & Popover Rich Preview** — Interactive user preview cards on link hover
+
+---
+
+## 🚧 v1.5 — Frontend Architecture & State Polish
+
+> **Target:** Bulletproof state persistence, smoother page transitions, and optimal developer ergonomics.
+
+### State & Routing
+- [ ] **Auth State Rehydration** — Keep `useAuthStore` session in sync with `localStorage` across browser refreshes
+- [ ] **Pinia UI Store** (`src/stores/ui.ts`) — Centralize reactive sidebar state, active notifications, and global layout flags
+- [ ] **Route Transition Animations** — Subtle page-level enter/leave transitions between route changes
+- [ ] **Role-Based Route Guard Helper** — Easy middleware recipe for restricting routes based on `authStore.user.role`
+- [ ] **Workspace / Tenant Switcher UI** — Clean header dropdown component for switching organizations or projects
+
+

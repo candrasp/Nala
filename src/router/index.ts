@@ -94,6 +94,11 @@ const router = createRouter({
           component: () => import('@/views/components/BadgeAvatarView.vue'),
         },
         {
+          path: 'components/formatters',
+          name: 'components-formatters',
+          component: () => import('@/views/components/FormatterView.vue'),
+        },
+        {
           path: 'components/toasts',
           name: 'components-toasts',
           component: () => import('@/views/components/ToastView.vue'),
