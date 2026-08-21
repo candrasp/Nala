@@ -128,19 +128,33 @@ Or configure via `netlify.toml` in the project root:
 
 ### Cloudflare Pages
 
-1. In the Cloudflare dashboard, navigate to **Compute (Workers) > Pages > Create a project > Connect to Git**.
-2. Select your Nala repository.
+There are two official ways to deploy Nala to Cloudflare Pages:
+
+#### Option A: Direct Git Integration (Zero Configuration — Recommended)
+
+1. Go to the [Cloudflare Dashboard](https://dash.cloudflare.com/) > **Compute (Workers) > Pages > Create a project > Connect to Git**.
+2. Select your repository `candrasp/Nala`.
 3. Configure build settings:
    - **Framework preset:** `Vue` or `Vite`
    - **Build command:** `pnpm build`
    - **Build output directory:** `dist`
    - **Root directory:** `/`
-4. Add environment variables in **Environment variables** section.
-5. Create a `public/_routes.json` or `public/_redirects` file:
-   ```text
-   /*    /index.html   200
-   ```
-6. Click **Save and Deploy**.
+4. Add environment variables under **Settings > Environment variables** (e.g. `VITE_DEFAULT_LOCALE`, `VITE_DEFAULT_CURRENCY`, `VITE_DEFAULT_TIME_FORMAT=24h`).
+5. SPA redirect rule is automatically handled by `public/_redirects` (`/*  /index.html  200`).
+6. Click **Save and Deploy**. Every `git push origin main` will automatically build and deploy your demo.
+
+#### Option B: Automated CD via GitHub Actions (`.github/workflows/deploy.yml`)
+
+Nala includes a production-ready CI/CD pipeline at `.github/workflows/deploy.yml`:
+
+1. In your GitHub repository, go to **Settings > Secrets and variables > Actions**.
+2. Add the following repository secrets:
+   - `CLOUDFLARE_API_TOKEN`: Cloudflare API Token with `Cloudflare Pages:Edit` permissions.
+   - `CLOUDFLARE_ACCOUNT_ID`: Your Cloudflare Account ID (found in Workers & Pages sidebar overview).
+3. On every push to `main`, GitHub Actions will:
+   - Run unit tests (`pnpm test:run`)
+   - Run TypeScript check & build (`pnpm build`)
+   - Automatically deploy `dist/` directly to Cloudflare Pages project named `nala`.
 
 ---
 
