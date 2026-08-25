@@ -158,4 +158,17 @@ export const notificationService = {
       })
     }
   },
+
+  /**
+   * Clear all read notifications
+   */
+  async clearReadNotifications(): Promise<void> {
+    try {
+      await apiClient.delete('/notifications/clear-read', { skipToast: true })
+    } catch {
+      const unreadOnly = mockNotifications.filter((n) => n.unread)
+      mockNotifications.length = 0
+      mockNotifications.push(...unreadOnly)
+    }
+  },
 }
