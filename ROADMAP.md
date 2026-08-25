@@ -273,29 +273,29 @@
 
 ---
 
-## 🚧 v1.3 — Core Admin Application Views
+## ✅ v1.3 — Core Admin Application Views
 
 > **Target:** Essential real-world administrative pages that every production dashboard requires.
 
 ### Pages & Workflows
-- [ ] **Profile & Account View** (`/profile`) — Personal user profile, avatar change, personal info, and account deletion safeguard
-- [ ] **Notifications Center** (`/notifications`) — Dedicated full inbox view with filter by type (unread, system, mention) and bulk mark as read
-- [ ] **Activity Log / Audit Trail** (`/activity`) — Filterable log table showing administrative actions, timestamps, and user events
-- [ ] **Roles & Permissions Matrix** (`/roles`) — Visual permission table/checkbox grid for managing role-based access control (RBAC)
-- [ ] **Billing & Invoices Sample** (`/billing`) — Subscription tier cards, payment method card, and invoice download history table
+- [x] **Profile & Account View** (`/profile`) — Personal user profile, avatar change, personal info, and account deletion safeguard
+- [x] **Notifications Center** (`/notifications`) — Dedicated full inbox view with filter by type (unread, system, mention) and bulk mark as read
+- [x] **Activity Log / Audit Trail** (`/activity`) — Filterable log table showing administrative actions, timestamps, and user events
+- [x] **Roles & Permissions Matrix** (`/roles`) — Visual permission table/checkbox grid for managing role-based access control (RBAC)
+- [x] **Billing & Invoices Sample** (`/billing`) — Subscription tier cards, payment method card, and invoice download history table
 
 ---
 
-## 🚧 v1.4 — Component Catalog Polish & Primitives
+## ✅ v1.4 — Component Catalog Polish & Primitives
 
 > **Target:** Complete UI primitive gaps and showcase remaining built-in components.
 
 ### UI Primitives & Showcase Gaps
-- [ ] **`<Accordion>` / Collapsible Primitive** — For FAQ sections, expandable settings groups, and collapsible filters
-- [ ] **`<Calendar>` Full Month View** — Event-ready calendar grid (expanding upon the single Date Picker)
-- [ ] **`<Kbd>` & Keyboard Shortcuts Showcase** — Demonstrate keyboard shortcut combinations in command palettes and dialogs
-- [ ] **`<Timeline>` Component Showcase** — Dedicated demo section for order tracking and milestone flows
-- [ ] **`<HoverCard>` & Popover Rich Preview** — Interactive user preview cards on link hover
+- [x] **`<Accordion>` / Collapsible Primitive** — For FAQ sections, expandable settings groups, and collapsible filters
+- [x] **`<Calendar>` Full Month View** — Event-ready calendar grid (expanding upon the single Date Picker)
+- [x] **`<Kbd>` & Keyboard Shortcuts Showcase** — Demonstrate keyboard shortcut combinations in command palettes and dialogs
+- [x] **`<Timeline>` Component Showcase** — Dedicated demo section for order tracking and milestone flows
+- [x] **`<HoverCard>` & Popover Rich Preview** — Interactive user preview cards on link hover
 
 ---
 

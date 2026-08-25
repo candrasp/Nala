@@ -5,6 +5,54 @@ All notable changes to **Nala** — Vue 3 Admin Dashboard Template — are docum
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [Semantic Versioning](https://semver.org/).
 
+## [1.4.0] — 2026-08-25
+
+### Added
+
+#### 🧩 UI Primitives & Component Catalog Polish
+- **`<Accordion>` & `<Collapsible>` Primitives (`src/components/ui/accordion/` & `src/components/ui/collapsible/`)**:
+  - `Accordion.vue`, `AccordionItem.vue`, `AccordionTrigger.vue`, `AccordionContent.vue` wrapping Reka UI with accessible keyboard navigation, single/multiple expansion modes, rotating chevrons, and animated height transitions (`animate-accordion-down` / `animate-accordion-up`).
+  - `Collapsible.vue`, `CollapsibleTrigger.vue`, `CollapsibleContent.vue` for single collapsible container panels and drawers.
+  - Showcased in `src/views/components/NavigationView.vue` (`/components/navigation`) with interactive FAQ accordion and advanced query parameter collapsible cards.
+- **`<Calendar>` Full Month View Grid (`src/components/ui/calendar/`)**:
+  - Accessible month calendar primitive built with Reka UI (`CalendarRoot`, `CalendarHeader`, `CalendarHeading`, `CalendarPrev`, `CalendarNext`, `CalendarGrid`, `CalendarCell`, `CalendarCellTrigger`).
+  - Includes localized weekday headers, today indicator ring, date selection feedback, and keyboard arrow navigation.
+  - Showcased in `src/views/components/FormView.vue` (`/components/forms`) with live selected date telemetry.
+- **`<Kbd>` & Keyboard Shortcuts Showcase (`src/views/components/TypographyView.vue`)**:
+  - Added comprehensive shortcut demonstration matrix in `/components/typography` categorized by **Global Accelerators** (`⌘+K`, `⌘+D`, `⌘+B`), **Table & Data Hotkeys** (`J`/`K`, `Shift+A`), and **Modal/Form Hotkeys** (`⌘+Enter`, `Esc`, `⌘+S`).
+- **`<Timeline>` Multi-Track Milestone Showcases (`src/views/components/NavigationView.vue`)**:
+  - Showcased **CI/CD Deployment Pipeline** (database migrations, blue-green deployment, SSL renewals) and **Order Fulfillment & Logistics Flow** (payment authorized, packaging, transit, doorstep delivery).
+- **`<HoverCard>` & Popover Rich Entity Previews (`src/views/components/OverlayView.vue`)**:
+  - Added rich interactive hovercards for **User Profile Preview** (avatar, bio, presence status), **PostgreSQL Cluster Telemetry** (HA replica count, uptime %), and **GitHub Repository Preview** (stargazers, language dot, forks count).
+- **Component Barrel Re-exports (`src/components/ui/index.ts`)**:
+  - Re-exported `accordion`, `collapsible`, and `calendar` for clean direct barrel imports.
+
+---
+
+## [1.3.0] — 2026-08-25
+
+### Added
+
+#### 🚀 Core Enterprise Admin Views & Store Architectures
+- **Personal Profile & Account Settings (`/profile`)**:
+  - `src/views/profile/IndexView.vue` with user hero badge, bio character counter, avatar studio with upload simulation, regional and localized preference controls via `useFormatter()`, GDPR account data archive export, and 2-step deletion safeguard dialog.
+- **Dedicated Notifications Center (`/notifications`)**:
+  - `src/services/notification.service.ts` & `src/stores/notification.ts` managing real-time and mock notifications.
+  - `src/views/notifications/IndexView.vue` with category filters (`All`, `Unread`, `Security`, `Mentions`, `System`), keyword search, bulk mark-as-read, batch delete, and bidirectional sync with the top navbar notification drawer.
+- **Activity Log & Audit Trail Inspector (`/activity`)**:
+  - `src/services/activity.service.ts` & `src/stores/activity.ts` with telemetry mock events (auth events, API key rotations, DB snapshots, billing upgrades).
+  - `src/views/activity/IndexView.vue` with 4 summary metric cards, filterable audit data table, Event Detail Inspector modal with raw JSON payload viewer, and CSV / JSON export downloaders.
+- **Visual Roles & Permissions Matrix (`/roles`)**:
+  - `src/services/role.service.ts` & `src/stores/role.ts` providing RBAC matrix state across 6 functional modules (`Users`, `Roles`, `Content`, `Billing`, `API Keys`, `Audit Logs`).
+  - `src/views/roles/IndexView.vue` with role summary cards, interactive permission checkbox grid with module-level and column-level select-all toggles, dirty-state change tracker, custom role creator modal, and role deletion safeguards.
+- **Billing, Invoicing & Subscription Management (`/billing`)**:
+  - `src/services/billing.service.ts` & `src/stores/billing.ts` managing subscription tiers (`Starter`, `Pro Team`, `Enterprise Plus`), payment instruments, and invoice archives.
+  - `src/views/billing/IndexView.vue` with active plan overview, 3 quota progress meters (Seats, API calls, Cloud storage), monthly vs annual billing interval toggle with 20% discount badge, payment card management dialog, and invoice history table with PDF receipt download simulation.
+- **Navigation & Routing Integration**:
+  - Registered `/profile`, `/notifications`, `/activity`, `/roles`, and `/billing` in `src/router/index.ts`, `AppNavbar.vue`, `AppSidebar.vue`, and `CommandSearchDialog.vue`.
+
+---
+
 ## [1.2.4] — 2026-08-21
 
 ### Added

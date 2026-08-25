@@ -19,7 +19,9 @@ import {
   Server,
   Zap,
   Shield,
+  CalendarDays,
 } from '@lucide/vue'
+import { Calendar } from '@/components/ui/calendar'
 
 // ─── 1. Text Inputs & Basic States ────────────────────────────────────────────
 const showPassword = ref(false)
@@ -37,9 +39,10 @@ const selectedNewsletter = ref(false)
 const isSubmitting = ref(false)
 const isSaved = ref(false)
 
-// ─── 2. Radio Group States ───────────────────────────────────────────────────
+// ─── 2. Radio Group & Calendar States ─────────────────────────────────────────
 const selectedPlan = ref<'starter' | 'pro' | 'enterprise'>('pro')
 const selectedNotificationFreq = ref('daily')
+const selectedCalendarDate = ref<any>(undefined)
 
 // ─── 3. Sliders & Stepper States ─────────────────────────────────────────────
 const storageSlider = ref<number[]>([128]) // in GB
@@ -312,6 +315,14 @@ const comboboxUploadSnippet = `<!-- Searchable Combobox -->
 
 const datePickerSnippet = `<!-- Zero-dependency Date & Range Selector -->
 <DatePicker />`
+
+const calendarSnippet = `<!-- Full Month Calendar Grid Primitive -->
+<script setup lang="ts">
+import { Calendar } from '@/components/ui/calendar'
+const selectedDate = ref(undefined)
+<\/script>
+
+<Calendar v-model="selectedDate" />`
 
 const switchesCheckboxesSnippet = `<!-- Switches -->
 <div class="flex items-center justify-between gap-4 p-4 rounded-lg border border-border bg-muted/20">
@@ -868,6 +879,33 @@ const switchesCheckboxesSnippet = `<!-- Switches -->
       :code="datePickerSnippet"
     >
       <DatePicker />
+    </CodePreview>
+
+    <!-- 7. Full Month Calendar Grid Primitive -->
+    <CodePreview
+      title="Full Month Calendar Grid (<Calendar>)"
+      description="Event-ready month calendar primitive with keyboard navigation, event marker dots, and date selection."
+      :code="calendarSnippet"
+    >
+      <div class="flex flex-col sm:flex-row items-start gap-6">
+        <Calendar v-model="selectedCalendarDate" />
+
+        <div class="p-4 rounded-xl border bg-muted/20 space-y-3 flex-1 w-full text-xs">
+          <div class="flex items-center gap-2">
+            <CalendarDays class="h-4 w-4 text-primary" />
+            <h4 class="font-bold text-foreground">Schedule &amp; Event Booking</h4>
+          </div>
+          <p class="text-muted-foreground leading-relaxed">
+            Integrates directly with Reka UI accessible calendar state with automated localization and weekday ordering.
+          </p>
+          <div class="p-2.5 rounded-lg border bg-background space-y-1">
+            <span class="text-[11px] text-muted-foreground font-medium">Selected Date Model:</span>
+            <p class="font-mono text-xs font-semibold text-primary">
+              {{ selectedCalendarDate ? selectedCalendarDate.toString() : 'None (Click a day in the calendar)' }}
+            </p>
+          </div>
+        </div>
+      </div>
     </CodePreview>
 
     <!-- 7. Switches & Checkboxes -->

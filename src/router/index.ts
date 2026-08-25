@@ -50,6 +50,26 @@ const router = createRouter({
           component: () => import('@/views/users/IndexView.vue'),
         },
         {
+          path: 'notifications',
+          name: 'notifications',
+          component: () => import('@/views/notifications/IndexView.vue'),
+        },
+        {
+          path: 'activity',
+          name: 'activity',
+          component: () => import('@/views/activity/IndexView.vue'),
+        },
+        {
+          path: 'roles',
+          name: 'roles',
+          component: () => import('@/views/roles/IndexView.vue'),
+        },
+        {
+          path: 'billing',
+          name: 'billing',
+          component: () => import('@/views/billing/IndexView.vue'),
+        },
+        {
           path: 'components/buttons',
           name: 'components-buttons',
           component: () => import('@/views/components/ButtonView.vue'),
@@ -132,6 +152,11 @@ const router = createRouter({
           path: 'starter/blank',
           name: 'starter-blank',
           component: () => import('@/views/_starter/BlankView.vue'),
+        },
+        {
+          path: 'profile',
+          name: 'profile',
+          component: () => import('@/views/profile/IndexView.vue'),
         },
         {
           path: 'settings',

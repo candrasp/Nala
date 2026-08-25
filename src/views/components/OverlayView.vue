@@ -15,6 +15,9 @@ import {
   Shield,
   Activity,
   Layers,
+  GitFork,
+  Star,
+  Circle,
 } from '@lucide/vue'
 import {
   Sheet,
@@ -419,6 +422,42 @@ const dropdownSnippet = `<!-- Dropdown Action Menus with Keyboard Shortcuts -->
                 <div class="pt-1 flex items-center gap-3 text-[11px] text-muted-foreground font-mono">
                   <span class="flex items-center gap-1"><Activity class="h-3 w-3 text-emerald-500" /> 99.99%</span>
                   <span class="flex items-center gap-1"><Layers class="h-3 w-3 text-primary" /> 3 Replicas</span>
+                </div>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+        </span>
+
+        <span>
+          Built for
+          <HoverCard>
+            <HoverCardTrigger as-child>
+              <Button variant="link" class="p-0 h-auto font-semibold text-primary underline">
+                candrasp/Nala
+              </Button>
+            </HoverCardTrigger>
+            <HoverCardContent class="w-80 space-y-2.5">
+              <div class="space-y-1">
+                <div class="flex items-center justify-between">
+                  <h4 class="text-xs font-bold text-foreground">candrasp / Nala</h4>
+                  <Badge variant="outline" class="text-[10px] font-mono">Public</Badge>
+                </div>
+                <p class="text-xs text-muted-foreground leading-relaxed">
+                  Enterprise-grade Vue 3, Vite, TypeScript, and Tailwind CSS v4 admin template.
+                </p>
+              </div>
+              <div class="flex items-center gap-4 text-[11px] text-muted-foreground pt-1 border-t">
+                <div class="flex items-center gap-1">
+                  <Circle class="h-2.5 w-2.5 fill-emerald-500 text-emerald-500" />
+                  <span>Vue (94.2%)</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <Star class="h-3 w-3 text-amber-500 fill-amber-500" />
+                  <span>1.4k</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <GitFork class="h-3 w-3 text-muted-foreground" />
+                  <span>280</span>
                 </div>
               </div>
             </HoverCardContent>

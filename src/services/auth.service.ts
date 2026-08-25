@@ -30,7 +30,31 @@ export interface UserProfile {
   bio?: string
   timezone?: string
   company?: string
+  phone?: string
+  jobTitle?: string
+  location?: string
+  website?: string
+  github?: string
+  twitter?: string
+  linkedin?: string
   createdAt?: string
+}
+
+export interface UpdateProfilePayload {
+  name: string
+  email: string
+  username?: string
+  avatar?: string
+  bio?: string
+  timezone?: string
+  company?: string
+  phone?: string
+  jobTitle?: string
+  location?: string
+  website?: string
+  github?: string
+  twitter?: string
+  linkedin?: string
 }
 
 export interface AuthResponse {
@@ -147,6 +171,61 @@ export const authService = {
   async getProfile(): Promise<UserProfile> {
     const res = await apiClient.get<ApiResponse<UserProfile> | UserProfile>('/auth/me')
     return 'data' in res && res.data ? res.data : (res as UserProfile)
+  },
+
+  /**
+   * Update authenticated user profile
+   */
+  async updateProfile(payload: UpdateProfilePayload): Promise<UserProfile> {
+    try {
+      const res = await apiClient.patch<ApiResponse<UserProfile> | UserProfile>(
+        '/auth/profile',
+        payload,
+      )
+      return 'data' in res && res.data ? res.data : (res as UserProfile)
+    } catch (error) {
+      if (import.meta.env.DEV) {
+        return {
+          id: 'usr_admin_1',
+          role: 'Administrator',
+          avatar: payload.avatar || '/img/avatar.webp',
+          name: payload.name,
+          email: payload.email,
+          username: payload.username || 'admin',
+          bio: payload.bio,
+          timezone: payload.timezone || 'utc-7',
+          company: payload.company || 'Nala Corp',
+          phone: payload.phone,
+          jobTitle: payload.jobTitle,
+          location: payload.location,
+          website: payload.website,
+          github: payload.github,
+          twitter: payload.twitter,
+          linkedin: payload.linkedin,
+          createdAt: '2025-01-15T00:00:00.000Z',
+        }
+      }
+      throw error
+    }
+  },
+
+  /**
+   * Delete account with password verification safeguard
+   */
+  async deleteAccount(password: string): Promise<{ success: boolean; message: string }> {
+    try {
+      const res = await apiClient.post<{ success: boolean; message: string }>('/auth/delete-account', { password })
+      return res
+    } catch (error) {
+      if (import.meta.env.DEV) {
+        tokenStorage.clearTokens()
+        return {
+          success: true,
+          message: 'Account successfully deleted and all sessions purged.',
+        }
+      }
+      throw error
+    }
   },
 
   /**

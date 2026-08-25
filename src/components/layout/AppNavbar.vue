@@ -2,6 +2,7 @@
 import {
   Search,
   ChevronDown,
+  User,
   Settings,
   LogOut,
 } from '@lucide/vue'
@@ -52,6 +53,10 @@ const mode = useColorMode({
 const pageTitle = computed(() => {
   if (route.name === 'dashboard') return 'Dashboard'
   if (route.name === 'users') return 'User Management'
+  if (route.name === 'notifications') return 'Notifications'
+  if (route.name === 'activity') return 'Activity Log'
+  if (route.name === 'roles') return 'Roles & Permissions'
+  if (route.name === 'billing') return 'Billing & Invoicing'
   if (route.name === 'components-buttons' || route.name === 'buttons') return 'Buttons'
   if (route.name === 'components-forms') return 'Form & Inputs'
   if (route.name === 'components-modals') return 'Modals & Dialogs'
@@ -68,6 +73,7 @@ const pageTitle = computed(() => {
   if (route.name === 'components-colors') return 'Color Tokens'
   if (route.name === 'components-icons') return 'Icon Set & Glyphs'
   if (route.name === 'starter-blank') return 'Blank Page'
+  if (route.name === 'profile') return 'User Profile'
   if (route.name === 'settings') return 'Settings'
   if (route.name === 'not-found' || route.name === 'catch-all-not-found') return '404 Not Found'
   if (route.name === 'server-error') return '500 Server Error'
@@ -168,6 +174,10 @@ const handleLogout = () => {
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
+          <DropdownMenuItem @click="$router.push('/profile')">
+            <User class="mr-2 h-4 w-4" />
+            <span>My Profile</span>
+          </DropdownMenuItem>
           <DropdownMenuItem @click="$router.push('/settings')">
             <Settings class="mr-2 h-4 w-4" />
             <span>Settings</span>

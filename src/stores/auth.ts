@@ -1,6 +1,11 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { authService, type LoginCredentials, type UserProfile } from '@/services/auth.service'
+import {
+  authService,
+  type LoginCredentials,
+  type UserProfile,
+  type UpdateProfilePayload,
+} from '@/services/auth.service'
 import { tokenStorage } from '@/lib/axios'
 
 export interface User extends UserProfile {}
@@ -15,6 +20,15 @@ export const useAuthStore = defineStore('auth', () => {
     username: 'admin',
     timezone: 'utc-7',
     company: 'Nala Corp',
+    jobTitle: 'Lead Software Architect',
+    location: 'San Francisco, CA',
+    phone: '+1 (555) 234-5678',
+    bio: 'Lead engineer and design systems advocate building modern enterprise interfaces.',
+    github: 'candrasp',
+    twitter: 'candrasp',
+    linkedin: 'candrasp',
+    website: 'https://nala.dev',
+    createdAt: '2025-01-15T00:00:00.000Z',
   })
 
   const isLoading = ref<boolean>(false)
@@ -36,6 +50,37 @@ export const useAuthStore = defineStore('auth', () => {
       const res = await authService.login(credentials)
       user.value = res.user
       return res.user
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  /**
+   * Update current user profile
+   */
+  async function updateProfile(payload: UpdateProfilePayload): Promise<User> {
+    isLoading.value = true
+    try {
+      const updated = await authService.updateProfile(payload)
+      user.value = {
+        ...(user.value || {}),
+        ...updated,
+      } as User
+      return user.value
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  /**
+   * Delete user account with safeguard verification
+   */
+  async function deleteAccount(password: string): Promise<boolean> {
+    isLoading.value = true
+    try {
+      await authService.deleteAccount(password)
+      user.value = null
+      return true
     } finally {
       isLoading.value = false
     }
@@ -79,5 +124,7 @@ export const useAuthStore = defineStore('auth', () => {
     login,
     logout,
     fetchProfile,
+    updateProfile,
+    deleteAccount,
   }
 })

@@ -1,4 +1,9 @@
 <script setup lang="ts">
+import { Kbd } from '@/components/ui/kbd'
+import { Search, Zap, Shield } from '@lucide/vue'
+import PageHeader from '@/components/PageHeader.vue'
+import CodePreview from '@/components/CodePreview.vue'
+
 // ─── Code Documentation Snippets ─────────────────────────────────────────────
 
 const headingScaleSnippet = `<!-- Modular Headings Scale (H1 to H6) -->
@@ -83,14 +88,28 @@ const listsSnippet = `<!-- Lists & Structural Layouts -->
   <li>Install dependencies using pnpm</li>
   <li>Start local dev server</li>
 </ol>`
+
+const kbdSnippet = `<!-- Keyboard Shortcut (<Kbd>) Combinations -->
+<div class="flex items-center gap-1.5">
+  <Kbd>⌘</Kbd>
+  <Kbd>K</Kbd>
+  <span class="text-xs text-muted-foreground">Quick Search</span>
+</div>
+
+<div class="flex items-center gap-1.5">
+  <Kbd size="sm">Ctrl</Kbd>
+  <Kbd size="sm">Shift</Kbd>
+  <Kbd size="sm">P</Kbd>
+  <span class="text-xs text-muted-foreground">Command Palette</span>
+</div>`
 </script>
 
 <template>
   <div class="space-y-8 max-w-[1920px] mx-auto pb-12">
     <!-- Page Header -->
     <PageHeader
-      title="Typography Scale"
-      description="Modular typographic hierarchy, lead paragraphs, code blocks, blockquotes, and list styling."
+      title="Typography & Keyboard Shortcuts"
+      description="Modular typographic hierarchy, lead paragraphs, code blocks, blockquotes, list styling, and Kbd shortcut key combinations."
       badge="Design System"
     />
 
@@ -100,151 +119,78 @@ const listsSnippet = `<!-- Lists & Structural Layouts -->
       description="Standardized heading styles with calibrated font weights, optical letter-spacing (tracking-tight), and responsive scale."
       :code="headingScaleSnippet"
     >
-      <div class="divide-y divide-border/60">
-        <!-- H1 -->
-        <div class="py-4 first:pt-0 last:pb-0 flex flex-col md:flex-row md:items-baseline justify-between gap-4">
-          <div class="space-y-1">
-            <h1 class="text-4xl font-extrabold tracking-tight text-foreground">
-              The quick brown fox jumps over the lazy dog
-            </h1>
-            <p class="text-xs text-muted-foreground">Main Page Title / Hero Heading</p>
-          </div>
-          <div class="flex items-center gap-2 shrink-0">
-            <span class="label-mono text-[11px] bg-muted px-2 py-1 rounded">H1 · 36px · 800</span>
-            <Kbd size="sm">text-4xl font-extrabold</Kbd>
-          </div>
+      <div class="space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 border-b border-border pb-3">
+          <span class="text-3xl font-extrabold tracking-tight text-foreground">H1 — Main Page Header</span>
+          <span class="label-mono">text-3xl font-extrabold</span>
         </div>
-
-        <!-- H2 -->
-        <div class="py-4 flex flex-col md:flex-row md:items-baseline justify-between gap-4">
-          <div class="space-y-1">
-            <h2 class="text-3xl font-bold tracking-tight text-foreground">
-              The quick brown fox jumps over the lazy dog
-            </h2>
-            <p class="text-xs text-muted-foreground">Section Header / Main Feature Title</p>
-          </div>
-          <div class="flex items-center gap-2 shrink-0">
-            <span class="label-mono text-[11px] bg-muted px-2 py-1 rounded">H2 · 30px · 700</span>
-            <Kbd size="sm">text-3xl font-bold</Kbd>
-          </div>
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 border-b border-border pb-3">
+          <span class="text-2xl font-bold tracking-tight text-foreground">H2 — Major Section Title</span>
+          <span class="label-mono">text-2xl font-bold</span>
         </div>
-
-        <!-- H3 -->
-        <div class="py-4 flex flex-col md:flex-row md:items-baseline justify-between gap-4">
-          <div class="space-y-1">
-            <h3 class="text-2xl font-semibold tracking-tight text-foreground">
-              The quick brown fox jumps over the lazy dog
-            </h3>
-            <p class="text-xs text-muted-foreground">Card Group Header / Subsection Title</p>
-          </div>
-          <div class="flex items-center gap-2 shrink-0">
-            <span class="label-mono text-[11px] bg-muted px-2 py-1 rounded">H3 · 24px · 600</span>
-            <Kbd size="sm">text-2xl font-semibold</Kbd>
-          </div>
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 border-b border-border pb-3">
+          <span class="text-xl font-semibold tracking-tight text-foreground">H3 — Card Group Heading</span>
+          <span class="label-mono">text-xl font-semibold</span>
         </div>
-
-        <!-- H4 -->
-        <div class="py-4 flex flex-col md:flex-row md:items-baseline justify-between gap-4">
-          <div class="space-y-1">
-            <h4 class="text-xl font-semibold tracking-tight text-foreground">
-              The quick brown fox jumps over the lazy dog
-            </h4>
-            <p class="text-xs text-muted-foreground">Card Title / Modal Header</p>
-          </div>
-          <div class="flex items-center gap-2 shrink-0">
-            <span class="label-mono text-[11px] bg-muted px-2 py-1 rounded">H4 · 20px · 600</span>
-            <Kbd size="sm">text-xl font-semibold</Kbd>
-          </div>
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 border-b border-border pb-3">
+          <span class="text-lg font-semibold tracking-tight text-foreground">H4 — Subsection &amp; Modal Title</span>
+          <span class="label-mono">text-lg font-semibold</span>
         </div>
-
-        <!-- H5 -->
-        <div class="py-4 flex flex-col md:flex-row md:items-baseline justify-between gap-4">
-          <div class="space-y-1">
-            <h5 class="text-base font-semibold text-foreground">
-              The quick brown fox jumps over the lazy dog
-            </h5>
-            <p class="text-xs text-muted-foreground">Form Section Label / Widget Heading</p>
-          </div>
-          <div class="flex items-center gap-2 shrink-0">
-            <span class="label-mono text-[11px] bg-muted px-2 py-1 rounded">H5 · 16px · 600</span>
-            <Kbd size="sm">text-base font-semibold</Kbd>
-          </div>
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 border-b border-border pb-3">
+          <span class="text-base font-semibold text-foreground">H5 — Component &amp; Widget Heading</span>
+          <span class="label-mono">text-base font-semibold</span>
         </div>
-
-        <!-- H6 -->
-        <div class="py-4 flex flex-col md:flex-row md:items-baseline justify-between gap-4">
-          <div class="space-y-1">
-            <h6 class="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-              The quick brown fox jumps over the lazy dog
-            </h6>
-            <p class="text-xs text-muted-foreground">Overline / Category Tag / Sidebar Group</p>
-          </div>
-          <div class="flex items-center gap-2 shrink-0">
-            <span class="label-mono text-[11px] bg-muted px-2 py-1 rounded">H6 · 14px · 600</span>
-            <Kbd size="sm">text-sm font-semibold uppercase</Kbd>
-          </div>
+        <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+          <span class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">H6 — Overline Category</span>
+          <span class="label-mono">text-xs font-semibold uppercase</span>
         </div>
       </div>
     </CodePreview>
 
     <!-- 2. BODY TEXT & BLOCKQUOTES (2-COL) -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <!-- Paragraph Scales -->
+      <!-- Body Text -->
       <CodePreview
-        title="Body Text & Paragraph Variants"
-        description="Lead paragraphs, standard body text, muted secondary hints, and monospace tokens."
+        title="Body Paragraphs & Hierarchy"
+        description="Lead paragraphs, regular copy, muted descriptions, and inline monospace chips."
         :code="bodyTextSnippet"
       >
-        <div class="space-y-5">
+        <div class="space-y-4">
+          <!-- Lead Paragraph -->
           <div class="space-y-1">
             <span class="text-[11px] font-mono text-muted-foreground uppercase">Lead Paragraph</span>
-            <p class="text-lg text-muted-foreground leading-relaxed">
-              Nala is an enterprise-grade admin dashboard built with Vue 3, Vite, Tailwind CSS v4, and Reka UI.
+            <p class="text-base text-muted-foreground leading-relaxed">
+              Nala is a high-performance, enterprise dashboard template designed for real-world operations with Vue 3 and Tailwind CSS v4.
             </p>
           </div>
 
-          <div class="space-y-1">
-            <span class="text-[11px] font-mono text-muted-foreground uppercase">Base Body</span>
-            <p class="text-sm text-foreground leading-relaxed">
-              Every component is crafted with accessibility in mind, supporting complete keyboard navigation, dark mode, and seamless composability.
+          <!-- Body Regular -->
+          <div class="space-y-1 border-t border-border pt-3">
+            <span class="text-[11px] font-mono text-muted-foreground uppercase">Body Regular (text-sm)</span>
+            <p class="text-xs text-foreground leading-relaxed">
+              Every layout surface complies strictly with WCAG 2.1 AA accessibility standards, responsive breakpoints, and hardware-accelerated theme switching.
             </p>
           </div>
 
-          <div class="space-y-1">
-            <span class="text-[11px] font-mono text-muted-foreground uppercase">Muted Helper</span>
+          <!-- Muted Helper -->
+          <div class="space-y-1 border-t border-border pt-3">
+            <span class="text-[11px] font-mono text-muted-foreground uppercase">Muted Helper (text-xs)</span>
             <p class="text-xs text-muted-foreground leading-relaxed">
-              Helper descriptions, placeholder instructions, and secondary timestamp metadata.
-            </p>
-          </div>
-
-          <div class="space-y-1">
-            <span class="text-[11px] font-mono text-muted-foreground uppercase">Monospace Token</span>
-            <p class="text-xs font-mono text-foreground bg-muted/40 p-2 rounded border border-border">
-              oklch(0.696 0.17 162.48) · SHA-256: 8f19da2e91a0
+              Helper instructions, form validation feedback, and secondary metadata descriptions.
             </p>
           </div>
         </div>
       </CodePreview>
 
-      <!-- Blockquotes & Editorial Callouts -->
+      <!-- Blockquotes -->
       <CodePreview
-        title="Blockquotes & Highlights"
-        description="Editorial quotes, decorative borders, and colored callout boxes."
+        title="Blockquotes & Callouts"
+        description="Editorial callouts, quote containers, and attention badges."
         :code="blockquoteSnippet"
       >
         <div class="space-y-4">
-          <!-- Default Blockquote -->
-          <blockquote class="border-l-4 border-primary pl-4 py-1 italic text-sm text-foreground space-y-1 bg-primary/5 rounded-r-lg">
-            <p>
-              "Simplicity is the prerequisite for reliability. Software engineering is about managing complexity."
-            </p>
-            <footer class="text-xs text-muted-foreground font-normal not-italic">
-              — Edsger W. Dijkstra
-            </footer>
-          </blockquote>
-
-          <!-- Accent Callout -->
-          <blockquote class="border-l-4 border-blue-500 pl-4 py-1 italic text-sm text-foreground space-y-1 bg-blue-500/5 rounded-r-lg">
+          <!-- Standard Blockquote -->
+          <blockquote class="border-l-4 border-primary pl-4 py-1 italic text-xs text-foreground space-y-1 bg-primary/5 rounded-r-lg">
             <p>
               "Design is not just what it looks like and feels like. Design is how it works."
             </p>
@@ -312,5 +258,98 @@ const listsSnippet = `<!-- Lists & Structural Layouts -->
         </div>
       </CodePreview>
     </div>
+
+    <!-- 4. KEYBOARD SHORTCUTS (<KBD>) SHOWCASE -->
+    <CodePreview
+      title="Keyboard Shortcuts & Key Combinations (<Kbd>)"
+      description="Semantic keyboard shortcut badges for command palettes, navigation accelerators, and modal hotkeys."
+      :code="kbdSnippet"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- 1. Global Navigation Keys -->
+        <div class="p-4 rounded-xl border bg-muted/20 space-y-3">
+          <div class="flex items-center gap-2">
+            <Search class="h-4 w-4 text-primary" />
+            <h4 class="text-xs font-bold text-foreground">Global Accelerators</h4>
+          </div>
+          <div class="space-y-2 text-xs">
+            <div class="flex items-center justify-between">
+              <span class="text-muted-foreground">Open Command Palette</span>
+              <div class="flex items-center gap-1">
+                <Kbd size="sm">⌘</Kbd>
+                <Kbd size="sm">K</Kbd>
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-muted-foreground">Toggle Dark Theme</span>
+              <div class="flex items-center gap-1">
+                <Kbd size="sm">⌘</Kbd>
+                <Kbd size="sm">D</Kbd>
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-muted-foreground">Toggle Sidebar</span>
+              <div class="flex items-center gap-1">
+                <Kbd size="sm">⌘</Kbd>
+                <Kbd size="sm">B</Kbd>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Data & Table Hotkeys -->
+        <div class="p-4 rounded-xl border bg-muted/20 space-y-3">
+          <div class="flex items-center gap-2">
+            <Zap class="h-4 w-4 text-amber-500" />
+            <h4 class="text-xs font-bold text-foreground">Table &amp; Grid Hotkeys</h4>
+          </div>
+          <div class="space-y-2 text-xs">
+            <div class="flex items-center justify-between">
+              <span class="text-muted-foreground">Select Next Record</span>
+              <Kbd size="sm">J</Kbd>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-muted-foreground">Select Previous Record</span>
+              <Kbd size="sm">K</Kbd>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-muted-foreground">Batch Select All</span>
+              <div class="flex items-center gap-1">
+                <Kbd size="sm">Shift</Kbd>
+                <Kbd size="sm">A</Kbd>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Dialog & Form Shortcuts -->
+        <div class="p-4 rounded-xl border bg-muted/20 space-y-3">
+          <div class="flex items-center gap-2">
+            <Shield class="h-4 w-4 text-emerald-500" />
+            <h4 class="text-xs font-bold text-foreground">Dialog &amp; Form Hotkeys</h4>
+          </div>
+          <div class="space-y-2 text-xs">
+            <div class="flex items-center justify-between">
+              <span class="text-muted-foreground">Confirm / Submit Form</span>
+              <div class="flex items-center gap-1">
+                <Kbd size="sm">⌘</Kbd>
+                <Kbd size="sm">Enter</Kbd>
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-muted-foreground">Dismiss / Close Modal</span>
+              <Kbd size="sm">Esc</Kbd>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-muted-foreground">Save Matrix Draft</span>
+              <div class="flex items-center gap-1">
+                <Kbd size="sm">⌘</Kbd>
+                <Kbd size="sm">S</Kbd>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </CodePreview>
   </div>
 </template>

@@ -6,18 +6,36 @@ import {
   Database,
   Activity,
   Shield,
-  ChevronDown,
-  CheckCircle2,
+  ChevronsUpDown,
   AlertCircle,
   GitCommit,
   Rocket,
   Settings2,
-  Globe,
+  Package,
+  Truck,
+  CheckCircle2,
+  CreditCard,
+  SlidersHorizontal,
 } from '@lucide/vue'
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Stepper } from '@/components/ui/stepper'
 import { Timeline } from '@/components/ui/timeline'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible'
+import PageHeader from '@/components/PageHeader.vue'
+import CodePreview from '@/components/CodePreview.vue'
 
 // ─── 1. Stepper / Wizard State ────────────────────────────────────────────────
 const currentStep = ref(2)
@@ -33,12 +51,8 @@ const wizardSteps = [
 const activeVerticalTab = ref('general')
 const activeUnderlineTab = ref('analytics')
 
-// ─── 3. Accordions State ─────────────────────────────────────────────────────
-const activeAccordion = ref<string | null>('item-1')
-
-function toggleAccordion(item: string) {
-  activeAccordion.value = activeAccordion.value === item ? null : item
-}
+// ─── 3. Collapsible Filter State ─────────────────────────────────────────────
+const isCollapsibleOpen = ref(true)
 
 // ─── 4. Pagination State ─────────────────────────────────────────────────────
 const currentPage = ref(3)
@@ -67,7 +81,7 @@ const deploymentEvents = [
   {
     id: 3,
     title: 'SSL Certificate Auto-Renewed',
-    description: "Let's Encrypt wildcard certificate for *.supabase.co renewed for 90 days.",
+    description: "Let's Encrypt wildcard certificate for *.nala.dev renewed for 90 days.",
     time: '3 hours ago',
     icon: Shield,
     status: 'neutral' as const,
@@ -85,11 +99,50 @@ const deploymentEvents = [
   {
     id: 5,
     title: 'Git Commit Synced to Main Branch',
-    description: 'Commit 8f19da2: "refactor: upgrade to tailwind v4" pushed by @developer.',
+    description: 'Commit 8f19da2: "feat: add accordion and calendar primitives" pushed by @developer.',
     time: '8 hours ago',
     icon: GitCommit,
     status: 'neutral' as const,
     badge: 'GitHub',
+  },
+]
+
+const orderTrackingEvents = [
+  {
+    id: 'ord-1',
+    title: 'Package Delivered to Doorstep',
+    description: 'Signed by recipient at 548 Market St, San Francisco, CA.',
+    time: 'Today, 2:45 PM',
+    icon: CheckCircle2,
+    status: 'success' as const,
+    badge: 'Completed',
+  },
+  {
+    id: 'ord-2',
+    title: 'Out for Delivery via Express Courier',
+    description: 'Courier driver #84 is in transit with 4 stops remaining.',
+    time: 'Today, 9:15 AM',
+    icon: Truck,
+    status: 'info' as const,
+    badge: 'In Transit',
+  },
+  {
+    id: 'ord-3',
+    title: 'Custom Hardware Kit Packaged',
+    description: 'Hardware tokens and NFC security keys boxed at fulfillment hub.',
+    time: 'Yesterday, 6:30 PM',
+    icon: Package,
+    status: 'neutral' as const,
+    badge: 'Warehouse',
+  },
+  {
+    id: 'ord-4',
+    title: 'Payment Authorized & Invoice Settled',
+    description: 'Billed $499.00 USD via Visa •••• 4242.',
+    time: 'Aug 24, 11:00 AM',
+    icon: CreditCard,
+    status: 'success' as const,
+    badge: 'Paid',
   },
 ]
 
@@ -152,17 +205,7 @@ const tabsSnippet = `<!-- Standard Horizontal Tabs & Underline Tabs -->
   <TabsContent value="security" class="p-4 border rounded-lg">
     <p class="text-xs">TLS 1.3 encryption enabled.</p>
   </TabsContent>
-</Tabs>
-
-<!-- 2. Clean Underline Tabs -->
-<div class="flex border-b border-border gap-6">
-  <button
-    class="pb-2 text-xs font-medium border-b-2 transition-colors"
-    :class="activeTab === 'tab1' ? 'border-primary text-foreground font-semibold' : 'border-transparent text-muted-foreground'"
-  >
-    Analytics
-  </button>
-</div>`
+</Tabs>`
 
 const verticalTabsSnippet = `<!-- Vertical Tabs Navigation Layout -->
 <div class="flex flex-col sm:flex-row gap-6">
@@ -177,14 +220,9 @@ const verticalTabsSnippet = `<!-- Vertical Tabs Navigation Layout -->
       General Settings
     </button>
   </div>
-
-  <!-- Tab Body View -->
-  <div class="flex-1 p-2">
-    <p class="text-xs text-muted-foreground">Manage organization profile & preferences.</p>
-  </div>
 </div>`
 
-const breadcrumbsSnippet = `<!-- Hierarchical Breadcrumb Navigation Trail -->
+const breadcrumbsSnippet = `<!-- Breadcrumb Hierarchical Navigation -->
 <Breadcrumb>
   <BreadcrumbList>
     <BreadcrumbItem>
@@ -196,52 +234,54 @@ const breadcrumbsSnippet = `<!-- Hierarchical Breadcrumb Navigation Trail -->
     </BreadcrumbItem>
     <BreadcrumbSeparator />
     <BreadcrumbItem>
-      <BreadcrumbPage>Navigation &amp; Flow</BreadcrumbPage>
+      <BreadcrumbPage>Navigation & Flow</BreadcrumbPage>
     </BreadcrumbItem>
   </BreadcrumbList>
 </Breadcrumb>`
 
 const paginationSnippet = `<!-- Numbered & Previous/Next Pagination -->
-<script setup lang="ts">
-const currentPage = ref(3)
-const totalPages = ref(10)
-<\/script>
-
 <div class="flex items-center gap-1">
-  <Button
-    variant="outline"
-    size="icon"
-    class="h-8 w-8"
-    :disabled="currentPage === 1"
-    @click="currentPage = Math.max(1, currentPage - 1)"
-  >
+  <Button variant="outline" size="icon" :disabled="currentPage === 1" @click="currentPage--">
     <ChevronLeft class="h-4 w-4" />
   </Button>
-
-  <Button
-    v-for="p in [1, 2, 3, 4, 5]"
-    :key="p"
-    variant="ghost"
-    size="sm"
-    class="h-8 w-8 p-0 text-xs font-mono"
-    :class="{ 'bg-primary text-primary-foreground font-semibold': currentPage === p }"
-    @click="currentPage = p"
-  >
+  <Button v-for="p in [1, 2, 3, 4, 5]" :key="p" variant="ghost" :class="{ 'bg-primary text-primary-foreground': currentPage === p }" @click="currentPage = p">
     {{ p }}
   </Button>
-
-  <Button
-    variant="outline"
-    size="icon"
-    class="h-8 w-8"
-    :disabled="currentPage === totalPages"
-    @click="currentPage = Math.min(totalPages, currentPage + 1)"
-  >
+  <Button variant="outline" size="icon" :disabled="currentPage === totalPages" @click="currentPage++">
     <ChevronRight class="h-4 w-4" />
   </Button>
 </div>`
 
-const timelineSnippet = `<!-- Chronological Activity Timeline Component -->
+const accordionSnippet = `<!-- Accordion Primitives (Single or Multiple) -->
+<Accordion type="single" collapsible default-value="item-1">
+  <AccordionItem value="item-1">
+    <AccordionTrigger>What is the query throughput limit?</AccordionTrigger>
+    <AccordionContent>
+      Serverless functions allow up to 10,000 invocations per minute on the Pro tier.
+    </AccordionContent>
+  </AccordionItem>
+  <AccordionItem value="item-2">
+    <AccordionTrigger>How does Point-in-Time Recovery work?</AccordionTrigger>
+    <AccordionContent>
+      PITR creates continuous WAL log archives, allowing recovery to any specific second in the past 7 days.
+    </AccordionContent>
+  </AccordionItem>
+</Accordion>`
+
+const collapsibleSnippet = `<!-- Collapsible Primitive Panel -->
+<Collapsible v-model:open="isOpen">
+  <div class="flex items-center justify-between p-3 border rounded-lg">
+    <span>Filter Options</span>
+    <CollapsibleTrigger as-child>
+      <Button variant="ghost" size="sm">Toggle</Button>
+    </CollapsibleTrigger>
+  </div>
+  <CollapsibleContent class="p-3 border-x border-b rounded-b-lg">
+    Expandable filter content here...
+  </CollapsibleContent>
+</Collapsible>`
+
+const timelineSnippet = `<!-- Multi-Track Activity Timeline -->
 <Timeline :items="deploymentEvents" />`
 </script>
 
@@ -250,7 +290,7 @@ const timelineSnippet = `<!-- Chronological Activity Timeline Component -->
     <!-- Page Header -->
     <PageHeader
       title="Navigation & Flow"
-      description="Multi-step wizards, tab navigations, hierarchical breadcrumbs, numbered paginations, and audit timelines."
+      description="Multi-step wizards, tab navigations, hierarchical breadcrumbs, collapsible accordions, and audit timelines."
       badge="Component Showcase"
     />
 
@@ -260,99 +300,83 @@ const timelineSnippet = `<!-- Chronological Activity Timeline Component -->
       description="Interactive multi-step progress indicator with step status, labels, numbers, and validation controls."
       :code="stepperSnippet"
     >
-      <div class="space-y-6">
-        <Stepper :steps="wizardSteps" v-model="currentStep" class="pb-2" />
+      <div class="space-y-8">
+        <!-- Interactive Stepper Track -->
+        <Stepper :steps="wizardSteps" v-model="currentStep" />
 
-        <!-- Step Content Area Card -->
-        <div class="rounded-xl border border-border bg-muted/10 p-6 min-h-36 flex flex-col justify-between">
-          <div v-if="currentStep === 1" class="space-y-2">
-            <h4 class="text-sm font-semibold text-foreground flex items-center gap-2">
-              <span class="h-2 w-2 rounded-full bg-primary inline-block"></span>
-              Step 1: Project Details &amp; Workspace
+        <!-- Mock Content for Active Step -->
+        <div class="p-6 rounded-xl border border-border bg-muted/10 space-y-4">
+          <div class="flex items-center justify-between">
+            <h4 class="text-sm font-bold text-foreground">
+              Step {{ currentStep }}: {{ wizardSteps[currentStep - 1]?.title }}
             </h4>
-            <p class="text-xs text-muted-foreground leading-relaxed">
-              Define your repository name, organization ownership, and base template configuration.
-            </p>
+            <span class="badge-blue text-xs font-mono">
+              {{ wizardSteps[currentStep - 1]?.description }}
+            </span>
           </div>
 
-          <div v-else-if="currentStep === 2" class="space-y-2">
-            <h4 class="text-sm font-semibold text-foreground flex items-center gap-2">
-              <span class="h-2 w-2 rounded-full bg-primary inline-block"></span>
-              Step 2: Environment &amp; Secret Variables
-            </h4>
-            <p class="text-xs text-muted-foreground leading-relaxed">
-              Inject SSL keys, PostgreSQL connection strings, and JWT auth secret tokens.
-            </p>
+          <!-- Dynamic Mock Panel based on active step -->
+          <div v-if="currentStep === 1" class="text-xs text-muted-foreground space-y-2">
+            <p>Configure repository origin, repository name (<code class="font-mono text-primary">nala-admin-core</code>), and branch synchronization rules.</p>
           </div>
-
-          <div v-else-if="currentStep === 3" class="space-y-2">
-            <h4 class="text-sm font-semibold text-foreground flex items-center gap-2">
-              <span class="h-2 w-2 rounded-full bg-primary inline-block"></span>
-              Step 3: Compute Sizing &amp; Node Allocation
-            </h4>
-            <p class="text-xs text-muted-foreground leading-relaxed">
-              Choose dedicated vCPU units, memory allocation, and read replica multi-region failover.
-            </p>
+          <div v-else-if="currentStep === 2" class="text-xs text-muted-foreground space-y-2">
+            <p>Define PostgreSQL database connection pooling strings, SSL mode, and JWT signing secrets.</p>
           </div>
-
-          <div v-else class="space-y-2">
-            <h4 class="text-sm font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-2">
-              <CheckCircle2 class="h-4 w-4" />
-              Step 4: Verification &amp; Instant Deployment
-            </h4>
-            <p class="text-xs text-muted-foreground leading-relaxed">
-              All health checks passed. Your cluster is ready to deploy with zero downtime.
-            </p>
+          <div v-else-if="currentStep === 3" class="text-xs text-muted-foreground space-y-2">
+            <p>Select instance compute tier: <strong class="text-foreground">2 vCPU / 4GB RAM</strong> with horizontal auto-scaling enabled up to 6 replicas.</p>
           </div>
+          <div v-else class="text-xs text-muted-foreground space-y-2">
+            <p>All configuration checks passed. Ready to initiate blue-green cluster rollout.</p>
+          </div>
+        </div>
 
-          <!-- Wizard Action Buttons -->
-          <div class="flex items-center justify-between pt-4 mt-4 border-t border-border/60">
+        <!-- Navigation Controls -->
+        <div class="flex items-center justify-between pt-2">
+          <Button
+            variant="outline"
+            size="sm"
+            class="text-xs gap-1.5"
+            :disabled="currentStep === 1"
+            @click="currentStep = Math.max(1, currentStep - 1)"
+          >
+            <ChevronLeft class="h-4 w-4" />
+            Previous Step
+          </Button>
+
+          <div class="flex items-center gap-2">
             <Button
-              variant="outline"
+              v-if="currentStep < wizardSteps.length"
               size="sm"
-              :disabled="currentStep === 1"
-              @click="currentStep = Math.max(1, currentStep - 1)"
-              class="gap-1.5 text-xs"
+              class="text-xs gap-1.5"
+              @click="currentStep = Math.min(wizardSteps.length, currentStep + 1)"
             >
-              <ChevronLeft class="h-3.5 w-3.5" />
-              Previous Step
+              Next Step
+              <ChevronRight class="h-4 w-4" />
             </Button>
-
-            <div class="flex items-center gap-2">
-              <Button
-                v-if="currentStep < wizardSteps.length"
-                size="sm"
-                @click="currentStep = Math.min(wizardSteps.length, currentStep + 1)"
-                class="gap-1.5 text-xs"
-              >
-                Continue Next
-                <ChevronRight class="h-3.5 w-3.5" />
-              </Button>
-              <Button
-                v-else
-                size="sm"
-                class="gap-1.5 text-xs bg-emerald-600 hover:bg-emerald-700 text-white"
-                @click="currentStep = 1"
-              >
-                <Rocket class="h-3.5 w-3.5" />
-                Finish &amp; Deploy
-              </Button>
-            </div>
+            <Button
+              v-else
+              variant="default"
+              size="sm"
+              class="text-xs gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white"
+            >
+              <Rocket class="h-4 w-4" />
+              Deploy Project
+            </Button>
           </div>
         </div>
       </div>
     </CodePreview>
 
-    <!-- 2. TABS: HORIZONTAL & UNDERLINE -->
+    <!-- 2. HORIZONTAL & UNDERLINE TABS -->
     <CodePreview
-      title="Tabs (Pill, Underline & Default Variants)"
-      description="Tabbed view switches supporting standard pill triggers, custom border underline indicators, and nested content panels."
+      title="Horizontal & Underline Tabs"
+      description="Tabbed navigation switches for organizing dense configuration views and contextual dashboards."
       :code="tabsSnippet"
     >
       <div class="space-y-6">
-        <!-- Underline Tabs Demo -->
+        <!-- Clean Underline Tabs -->
         <div class="space-y-3">
-          <span class="label-mono">Underline Tab Bar</span>
+          <span class="label-mono">Underline Indicator Tabs</span>
           <div class="flex border-b border-border gap-6">
             <button
               type="button"
@@ -364,7 +388,7 @@ const timelineSnippet = `<!-- Chronological Activity Timeline Component -->
                   : 'border-transparent text-muted-foreground hover:text-foreground'
               "
             >
-              Analytics &amp; Queries
+              Real-Time Telemetry
             </button>
             <button
               type="button"
@@ -376,7 +400,7 @@ const timelineSnippet = `<!-- Chronological Activity Timeline Component -->
                   : 'border-transparent text-muted-foreground hover:text-foreground'
               "
             >
-              Network Ingress
+              Edge Bandwidth
             </button>
             <button
               type="button"
@@ -489,47 +513,28 @@ const timelineSnippet = `<!-- Chronological Activity Timeline Component -->
             "
           >
             <Shield class="h-4 w-4 shrink-0" />
-            Security &amp; SSL
-          </button>
-          <button
-            type="button"
-            @click="activeVerticalTab = 'domains'"
-            class="flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium text-left transition-colors cursor-pointer"
-            :class="
-              activeVerticalTab === 'domains'
-                ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
-                : 'text-muted-foreground hover:bg-accent hover:text-foreground'
-            "
-          >
-            <Globe class="h-4 w-4 shrink-0" />
-            Custom Domains
+            Security &amp; 2FA
           </button>
         </div>
 
-        <!-- Vertical Tab Body Content -->
-        <div class="flex-1 space-y-2 p-2">
+        <!-- Vertical Tab Content Pane -->
+        <div class="flex-1 p-4 rounded-xl border border-border bg-muted/10">
           <div v-if="activeVerticalTab === 'general'" class="space-y-2">
-            <h4 class="text-sm font-semibold text-foreground">Project General Preferences</h4>
+            <h4 class="text-sm font-semibold text-foreground">Global Instance Parameters</h4>
             <p class="text-xs text-muted-foreground">
-              Manage organization profile, timezone default (UTC+7), and team collaboration permissions.
+              Configure telemetry reporting frequency, debug log verbosity, and maintenance windows.
             </p>
           </div>
           <div v-else-if="activeVerticalTab === 'database'" class="space-y-2">
-            <h4 class="text-sm font-semibold text-foreground">PostgreSQL Engine 16.3</h4>
+            <h4 class="text-sm font-semibold text-foreground">PgBouncer Connection Pooling</h4>
             <p class="text-xs text-muted-foreground">
-              Connection pooler (PgBouncer) running at 98.4% efficiency with 120 max concurrent connections.
-            </p>
-          </div>
-          <div v-else-if="activeVerticalTab === 'security'" class="space-y-2">
-            <h4 class="text-sm font-semibold text-foreground">Hardware 2FA &amp; Passkeys</h4>
-            <p class="text-xs text-muted-foreground">
-              Enforce WebAuthn passkeys across all organization administrators and developer roles.
+              Connection pooler running at 98.4% efficiency with 120 max concurrent connections.
             </p>
           </div>
           <div v-else class="space-y-2">
-            <h4 class="text-sm font-semibold text-foreground">Cloudflare CNAME Records</h4>
+            <h4 class="text-sm font-semibold text-foreground">Hardware 2FA &amp; Passkeys</h4>
             <p class="text-xs text-muted-foreground">
-              Your custom domain api.nala-admin.com is verified and serving traffic over HTTPS.
+              Enforce WebAuthn passkeys across all organization administrators and developer roles.
             </p>
           </div>
         </div>
@@ -548,11 +553,11 @@ const timelineSnippet = `<!-- Chronological Activity Timeline Component -->
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
-                <BreadcrumbLink to="/">Dashboard</BreadcrumbLink>
+                <BreadcrumbLink href="/">Dashboard</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbLink to="/components/navigation">Components</BreadcrumbLink>
+                <BreadcrumbLink href="/components/navigation">Components</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
@@ -608,85 +613,90 @@ const timelineSnippet = `<!-- Chronological Activity Timeline Component -->
       </CodePreview>
     </div>
 
-    <!-- 5. TIMELINE & ACCORDIONS (2-COL) -->
+    <!-- 5. ACCORDIONS & COLLAPSIBLES (2-COL) -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Activity Timeline -->
+      <!-- Reka UI Accordion Primitive -->
       <CodePreview
-        title="Activity Audit Timeline"
-        description="Chronological event list with status badges, icons, and relative timestamps."
+        title="Accordion Primitives (<Accordion>)"
+        description="Expandable question lists with animated height transitions and rotating chevrons."
+        :code="accordionSnippet"
+      >
+        <div class="p-1">
+          <Accordion type="single" collapsible default-value="faq-1" class="w-full">
+            <AccordionItem value="faq-1">
+              <AccordionTrigger>What is the query rate limit on edge functions?</AccordionTrigger>
+              <AccordionContent>
+                Serverless edge functions allow up to 10,000 invocations per minute on the Pro tier, with automatic burst scaling across global edge nodes.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="faq-2">
+              <AccordionTrigger>How does Point-in-Time Recovery (PITR) work?</AccordionTrigger>
+              <AccordionContent>
+                PITR creates continuous WAL log archives, allowing you to restore your PostgreSQL database state to any specific second in the past 7 days.
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value="faq-3">
+              <AccordionTrigger>Are database backups encrypted at rest?</AccordionTrigger>
+              <AccordionContent>
+                Yes, all physical snapshot archives are encrypted using AES-256-GCM customer-managed encryption keys (CMEK) with automatic KMS key rotation.
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
+      </CodePreview>
+
+      <!-- Collapsible Panel Primitive -->
+      <CodePreview
+        title="Collapsible Filter Panel (<Collapsible>)"
+        description="Single collapsible card container for expandable filters, sidebars, and drawer widgets."
+        :code="collapsibleSnippet"
+      >
+        <div class="space-y-3 p-1">
+          <Collapsible v-model:open="isCollapsibleOpen" class="border rounded-xl bg-card overflow-hidden">
+            <div class="flex items-center justify-between p-4 bg-muted/20">
+              <div class="flex items-center gap-2">
+                <SlidersHorizontal class="h-4 w-4 text-primary" />
+                <span class="text-xs font-bold text-foreground">Advanced Query Parameters</span>
+              </div>
+              <CollapsibleTrigger as-child>
+                <Button variant="ghost" size="icon-xs" class="h-7 w-7">
+                  <ChevronsUpDown class="h-4 w-4" />
+                </Button>
+              </CollapsibleTrigger>
+            </div>
+
+            <CollapsibleContent class="p-4 pt-2 text-xs text-muted-foreground border-t space-y-2">
+              <p>Configure custom timeout limits, retry backoff multipliers, and replica read-pool overrides.</p>
+              <div class="flex items-center gap-2 pt-1">
+                <Badge variant="outline" class="text-[10px]">Pool: Master + 2 Read Replicas</Badge>
+                <Badge variant="success" shape="pill" dot class="text-[10px]">Healthy</Badge>
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
+        </div>
+      </CodePreview>
+    </div>
+
+    <!-- 6. MULTI-TRACK ACTIVITY TIMELINES (2-COL) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- 1. Activity Audit Timeline -->
+      <CodePreview
+        title="CI/CD & Deployment Timeline"
+        description="Chronological event pipeline with status badges, contextual icons, and relative timestamps."
         :code="timelineSnippet"
       >
         <Timeline :items="deploymentEvents" />
       </CodePreview>
 
-      <!-- Collapsible Accordions -->
+      <!-- 2. Order Fulfillment / Milestone Timeline -->
       <CodePreview
-        title="Collapsible Accordions"
-        description="CSS Grid animated expanding accordions with smooth caret rotation."
-        code="<!-- Accordion Item -->
-<div class='border rounded-lg overflow-hidden'>
-  <button @click='toggle' class='w-full flex justify-between p-4'>
-    <span>Question Title</span>
-    <ChevronDown :class='{ &quot;rotate-180&quot;: isOpen }' />
-  </button>
-  <div v-show='isOpen' class='p-4 pt-0 text-xs text-muted-foreground'>
-    Answer details...
-  </div>
-</div>"
+        title="Order Tracking & Milestones"
+        description="Step-by-step physical delivery and purchase milestone flow."
+        :code="timelineSnippet"
       >
-        <div class="space-y-3">
-          <div
-            class="border border-border rounded-lg overflow-hidden transition-colors"
-            :class="{ 'bg-muted/10 border-primary/40': activeAccordion === 'item-1' }"
-          >
-            <button
-              @click="toggleAccordion('item-1')"
-              class="w-full flex items-center justify-between p-4 text-left font-medium text-sm text-foreground hover:bg-muted/40 transition-colors cursor-pointer"
-            >
-              <span>What is the query rate limit on edge functions?</span>
-              <ChevronDown
-                class="h-4 w-4 text-muted-foreground transition-transform duration-300 ease-out shrink-0"
-                :class="{ 'rotate-180 text-primary': activeAccordion === 'item-1' }"
-              />
-            </button>
-            <div
-              class="grid transition-[grid-template-rows,opacity] duration-300 ease-out"
-              :class="activeAccordion === 'item-1' ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'"
-            >
-              <div class="overflow-hidden">
-                <div class="p-4 pt-0 text-xs text-muted-foreground leading-relaxed border-t border-border/40 mt-1">
-                  Serverless functions allow up to 10,000 invocations per minute on the Pro Tier, with automatic bursting capabilities.
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="border border-border rounded-lg overflow-hidden transition-colors"
-            :class="{ 'bg-muted/10 border-primary/40': activeAccordion === 'item-2' }"
-          >
-            <button
-              @click="toggleAccordion('item-2')"
-              class="w-full flex items-center justify-between p-4 text-left font-medium text-sm text-foreground hover:bg-muted/40 transition-colors cursor-pointer"
-            >
-              <span>How does Point-in-Time Recovery (PITR) work?</span>
-              <ChevronDown
-                class="h-4 w-4 text-muted-foreground transition-transform duration-300 ease-out shrink-0"
-                :class="{ 'rotate-180 text-primary': activeAccordion === 'item-2' }"
-              />
-            </button>
-            <div
-              class="grid transition-[grid-template-rows,opacity] duration-300 ease-out"
-              :class="activeAccordion === 'item-2' ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'"
-            >
-              <div class="overflow-hidden">
-                <div class="p-4 pt-0 text-xs text-muted-foreground leading-relaxed border-t border-border/40 mt-1">
-                  PITR creates continuous WAL log archives, allowing you to restore your database state to any specific second in the past 7 days.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Timeline :items="orderTrackingEvents" />
       </CodePreview>
     </div>
   </div>

@@ -11,6 +11,10 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    Accordion: typeof import('./components/ui/accordion/Accordion.vue')['default']
+    AccordionContent: typeof import('./components/ui/accordion/AccordionContent.vue')['default']
+    AccordionItem: typeof import('./components/ui/accordion/AccordionItem.vue')['default']
+    AccordionTrigger: typeof import('./components/ui/accordion/AccordionTrigger.vue')['default']
     Alert: typeof import('./components/ui/alert/Alert.vue')['default']
     AlertDescription: typeof import('./components/ui/alert/AlertDescription.vue')['default']
     AlertDialog: typeof import('./components/ui/alert-dialog/AlertDialog.vue')['default']
@@ -39,6 +43,7 @@ declare module 'vue' {
     BreadcrumbPage: typeof import('./components/ui/breadcrumb/BreadcrumbPage.vue')['default']
     BreadcrumbSeparator: typeof import('./components/ui/breadcrumb/BreadcrumbSeparator.vue')['default']
     Button: typeof import('./components/ui/button/Button.vue')['default']
+    Calendar: typeof import('./components/ui/calendar/Calendar.vue')['default']
     Card: typeof import('./components/ui/card/Card.vue')['default']
     CardAction: typeof import('./components/ui/card/CardAction.vue')['default']
     CardContent: typeof import('./components/ui/card/CardContent.vue')['default']
@@ -48,6 +53,9 @@ declare module 'vue' {
     CardTitle: typeof import('./components/ui/card/CardTitle.vue')['default']
     Checkbox: typeof import('./components/ui/checkbox/Checkbox.vue')['default']
     CodePreview: typeof import('./components/CodePreview.vue')['default']
+    Collapsible: typeof import('./components/ui/collapsible/Collapsible.vue')['default']
+    CollapsibleContent: typeof import('./components/ui/collapsible/CollapsibleContent.vue')['default']
+    CollapsibleTrigger: typeof import('./components/ui/collapsible/CollapsibleTrigger.vue')['default']
     Command: typeof import('./components/ui/command/Command.vue')['default']
     CommandDialog: typeof import('./components/ui/command/CommandDialog.vue')['default']
     CommandEmpty: typeof import('./components/ui/command/CommandEmpty.vue')['default']

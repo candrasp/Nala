@@ -1,14 +1,17 @@
 // Re-export all shadcn / Reka UI components for barrel imports:
 // import { Button, Card, Input, Dialog, Badge } from '@/components/ui'
 
+export * from './accordion'
 export * from './alert'
 export * from './alert-dialog'
 export * from './avatar'
 export * from './badge'
 export * from './breadcrumb'
 export * from './button'
+export * from './calendar'
 export * from './card'
 export * from './checkbox'
+export * from './collapsible'
 export * from './command'
 export * from './date-picker'
 export * from './dialog'

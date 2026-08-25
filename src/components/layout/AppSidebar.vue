@@ -2,6 +2,9 @@
 import {
   LayoutDashboard,
   Users,
+  Bell,
+  Activity,
+  CreditCard,
   Palette,
   Type,
   Sparkles,
@@ -27,7 +30,9 @@ import {
   FileQuestion,
   ServerCrash,
   ShieldAlert,
+  ShieldCheck,
   Settings,
+  User,
   ExternalLink,
 } from '@lucide/vue'
 import {
@@ -68,6 +73,10 @@ const closeMobileSidebar = () => {
 // 1. Overview Group
 const mainNav: NavItem[] = [
   { name: 'Dashboard', routeName: 'dashboard', href: '/', icon: LayoutDashboard },
+  { name: 'Notifications', routeName: 'notifications', href: '/notifications', icon: Bell },
+  { name: 'Activity Log', routeName: 'activity', href: '/activity', icon: Activity },
+  { name: 'Roles & Permissions', routeName: 'roles', href: '/roles', icon: ShieldCheck },
+  { name: 'Billing & Invoices', routeName: 'billing', href: '/billing', icon: CreditCard },
   { name: 'Users', routeName: 'users', href: '/users', icon: Users },
 ]
 
@@ -114,6 +123,7 @@ const pagesNav: NavItem[] = [
 
 // 6. System Group
 const systemNav: NavItem[] = [
+  { name: 'Profile', routeName: 'profile', href: '/profile', icon: User },
   { name: 'Settings', routeName: 'settings', href: '/settings', icon: Settings },
 ]
 </script>

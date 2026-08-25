@@ -2,6 +2,9 @@
 import {
   LayoutDashboard,
   Users,
+  Bell,
+  Activity,
+  CreditCard,
   Palette,
   Type,
   Sparkles,
@@ -21,6 +24,7 @@ import {
   FileQuestion,
   ServerCrash,
   ShieldAlert,
+  ShieldCheck,
   LogIn,
   UserRound,
   KeyRound,
@@ -28,6 +32,7 @@ import {
   LockKeyhole,
   MailCheck,
   Settings,
+  User,
   Search,
   ExternalLink,
 } from '@lucide/vue'
@@ -59,6 +64,10 @@ const searchQuery = ref('')
 
 const searchItems: SearchItem[] = [
   { title: 'Dashboard', href: '/', icon: LayoutDashboard, category: 'Overview' },
+  { title: 'Notifications Center', href: '/notifications', icon: Bell, category: 'Overview' },
+  { title: 'Activity Log & Audit Trail', href: '/activity', icon: Activity, category: 'Overview' },
+  { title: 'Roles & Permissions Matrix', href: '/roles', icon: ShieldCheck, category: 'Overview' },
+  { title: 'Billing & Invoices', href: '/billing', icon: CreditCard, category: 'Overview' },
   { title: 'User Management', href: '/users', icon: Users, category: 'Overview' },
   { title: 'GitHub Repository', href: 'https://github.com/candrasp/Nala', icon: ExternalLink, category: 'Links' },
   { title: 'Color Tokens', href: '/components/colors', icon: Palette, category: 'Design System' },
@@ -86,6 +95,7 @@ const searchItems: SearchItem[] = [
   { title: 'Verify OTP', href: '/auth/verify-otp', icon: ScanLine, category: 'Auth' },
   { title: 'Reset Password', href: '/auth/reset-password', icon: LockKeyhole, category: 'Auth' },
   { title: 'Confirm Email', href: '/auth/confirm-email', icon: MailCheck, category: 'Auth' },
+  { title: 'User Profile', href: '/profile', icon: User, category: 'System' },
   { title: 'Settings', href: '/settings', icon: Settings, category: 'System' },
 ]
 
