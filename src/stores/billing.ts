@@ -5,7 +5,6 @@ import {
   type BillingOverview,
   type BillingInterval,
   type SubscriptionPlan,
-  type PaymentMethod,
   type InvoiceItem,
 } from '@/services/billing.service'
 import { toast } from '@/components/ui/sonner'
