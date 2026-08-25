@@ -1,4 +1,4 @@
-name: CI/CD & Deploy to Cloudflare Pages
+name: CI — Test & Build Check
 
 on:
   push:
@@ -23,7 +23,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -32,37 +32,5 @@ jobs:
       - name: Run Unit Tests
         run: pnpm test:run
 
-      - name: Run TypeScript Check & Build
+      - name: TypeScript Check & Build
         run: pnpm build
-
-      - name: Upload Build Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-artifact
-          path: dist
-
-  deploy:
-    name: Deploy to Cloudflare Pages
-    needs: test-and-build
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      deployments: write
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Download Build Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: dist-artifact
-          path: dist
-
-      - name: Deploy to Cloudflare Pages
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy dist --project-name=nala --commit-dirty=true
