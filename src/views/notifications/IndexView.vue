@@ -257,15 +257,9 @@ function handleFollowAction(url?: string) {
           <div
             v-for="item in notificationStore.filteredNotifications"
             :key="item.id"
-            class="p-4 sm:p-5 transition-colors hover:bg-muted/30 flex items-start gap-3 sm:gap-4 relative group"
-            :class="{ 'bg-muted/15': item.unread }"
+            class="p-4 sm:p-5 transition-colors hover:bg-muted/30 flex items-start gap-3 sm:gap-4 relative group border-l-2"
+            :class="item.unread ? 'bg-primary/5 dark:bg-primary/6 border-l-primary' : 'border-l-transparent'"
           >
-            <!-- Unread Pill Dot -->
-            <div
-              v-if="item.unread"
-              class="absolute left-1.5 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-primary"
-            />
-
             <!-- Item Checkbox -->
             <div class="pt-1">
               <Checkbox
@@ -276,7 +270,7 @@ function handleFollowAction(url?: string) {
             </div>
 
             <!-- Avatar or Type Icon -->
-            <div class="shrink-0 pt-0.5">
+            <div class="shrink-0 pt-0.5 relative">
               <Avatar v-if="item.actorAvatar" class="h-9 w-9 border shadow-xs">
                 <AvatarImage :src="item.actorAvatar" :alt="item.actorName || 'User'" />
                 <AvatarFallback>{{ fmt.initials(item.actorName || 'User') }}</AvatarFallback>
@@ -288,6 +282,13 @@ function handleFollowAction(url?: string) {
               >
                 <component :is="getIcon(item.type)" class="h-4 w-4" />
               </div>
+
+              <!-- Unread Status Dot Badge on Icon -->
+              <span
+                v-if="item.unread"
+                class="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-card shadow-xs"
+                title="Unread notification"
+              />
             </div>
 
             <!-- Notification Body -->
@@ -295,10 +296,16 @@ function handleFollowAction(url?: string) {
               <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2">
                 <div class="flex flex-wrap items-center gap-2 min-w-0">
                   <span
-                    class="text-sm font-medium text-foreground leading-tight"
-                    :class="{ 'font-bold': item.unread }"
+                    class="text-sm leading-tight text-foreground"
+                    :class="item.unread ? 'font-semibold' : 'font-medium'"
                   >
                     {{ item.title }}
+                  </span>
+                  <span
+                    v-if="item.unread"
+                    class="inline-flex items-center px-1.5 py-0.2 rounded-full text-[10px] font-semibold bg-primary/15 text-primary border border-primary/20"
+                  >
+                    New
                   </span>
                   <Badge :variant="getCategoryBadgeVariant(item.type)" shape="pill" class="text-[10px] py-0 px-2 font-medium">
                     {{ item.category }}
@@ -354,50 +361,35 @@ function handleFollowAction(url?: string) {
           </div>
 
           <!-- Empty State: No notifications in filter/search -->
-          <div
-            v-if="notificationStore.filteredNotifications.length === 0"
-            class="py-16 px-6 text-center space-y-3"
-          >
-            <div class="h-12 w-12 rounded-full bg-muted/60 border flex items-center justify-center mx-auto text-muted-foreground">
-              <Inbox v-if="!notificationStore.searchQuery" class="h-6 w-6" />
-              <Search v-else class="h-6 w-6" />
-            </div>
-
-            <div class="space-y-1 max-w-sm mx-auto">
-              <h3 class="text-sm font-semibold text-foreground">
-                <template v-if="notificationStore.searchQuery">
-                  No notifications match "{{ notificationStore.searchQuery }}"
-                </template>
-                <template v-else-if="notificationStore.activeTab === 'unread'">
-                  All caught up!
-                </template>
-                <template v-else>
-                  No notifications in this category
-                </template>
-              </h3>
-              <p class="text-xs text-muted-foreground">
-                <template v-if="notificationStore.searchQuery">
-                  Try clearing your search query or adjusting your category filters.
-                </template>
-                <template v-else-if="notificationStore.activeTab === 'unread'">
-                  You have read all urgent messages and security notices.
-                </template>
-                <template v-else>
-                  New updates and mentions will automatically appear in your inbox.
-                </template>
-              </p>
-            </div>
-
-            <div v-if="notificationStore.searchQuery" class="pt-2">
-              <Button
-                variant="outline"
-                size="sm"
-                class="text-xs"
-                @click="notificationStore.searchQuery = ''"
-              >
-                Clear Search Query
-              </Button>
-            </div>
+          <div v-if="notificationStore.filteredNotifications.length === 0" class="p-6">
+            <EmptyState
+              :icon="notificationStore.searchQuery ? Search : Inbox"
+              :title="
+                notificationStore.searchQuery
+                  ? `No notifications match '${notificationStore.searchQuery}'`
+                  : notificationStore.activeTab === 'unread'
+                    ? 'All caught up!'
+                    : 'No notifications in this category'
+              "
+              :description="
+                notificationStore.searchQuery
+                  ? 'Try clearing your search query or adjusting your category filters.'
+                  : notificationStore.activeTab === 'unread'
+                    ? 'You have read all urgent messages and security notices.'
+                    : 'New updates and mentions will automatically appear in your inbox.'
+              "
+            >
+              <template #actions v-if="notificationStore.searchQuery">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  class="text-xs"
+                  @click="notificationStore.searchQuery = ''"
+                >
+                  Clear Search Query
+                </Button>
+              </template>
+            </EmptyState>
           </div>
         </div>
       </CardContent>

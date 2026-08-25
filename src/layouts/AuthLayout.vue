@@ -33,6 +33,10 @@ onUnmounted(() => {
 
 <template>
   <div class="flex min-h-dvh w-full flex-col items-center justify-start pt-8 pb-12 px-4 sm:justify-center sm:py-8 sm:px-6 bg-muted/40 transition-colors duration-200 overflow-y-auto">
-    <RouterView />
+    <RouterView v-slot="{ Component }">
+      <Transition name="page" mode="out-in">
+        <component :is="Component" />
+      </Transition>
+    </RouterView>
   </div>
 </template>

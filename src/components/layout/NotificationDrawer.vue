@@ -122,15 +122,17 @@ function navigateToInbox() {
             v-for="item in notificationStore.notifications"
             :key="item.id"
             @click="handleNotificationClick(item.id, item.actionUrl)"
-            class="p-4 transition-colors hover:bg-muted/40 flex items-start gap-3 relative cursor-pointer"
-            :class="{ 'bg-muted/20': item.unread }"
+            class="p-4 transition-colors hover:bg-muted/40 flex items-start gap-3 relative cursor-pointer border-l-2"
+            :class="item.unread ? 'bg-primary/5 dark:bg-primary/6 border-l-primary' : 'border-l-transparent'"
           >
-            <div
-              v-if="item.unread"
-              class="absolute left-1.5 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-primary"
-            />
-            <div :class="['p-2 rounded-full shrink-0 flex items-center justify-center', getIconBg(item.type)]">
-              <component :is="getIcon(item.type)" class="h-4 w-4" />
+            <div class="relative shrink-0">
+              <div :class="['p-2 rounded-full flex items-center justify-center', getIconBg(item.type)]">
+                <component :is="getIcon(item.type)" class="h-4 w-4" />
+              </div>
+              <span
+                v-if="item.unread"
+                class="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-primary ring-2 ring-card shadow-xs"
+              />
             </div>
             <div class="flex-1 space-y-1 min-w-0">
               <div class="flex items-center justify-between gap-2">

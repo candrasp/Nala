@@ -299,15 +299,44 @@
 
 ---
 
-## 🚧 v1.5 — Frontend Architecture & State Polish
+## ✅ v1.5 — Dedicated Landing Page & UI Bug Fixes
 
-> **Target:** Bulletproof state persistence, smoother page transitions, and optimal developer ergonomics.
+> **Target:** Public-facing product landing page to showcase the template and fix outstanding UI issues.
 
-### State & Routing
-- [ ] **Auth State Rehydration** — Keep `useAuthStore` session in sync with `localStorage` across browser refreshes
-- [ ] **Pinia UI Store** (`src/stores/ui.ts`) — Centralize reactive sidebar state, active notifications, and global layout flags
-- [ ] **Route Transition Animations** — Subtle page-level enter/leave transitions between route changes
-- [ ] **Role-Based Route Guard Helper** — Easy middleware recipe for restricting routes based on `authStore.user.role`
-- [ ] **Workspace / Tenant Switcher UI** — Clean header dropdown component for switching organizations or projects
+### Dedicated Product Landing Page
+- [x] **Standalone Landing Page** (`src/views/landing/IndexView.vue`) — `/landing` route accessible without dashboard shell
+  - [x] Sticky top navbar with `AppLogo` (`size="xl"`), version badge (`v2.0`), section anchors, dark/light toggle, GitHub link, and *"Live Dashboard"* CTA
+  - [x] Hero section with ambient glow, gradient headline, metrics strip (36+ Primitives, 100% TypeScript, <100ms HMR, Zero Bloat), and `screenshot.png` mockup preview
+  - [x] Architecture & Tech Stack grid (Vue 3.5, Vite 8, Tailwind CSS v4, TypeScript, Reka UI, Enterprise Axios)
+  - [x] Core Features grid — RBAC matrix, Real-time audit trail, Stripe billing, TanStack data tables, 36+ UI primitives, mobile keyboard-safe UX
+  - [x] Interactive live module preview tabs (Dashboard Core, Data Tables, RBAC Matrix, Billing)
+  - [x] Transparent Pricing section — monthly/yearly billing interval toggle with 20% discount badge and 3 tiers (*Community*, *Pro Developer*, *Enterprise*)
+  - [x] Interactive FAQ accordion (collapsible questions with chevron animation)
+  - [x] Conversion CTA banner with gradient card
+  - [x] Public footer with `AppLogo`, "Developed by CandraSp" GitHub credit link, and quick navigation links
+- [x] Registered `/landing` in `src/router/index.ts`
+- [x] **Landing Page** entry added to `AppSidebar.vue` (under `Pages`) and `CommandSearchDialog.vue` (`Ctrl+K`)
 
+### Bug Fixes & Component Improvements
+- [x] **Checkbox Dual-Binding** (`src/components/ui/checkbox/Checkbox.vue`) — Added `checked` / `update:checked` proxy alongside `modelValue` for full `v-model` compatibility across all views
+- [x] **Data Table Row Selection** (`src/views/components/TableView.vue`) — Fixed select-all checkbox binding and synced full record count with `isAllSelected` computed state
+- [x] **Audit Detail Modal Viewport Overflow** (`src/views/activity/IndexView.vue`) — Constrained modal to `max-h-[85vh]` with sticky header/footer and scrollable body
+- [x] **Billing Payment Instrument Badge** (`src/views/billing/IndexView.vue`) — Fixed Mastercard brand text overlap with proper dual-circle badge, styled Visa/Amex rendering
+- [x] **Tailwind CSS v4 Gradient Syntax** (`src/views/landing/IndexView.vue`) — Migrated `bg-gradient-to-*` to `bg-linear-to-*`
 
+---
+
+## ✅ v1.6 — Frontend Polish & Developer Experience
+
+> **Target:** Pure frontend refinements to make this template as easy as possible to adopt, customize, and extend. No backend required — developers wire their own API layer using the provided Axios service pattern.
+
+### UI & Interaction Polish
+- [x] **Route Transition Animations** — Subtle page-level enter/leave transitions between route changes using Vue `<Transition>` (`AdminLayout.vue`, `AuthLayout.vue`, `style.css`)
+- [x] **Reusable Empty State Component** — Created auto-imported `<EmptyState>` component (`src/components/EmptyState.vue`) and wired to Users, Notifications, Activity, and Table search zero states
+- [x] **Print / Export CSS** — Printer-friendly stylesheet (`@media print` in `src/style.css`) for invoice and audit log views hiding navigation chrome
+- [x] **Improved Skeleton Loaders** — Standardized loading skeletons for dashboard, tables, and card grids during mock API delays
+
+### Developer Experience
+- [x] **Mock Data Customization Guide** — Dedicated `MOCKING.md` guide for replacing mock service data with a real REST or GraphQL API
+- [x] **`.env.example` Expansion** — Document all `VITE_*` variables with complete comments, defaults, and acceptable values
+- [x] **VS Code Workspace Config** — Shipped `.vscode/extensions.json` and `.vscode/settings.json` with recommended extensions (Volar, Tailwind CSS IntelliSense, ESLint, Prettier)

@@ -178,12 +178,9 @@ export const roleService = {
   async getRoles(): Promise<RoleItem[]> {
     try {
       const res = await apiClient.get<ApiResponse<RoleItem[]> | RoleItem[]>('/roles', { skipToast: true })
-      return Array.isArray(res) ? res : res.data
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        return JSON.parse(JSON.stringify(mockRoles))
-      }
-      throw error
+      return Array.isArray(res) ? res : (res as ApiResponse<RoleItem[]>).data || JSON.parse(JSON.stringify(mockRoles))
+    } catch {
+      return JSON.parse(JSON.stringify(mockRoles))
     }
   },
 
@@ -193,12 +190,9 @@ export const roleService = {
   async getPermissionModules(): Promise<PermissionModule[]> {
     try {
       const res = await apiClient.get<ApiResponse<PermissionModule[]> | PermissionModule[]>('/permissions/modules', { skipToast: true })
-      return Array.isArray(res) ? res : res.data
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        return PERMISSION_MODULES
-      }
-      throw error
+      return Array.isArray(res) ? res : (res as ApiResponse<PermissionModule[]>).data || PERMISSION_MODULES
+    } catch {
+      return PERMISSION_MODULES
     }
   },
 
@@ -208,14 +202,11 @@ export const roleService = {
   async updateRolesMatrix(roles: RoleItem[]): Promise<RoleItem[]> {
     try {
       const res = await apiClient.put<ApiResponse<RoleItem[]> | RoleItem[]>('/roles/matrix', { roles })
-      return Array.isArray(res) ? res : res.data
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        mockRoles.length = 0
-        mockRoles.push(...JSON.parse(JSON.stringify(roles)))
-        return [...mockRoles]
-      }
-      throw error
+      return Array.isArray(res) ? res : (res as ApiResponse<RoleItem[]>).data || [...roles]
+    } catch {
+      mockRoles.length = 0
+      mockRoles.push(...JSON.parse(JSON.stringify(roles)))
+      return [...mockRoles]
     }
   },
 

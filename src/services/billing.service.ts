@@ -206,29 +206,26 @@ export const billingService = {
     try {
       const res = await apiClient.get<ApiResponse<BillingOverview> | BillingOverview>('/billing/overview', { skipToast: true })
       return (res as ApiResponse<BillingOverview>).data || (res as BillingOverview)
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        return {
-          currentPlanId: 'plan-pro',
-          interval: 'monthly',
-          renewsAt: new Date(Date.now() + 18 * 24 * 60 * 60 * 1000).toISOString(),
-          billingEmail: 'billing@nala.dev',
-          companyName: 'Nala Global Technologies, Inc.',
-          taxId: 'US-EIN-948201948',
-          billingAddress: '548 Market St, Suite 29012, San Francisco, CA 94104',
-          usage: {
-            seatsUsed: 8,
-            seatsMax: 15,
-            apiCallsUsed: 142500,
-            apiCallsMax: 250000,
-            storageGbUsed: 18.4,
-            storageGbMax: 50,
-          },
-          paymentMethods: [...mockPaymentMethods],
-          plans: [...mockPlans],
-        }
+    } catch {
+      return {
+        currentPlanId: 'plan-pro',
+        interval: 'monthly',
+        renewsAt: new Date(Date.now() + 18 * 24 * 60 * 60 * 1000).toISOString(),
+        billingEmail: 'billing@nala.dev',
+        companyName: 'Nala Global Technologies, Inc.',
+        taxId: 'US-EIN-948201948',
+        billingAddress: '548 Market St, Suite 29012, San Francisco, CA 94104',
+        usage: {
+          seatsUsed: 8,
+          seatsMax: 15,
+          apiCallsUsed: 142500,
+          apiCallsMax: 250000,
+          storageGbUsed: 18.4,
+          storageGbMax: 50,
+        },
+        paymentMethods: [...mockPaymentMethods],
+        plans: [...mockPlans],
       }
-      throw error
     }
   },
 
@@ -238,12 +235,9 @@ export const billingService = {
   async getInvoices(): Promise<InvoiceItem[]> {
     try {
       const res = await apiClient.get<ApiResponse<InvoiceItem[]> | InvoiceItem[]>('/billing/invoices', { skipToast: true })
-      return Array.isArray(res) ? res : res.data
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        return [...mockInvoices]
-      }
-      throw error
+      return Array.isArray(res) ? res : (res as ApiResponse<InvoiceItem[]>).data || [...mockInvoices]
+    } catch {
+      return [...mockInvoices]
     }
   },
 
@@ -254,11 +248,8 @@ export const billingService = {
     try {
       const res = await apiClient.post<{ planId: string; interval: BillingInterval }>('/billing/plan', { planId, interval })
       return res
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        return { planId, interval }
-      }
-      throw error
+    } catch {
+      return { planId, interval }
     }
   },
 

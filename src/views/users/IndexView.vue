@@ -448,8 +448,23 @@ const statusConfig: Record<string, { label: string; dotClass: string; badgeClass
 
             <!-- Empty State -->
             <TableRow v-else-if="paginatedUsers.length === 0">
-              <TableCell colspan="7" class="h-32 text-center text-muted-foreground text-xs">
-                No users found matching your search and filter criteria.
+              <TableCell colspan="7" class="py-8 px-4">
+                <EmptyState
+                  title="No users found"
+                  description="No members match your current search query or active filter criteria."
+                  compact
+                >
+                  <template #actions>
+                    <Button
+                      v-if="searchQuery || selectedRoleFilter !== 'all' || selectedStatusFilter !== 'all'"
+                      variant="outline"
+                      size="xs"
+                      @click="searchQuery = ''; selectedRoleFilter = 'all'; selectedStatusFilter = 'all'"
+                    >
+                      Reset Filters
+                    </Button>
+                  </template>
+                </EmptyState>
               </TableCell>
             </TableRow>
 

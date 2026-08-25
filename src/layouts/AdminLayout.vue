@@ -36,7 +36,11 @@ onUnmounted(() => {
       <!-- Main Scrollable Inset Page View -->
       <SidebarInset class="flex flex-col min-h-0 min-w-0 max-w-full overflow-x-hidden flex-1">
         <main class="flex-1 overflow-y-auto overflow-x-hidden p-4 sm:p-6 bg-background">
-          <RouterView />
+          <RouterView v-slot="{ Component }">
+            <Transition name="page" mode="out-in">
+              <component :is="Component" />
+            </Transition>
+          </RouterView>
         </main>
       </SidebarInset>
     </div>

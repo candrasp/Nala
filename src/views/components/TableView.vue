@@ -577,11 +577,24 @@ const paginationFilterSnippet = `<!-- Pagination + Search Filter Combo -->
             </TableRow>
           </TableHeader>
           <TableBody>
+            <!-- Empty State -->
             <TableRow v-if="paginatedComboServices.length === 0">
-              <TableCell colspan="7" class="h-28 text-center text-muted-foreground text-xs">
-                No database clusters match your filter criteria.
+              <TableCell colspan="7" class="p-6">
+                <EmptyState
+                  :icon="Database"
+                  title="No instances found"
+                  description="No database cluster matches your search query or status filter."
+                  compact
+                >
+                  <template #actions>
+                    <Button variant="outline" size="xs" @click="searchQuery = ''; selectedStatusFilter = 'all'">
+                      Reset Filters
+                    </Button>
+                  </template>
+                </EmptyState>
               </TableCell>
             </TableRow>
+
             <TableRow
               v-for="service in paginatedComboServices"
               :key="service.id"

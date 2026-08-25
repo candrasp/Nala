@@ -5,6 +5,42 @@ All notable changes to **Nala** — Vue 3 Admin Dashboard Template — are docum
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [Semantic Versioning](https://semver.org/).
 
+## [1.6.0] — 2026-08-26
+
+### Added
+
+#### 🎨 Frontend Polish & Reusable Zero States
+- **`<EmptyState>` Reusable Component (`src/components/EmptyState.vue`)**:
+  - Auto-imported dashed container component featuring configurable icon, title, description, badge, compact mode, and an `#actions` slot for recovery/filter reset buttons.
+  - Integrated into zero-result states in `src/views/users/IndexView.vue` (Users table), `src/views/notifications/IndexView.vue` (Notifications center), `src/views/activity/IndexView.vue` (Audit logs), and `src/views/components/TableView.vue` (Database clusters table).
+- **Page-Level Route Transition Animations (`src/style.css`, `AdminLayout.vue`, `AuthLayout.vue`)**:
+  - Subtle 150ms enter/leave fade + slide transition (`.page-enter-active`, `.page-leave-active`, `.page-enter-from`, `.page-leave-to`).
+  - Native support for `@media (prefers-reduced-motion: reduce)` to disable transitions when requested by OS accessibility settings.
+- **Print / PDF Export Stylesheet (`src/style.css`)**:
+  - Added `@media print` rules that automatically hide navigation chrome (sidebars, navbar, header triggers, action buttons) and optimize layouts for clean A4 printing and PDF export.
+
+#### 🛠️ Developer Experience & Backend Integration Guides
+- **Dedicated Real API & Mock Integration Guide (`MOCKING.md`)**:
+  - Architectural blueprint explaining the 3-tier flow (Views → Pinia Stores / Services → Axios Interceptors → Backend / Mock Fallbacks).
+  - Step-by-step tutorial on replacing mock datasets with real REST or GraphQL endpoints.
+  - Guidelines on extending TypeScript schemas, token lifecycle handling, and local Vite dev proxy CORS bypass.
+- **Expanded Environment Configuration (`.env.example`)**:
+  - Complete documentation and commentary for `VITE_APP_NAME`, `VITE_API_BASE_URL`, `VITE_DEFAULT_LOCALE`, `VITE_DEFAULT_CURRENCY`, `VITE_DEFAULT_TIMEZONE`, and `VITE_DEFAULT_TIME_FORMAT`.
+- **VS Code Workspace Recommended Config (`.vscode/extensions.json` & `.vscode/settings.json`)**:
+  - Shipped IDE extensions and format-on-save configurations with Tailwind CSS v4 class regex triggers.
+
+### Fixed
+
+#### 🛡️ Resilient Mock Fallbacks & Zero-Backend Reliability
+- **Unconditional Service Mock Fallbacks (`src/services/`)**:
+  - Hardened error-handling in `notification.service.ts`, `activity.service.ts`, `billing.service.ts`, and `role.service.ts` to guarantee fallback datasets always populate across local preview, production builds, and Cloudflare Pages without requiring a backend server.
+- **Data Table Filter Binding (`src/views/components/TableView.vue`)**:
+  - Fixed property name mismatch (`searchCombo`/`statusFilter` → `searchQuery`/`selectedStatusFilter`) on the `<EmptyState>` filter reset action.
+- **VS Code Settings Schema Warnings (`.vscode/settings.json`)**:
+  - Removed unsupported default formatter IDs, maintaining clean Tailwind CSS experimental regex triggers and TypeScript SDK pathing.
+
+---
+
 ## [1.5.0] — 2026-08-25
 
 ### Added

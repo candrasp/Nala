@@ -98,12 +98,9 @@ export const notificationService = {
   async getNotifications(): Promise<NotificationItem[]> {
     try {
       const res = await apiClient.get<ApiResponse<NotificationItem[]> | NotificationItem[]>('/notifications', { skipToast: true })
-      return Array.isArray(res) ? res : res.data
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        return [...mockNotifications]
-      }
-      throw error
+      return Array.isArray(res) ? res : (res as ApiResponse<NotificationItem[]>).data || [...mockNotifications]
+    } catch {
+      return [...mockNotifications]
     }
   },
 
@@ -113,13 +110,9 @@ export const notificationService = {
   async markAsRead(id: string): Promise<void> {
     try {
       await apiClient.patch(`/notifications/${id}/read`, undefined, { skipToast: true })
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        const item = mockNotifications.find((n) => n.id === id)
-        if (item) item.unread = false
-        return
-      }
-      throw error
+    } catch {
+      const item = mockNotifications.find((n) => n.id === id)
+      if (item) item.unread = false
     }
   },
 
@@ -129,14 +122,10 @@ export const notificationService = {
   async markAllAsRead(): Promise<void> {
     try {
       await apiClient.post('/notifications/mark-all-read', undefined, { skipToast: true })
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        mockNotifications.forEach((n) => {
-          n.unread = false
-        })
-        return
-      }
-      throw error
+    } catch {
+      mockNotifications.forEach((n) => {
+        n.unread = false
+      })
     }
   },
 
@@ -146,30 +135,27 @@ export const notificationService = {
   async deleteNotification(id: string): Promise<void> {
     try {
       await apiClient.delete(`/notifications/${id}`, { skipToast: true })
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        const idx = mockNotifications.findIndex((n) => n.id === id)
-        if (idx !== -1) mockNotifications.splice(idx, 1)
-        return
+    } catch {
+      const idx = mockNotifications.findIndex((n) => n.id === id)
+      if (idx !== -1) {
+        mockNotifications.splice(idx, 1)
       }
-      throw error
     }
   },
 
   /**
-   * Clear all read notifications
+   * Delete multiple notifications
    */
-  async clearReadNotifications(): Promise<void> {
+  async deleteBatch(ids: string[]): Promise<void> {
     try {
-      await apiClient.delete('/notifications/clear-read', { skipToast: true })
-    } catch (error) {
-      if (import.meta.env.DEV) {
-        const unreadOnly = mockNotifications.filter((n) => n.unread)
-        mockNotifications.length = 0
-        mockNotifications.push(...unreadOnly)
-        return
-      }
-      throw error
+      await apiClient.post('/notifications/batch-delete', { ids }, { skipToast: true })
+    } catch {
+      ids.forEach((id) => {
+        const idx = mockNotifications.findIndex((n) => n.id === id)
+        if (idx !== -1) {
+          mockNotifications.splice(idx, 1)
+        }
+      })
     }
   },
 }

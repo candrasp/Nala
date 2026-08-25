@@ -464,17 +464,18 @@ function copyToClipboard(text: string, label: string = 'Text') {
             <!-- 3. Empty State -->
             <template v-else>
               <TableRow>
-                <TableCell colspan="8" class="h-48 text-center">
-                  <div class="flex flex-col items-center justify-center gap-2 text-muted-foreground">
-                    <Activity class="h-8 w-8 text-muted-foreground/40" />
-                    <p class="text-sm font-medium text-foreground">No audit activities found</p>
-                    <p class="text-xs text-muted-foreground max-w-sm">
-                      No logs match your current search query and filter criteria.
-                    </p>
-                    <Button variant="outline" size="sm" class="text-xs mt-2" @click="activityStore.resetFilters">
-                      Reset Filters
-                    </Button>
-                  </div>
+                <TableCell colspan="8" class="p-6">
+                  <EmptyState
+                    :icon="Activity"
+                    title="No audit activities found"
+                    description="No logs match your current search query and active filter criteria."
+                  >
+                    <template #actions>
+                      <Button variant="outline" size="sm" class="text-xs" @click="activityStore.resetFilters">
+                        Reset Filters
+                      </Button>
+                    </template>
+                  </EmptyState>
                 </TableCell>
               </TableRow>
             </template>

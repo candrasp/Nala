@@ -441,4 +441,60 @@
   .dark .bg-dot-pattern {
     background-image: radial-gradient(circle, oklch(0.985 0 0 / 8%) 1px, transparent 1px);
   }
+
+  /* Page Route Transitions */
+  .page-enter-active,
+  .page-leave-active {
+    transition: opacity 0.15s ease-out, transform 0.15s ease-out;
+  }
+
+  .page-enter-from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  .page-leave-to {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .page-enter-active,
+    .page-leave-active {
+      transition: none;
+    }
+    .page-enter-from,
+    .page-leave-to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  /* Print Stylesheet (Clean PDF/Paper Export) */
+  @media print {
+    header,
+    aside,
+    nav,
+    .no-print,
+    [data-sidebar="sidebar"],
+    button:not(.print-include) {
+      display: none !important;
+    }
+
+    body {
+      background: white !important;
+      color: black !important;
+      font-size: 11pt !important;
+    }
+
+    main {
+      padding: 0 !important;
+      overflow: visible !important;
+      max-height: none !important;
+    }
+
+    [class*="shadow-"] {
+      box-shadow: none !important;
+    }
+  }
 }
