@@ -433,9 +433,25 @@ function getPlanPrice(plan: SubscriptionPlan): number {
             class="p-3.5 rounded-xl border flex items-center justify-between gap-3 bg-muted/20"
           >
             <div class="flex items-center gap-3 min-w-0">
-              <div class="h-9 w-12 rounded-lg bg-background border flex items-center justify-center font-bold text-xs uppercase tracking-wider text-muted-foreground">
-                {{ pm.brand }}
+              <!-- Card Brand Badge -->
+              <div class="h-10 w-14 shrink-0 rounded-lg bg-card border flex items-center justify-center shadow-2xs">
+                <!-- Mastercard dual circle icon -->
+                <div v-if="pm.brand.toLowerCase() === 'mastercard'" class="flex items-center -space-x-2">
+                  <div class="h-4.5 w-4.5 rounded-full bg-red-500/90 shadow-2xs" />
+                  <div class="h-4.5 w-4.5 rounded-full bg-amber-500/90 shadow-2xs" />
+                </div>
+                <!-- Visa typography icon -->
+                <span v-else-if="pm.brand.toLowerCase() === 'visa'" class="font-black italic tracking-widest text-[13px] text-blue-600 dark:text-blue-400">
+                  VISA
+                </span>
+                <!-- Amex typography icon -->
+                <span v-else-if="pm.brand.toLowerCase().includes('amex')" class="font-bold text-[10px] text-sky-600 dark:text-sky-400 tracking-tight">
+                  AMEX
+                </span>
+                <!-- Fallback card icon -->
+                <CreditCard v-else class="h-4 w-4 text-muted-foreground" />
               </div>
+
               <div class="min-w-0 space-y-0.5">
                 <div class="flex items-center gap-2">
                   <p class="text-xs font-semibold text-foreground capitalize">
@@ -445,7 +461,7 @@ function getPlanPrice(plan: SubscriptionPlan): number {
                     Default
                   </Badge>
                 </div>
-                <p class="text-[11px] text-muted-foreground">
+                <p class="text-[11px] text-muted-foreground truncate">
                   Expires {{ pm.expMonth.toString().padStart(2, '0') }}/{{ pm.expYear }} • {{ pm.holderName }}
                 </p>
               </div>

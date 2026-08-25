@@ -35,6 +35,7 @@ import {
   User,
   Search,
   ExternalLink,
+  LayoutTemplate,
 } from '@lucide/vue'
 import {
   Dialog,
@@ -85,6 +86,7 @@ const searchItems: SearchItem[] = [
   { title: 'Toast & Alerts', href: '/components/toasts', icon: BellDot, category: 'UI Components' },
   { title: 'Feedback & Loading', href: '/components/feedback', icon: BellRing, category: 'UI Components' },
   { title: 'Navigation & Flow', href: '/components/navigation', icon: Compass, category: 'UI Components' },
+  { title: 'Landing Page', href: '/landing', icon: LayoutTemplate, category: 'Pages' },
   { title: 'Blank Starter Page', href: '/starter/blank', icon: FileCode2, category: 'Pages' },
   { title: '404 Not Found Page', href: '/errors/404', icon: FileQuestion, category: 'Pages' },
   { title: '500 Server Error Page', href: '/errors/500', icon: ServerCrash, category: 'Pages' },

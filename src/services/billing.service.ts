@@ -204,7 +204,7 @@ export const billingService = {
    */
   async getBillingOverview(): Promise<BillingOverview> {
     try {
-      const res = await apiClient.get<ApiResponse<BillingOverview> | BillingOverview>('/billing/overview')
+      const res = await apiClient.get<ApiResponse<BillingOverview> | BillingOverview>('/billing/overview', { skipToast: true })
       return (res as ApiResponse<BillingOverview>).data || (res as BillingOverview)
     } catch (error) {
       if (import.meta.env.DEV) {
@@ -237,7 +237,7 @@ export const billingService = {
    */
   async getInvoices(): Promise<InvoiceItem[]> {
     try {
-      const res = await apiClient.get<ApiResponse<InvoiceItem[]> | InvoiceItem[]>('/billing/invoices')
+      const res = await apiClient.get<ApiResponse<InvoiceItem[]> | InvoiceItem[]>('/billing/invoices', { skipToast: true })
       return Array.isArray(res) ? res : res.data
     } catch (error) {
       if (import.meta.env.DEV) {

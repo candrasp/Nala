@@ -534,8 +534,8 @@ function copyToClipboard(text: string, label: string = 'Text') {
     <!-- EVENT DETAIL INSPECTOR DIALOG MODAL                                   -->
     <!-- ═════════════════════════════════════════════════════════════════════ -->
     <Dialog v-model:open="activityStore.isDetailOpen">
-      <DialogContent class="sm:max-w-160">
-        <DialogHeader>
+      <DialogContent class="sm:max-w-160 max-h-[85vh] flex flex-col p-0 gap-0 overflow-hidden">
+        <DialogHeader class="p-5 sm:p-6 pb-4 border-b shrink-0 pr-12">
           <div class="flex items-center gap-2">
             <div class="p-2 rounded-lg bg-primary/10 border border-primary/20 text-primary">
               <Terminal class="h-4 w-4" />
@@ -551,7 +551,7 @@ function copyToClipboard(text: string, label: string = 'Text') {
           </div>
         </DialogHeader>
 
-        <div v-if="activityStore.selectedActivity" class="space-y-4 py-2 text-xs">
+        <div v-if="activityStore.selectedActivity" class="space-y-4 p-5 sm:p-6 overflow-y-auto flex-1 text-xs">
           <!-- Summary Banner -->
           <div class="p-3.5 rounded-lg border bg-muted/30 space-y-2">
             <div class="flex items-start justify-between gap-2">
@@ -573,7 +573,7 @@ function copyToClipboard(text: string, label: string = 'Text') {
           </div>
 
           <!-- Metadata Grid -->
-          <div class="grid grid-cols-2 gap-3 text-xs">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             <div class="p-3 rounded-lg border bg-card space-y-1">
               <span class="text-[11px] text-muted-foreground font-medium">Actor / Operator</span>
               <p class="font-semibold text-foreground">{{ activityStore.selectedActivity.actor.name }}</p>
@@ -622,11 +622,11 @@ function copyToClipboard(text: string, label: string = 'Text') {
                 Copy JSON
               </button>
             </div>
-            <pre class="p-3 rounded-lg bg-zinc-950 text-zinc-100 font-mono text-[11px] overflow-x-auto max-h-48 border border-zinc-800 leading-relaxed">{{ JSON.stringify(activityStore.selectedActivity.metadata, null, 2) }}</pre>
+            <pre class="p-3 rounded-lg bg-zinc-950 text-zinc-100 font-mono text-[11px] overflow-x-auto max-h-40 border border-zinc-800 leading-relaxed">{{ JSON.stringify(activityStore.selectedActivity.metadata, null, 2) }}</pre>
           </div>
         </div>
 
-        <DialogFooter class="gap-2 pt-2">
+        <DialogFooter class="p-4 sm:px-6 border-t bg-muted/10 shrink-0 gap-2 flex items-center justify-end">
           <Button
             type="button"
             variant="outline"

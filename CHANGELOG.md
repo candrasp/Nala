@@ -5,6 +5,41 @@ All notable changes to **Nala** — Vue 3 Admin Dashboard Template — are docum
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [Semantic Versioning](https://semver.org/).
 
+## [1.5.0] — 2026-08-25
+
+### Added
+
+#### 🚀 Dedicated Product Landing Page (`/landing`)
+- **Standalone Landing Page (`src/views/landing/IndexView.vue`)**:
+  - **Sticky Top Navbar**: Brand logo with `AppLogo` (`size="xl"`), version badge (`v2.0`), anchor links (`#features`, `#architecture`, `#showcase`, `#pricing`, `#faq`), Dark/Light mode toggle, GitHub repository link, and direct *"Live Dashboard"* CTA.
+  - **Hero Section**: High-impact headline with ambient glow background, live metric chips (36+ UI Primitives, 100% Strict TypeScript, <100ms HMR, Zero Legacy Bloat), and an interactive Dashboard window mockup previewing live metrics and recent activity logs.
+  - **Architecture & Tech Stack Grid**: Highlights Vue 3.5 Composition API, Vite 8, Tailwind CSS v4 OKLCH color engine, Strict TypeScript, Reka UI headless primitives, and Enterprise Axios with silent JWT token refresh.
+  - **Core Features Grid**: 6 enterprise feature cards covering RBAC matrix, Real-time audit trail, Stripe billing engine, TanStack console-grade data tables, 36+ UI primitives, and mobile keyboard-safe viewports.
+  - **Live Preview Tabs**: Interactive module explorer previewing Dashboard Core, Data Tables, RBAC Matrix, and Billing & Invoices.
+  - **Transparent Pricing Section**: Monthly vs. Annual billing interval switcher (with 20% discount badge) and 3 tiers (*Community*, *Pro Developer*, *Enterprise*).
+  - **Interactive FAQ Accordion**: Collapsible questions addressing commercial licensing, backend integrations, and customization.
+  - **Conversion CTA & Public Footer**: High-converting launch banner and public footer featuring official `AppLogo`, developer credits linking to GitHub (`Developed by CandraSp`), and quick links.
+- **Routing & Navigation Integration**:
+  - Registered `/landing` in `src/router/index.ts`.
+  - Added **Landing Page** with `LayoutTemplate` icon to `src/components/layout/AppSidebar.vue` (under `Pages`).
+  - Added **Landing Page** to quick search in `src/components/layout/CommandSearchDialog.vue` (`Ctrl+K`).
+
+### Fixed & Improved
+
+#### 🐛 Component & View Bug Fixes
+- **Checkbox Component Model & Checked Dual-Binding Compatibility (`src/components/ui/checkbox/Checkbox.vue`)**:
+  - Enhanced wrapper to support both `v-model` / `modelValue` (`update:modelValue`) and `:checked` / `v-model:checked` (`update:checked`) seamlessly across all views.
+- **Data Table Row Selection & Select All (`src/views/components/TableView.vue`)**:
+  - Fixed row selection checkbox event handling and synced full table records with `isAllSelected` computed state.
+- **Audit Detail Modal Viewport Overflow (`src/views/activity/IndexView.vue`)**:
+  - Added `max-h-[85vh]` constraint, fixed header/footer, and scrollable body to prevent dialog overflow on small screens.
+- **Mastercard Brand Badge Text Overlap (`src/views/billing/IndexView.vue`)**:
+  - Replaced tight fixed-width text box with dedicated fintech brand badge rendering (interlocking Mastercard circles, styled Visa typography, Amex chips).
+- **Tailwind CSS v4 Gradient Syntax (`src/views/landing/IndexView.vue`)**:
+  - Modernized `bg-gradient-to-*` classes to `bg-linear-to-b`, `bg-linear-to-r`, and `bg-linear-to-br`.
+
+---
+
 ## [1.4.0] — 2026-08-25
 
 ### Added

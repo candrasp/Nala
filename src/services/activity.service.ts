@@ -248,7 +248,7 @@ export const activityService = {
    */
   async getActivities(_params?: ActivityFilterParams): Promise<ActivityLogItem[]> {
     try {
-      const res = await apiClient.get<ApiResponse<ActivityLogItem[]> | ActivityLogItem[]>('/activity')
+      const res = await apiClient.get<ApiResponse<ActivityLogItem[]> | ActivityLogItem[]>('/activity', { skipToast: true })
       return Array.isArray(res) ? res : res.data
     } catch (error) {
       if (import.meta.env.DEV) {

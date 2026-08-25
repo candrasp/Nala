@@ -185,6 +185,11 @@ const router = createRouter({
       ],
     },
     {
+      path: '/landing',
+      name: 'landing',
+      component: () => import('@/views/landing/IndexView.vue'),
+    },
+    {
       path: '/auth',
       component: () => import('@/layouts/AuthLayout.vue'),
       children: [
@@ -235,9 +240,8 @@ const router = createRouter({
 })
 
 // ─── Global Route Transition Loading Indicator ──────────────────────────────
-router.beforeEach((_to, _from, next) => {
+router.beforeEach(() => {
   loadingBar.start()
-  next()
 })
 
 router.afterEach(() => {

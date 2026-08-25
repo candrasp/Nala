@@ -1,17 +1,38 @@
 <script setup lang="ts">
-import type { CheckboxRootEmits, CheckboxRootProps } from "reka-ui"
+import type { CheckboxRootProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
+import { computed } from "vue"
 import { Check } from "@lucide/vue"
 import { reactiveOmit } from "@vueuse/core"
 import { CheckboxIndicator, CheckboxRoot, useForwardPropsEmits } from "reka-ui"
 import { cn } from "@/lib/utils"
 
-const props = defineProps<CheckboxRootProps & { class?: HTMLAttributes["class"] }>()
-const emits = defineEmits<CheckboxRootEmits>()
+interface Props extends /* @vue-ignore */ CheckboxRootProps {
+  class?: HTMLAttributes["class"]
+  checked?: boolean | 'indeterminate'
+}
 
-const delegatedProps = reactiveOmit(props, "class")
+const props = defineProps<Props>()
+const emits = defineEmits<{
+  (e: 'update:modelValue', value: boolean | 'indeterminate'): void
+  (e: 'update:checked', value: boolean | 'indeterminate'): void
+}>()
 
+const delegatedProps = reactiveOmit(props, "class", "checked", "modelValue")
 const forwarded = useForwardPropsEmits(delegatedProps, emits)
+
+const internalValue = computed({
+  get: () => {
+    if (props.checked !== undefined) {
+      return props.checked
+    }
+    return props.modelValue
+  },
+  set: (val) => {
+    emits('update:modelValue', val as boolean | 'indeterminate')
+    emits('update:checked', val as boolean | 'indeterminate')
+  },
+})
 </script>
 
 <template>
@@ -19,8 +40,9 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
     v-slot="slotProps"
     data-slot="checkbox"
     v-bind="forwarded"
+    v-model="internalValue"
     :class="
-      cn('peer border-input data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground data-[state=checked]:border-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive size-4 shrink-0 rounded-[4px] border shadow-xs transition-shadow outline-none focus-visible:ring-3 disabled:cursor-not-allowed disabled:opacity-50',
+      cn('peer border-input data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground data-[state=checked]:border-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive size-4 shrink-0 rounded-md border shadow-xs transition-shadow outline-none focus-visible:ring-3 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer',
          props.class)"
   >
     <CheckboxIndicator

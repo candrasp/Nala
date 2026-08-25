@@ -97,7 +97,7 @@ export const notificationService = {
    */
   async getNotifications(): Promise<NotificationItem[]> {
     try {
-      const res = await apiClient.get<ApiResponse<NotificationItem[]> | NotificationItem[]>('/notifications')
+      const res = await apiClient.get<ApiResponse<NotificationItem[]> | NotificationItem[]>('/notifications', { skipToast: true })
       return Array.isArray(res) ? res : res.data
     } catch (error) {
       if (import.meta.env.DEV) {
@@ -112,7 +112,7 @@ export const notificationService = {
    */
   async markAsRead(id: string): Promise<void> {
     try {
-      await apiClient.patch(`/notifications/${id}/read`)
+      await apiClient.patch(`/notifications/${id}/read`, undefined, { skipToast: true })
     } catch (error) {
       if (import.meta.env.DEV) {
         const item = mockNotifications.find((n) => n.id === id)
@@ -128,7 +128,7 @@ export const notificationService = {
    */
   async markAllAsRead(): Promise<void> {
     try {
-      await apiClient.post('/notifications/mark-all-read')
+      await apiClient.post('/notifications/mark-all-read', undefined, { skipToast: true })
     } catch (error) {
       if (import.meta.env.DEV) {
         mockNotifications.forEach((n) => {
@@ -145,7 +145,7 @@ export const notificationService = {
    */
   async deleteNotification(id: string): Promise<void> {
     try {
-      await apiClient.delete(`/notifications/${id}`)
+      await apiClient.delete(`/notifications/${id}`, { skipToast: true })
     } catch (error) {
       if (import.meta.env.DEV) {
         const idx = mockNotifications.findIndex((n) => n.id === id)
@@ -161,7 +161,7 @@ export const notificationService = {
    */
   async clearReadNotifications(): Promise<void> {
     try {
-      await apiClient.delete('/notifications/clear-read')
+      await apiClient.delete('/notifications/clear-read', { skipToast: true })
     } catch (error) {
       if (import.meta.env.DEV) {
         const unreadOnly = mockNotifications.filter((n) => n.unread)

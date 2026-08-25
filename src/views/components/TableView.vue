@@ -150,7 +150,7 @@ const sortedServices = computed(() => {
 const selectedRowIds = ref<string[]>(['db-fra-01'])
 
 const isAllSelected = computed({
-  get: () => selectedRowIds.value.length === services.value.length,
+  get: () => services.value.length > 0 && selectedRowIds.value.length === services.value.length,
   set: (val: boolean) => {
     selectedRowIds.value = val ? services.value.map((s) => s.id) : []
   },
@@ -259,7 +259,7 @@ const rowSelectionSnippet = `<!-- Row Selection with Checkboxes & Bulk Actions T
 const selectedIds = ref<string[]>([])
 
 const isAllSelected = computed({
-  get: () => selectedIds.value.length === items.length,
+  get: () => items.length > 0 && selectedIds.value.length === items.length,
   set: (val) => { selectedIds.value = val ? items.map(i => i.id) : [] }
 })
 <\/script>
@@ -274,7 +274,7 @@ const isAllSelected = computed({
   <TableHeader>
     <TableRow>
       <TableHead class="w-10">
-        <Checkbox :checked="isAllSelected" @update:checked="isAllSelected = $event" />
+        <Checkbox v-model="isAllSelected" />
       </TableHead>
       <TableHead>Cluster Name</TableHead>
     </TableRow>
@@ -486,7 +486,7 @@ const paginationFilterSnippet = `<!-- Pagination + Search Filter Combo -->
             <TableHeader>
               <TableRow class="bg-muted/40 hover:bg-muted/40">
                 <TableHead class="w-10">
-                  <Checkbox :checked="isAllSelected" @update:checked="isAllSelected = $event" />
+                  <Checkbox v-model="isAllSelected" aria-label="Select all instances" />
                 </TableHead>
                 <TableHead class="text-xs font-semibold">Instance</TableHead>
                 <TableHead class="text-xs font-semibold">Region</TableHead>
@@ -495,7 +495,7 @@ const paginationFilterSnippet = `<!-- Pagination + Search Filter Combo -->
             </TableHeader>
             <TableBody>
               <TableRow
-                v-for="service in services.slice(0, 4)"
+                v-for="service in services"
                 :key="service.id"
                 class="hover:bg-muted/30 transition-colors"
                 :class="{ 'bg-muted/20': selectedRowIds.includes(service.id) }"
@@ -504,6 +504,7 @@ const paginationFilterSnippet = `<!-- Pagination + Search Filter Combo -->
                   <Checkbox
                     :checked="selectedRowIds.includes(service.id)"
                     @update:checked="toggleRowSelect(service.id)"
+                    :aria-label="`Select ${service.name}`"
                   />
                 </TableCell>
                 <TableCell class="text-xs font-semibold text-foreground">{{ service.name }}</TableCell>

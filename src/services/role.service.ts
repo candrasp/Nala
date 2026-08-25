@@ -177,7 +177,7 @@ export const roleService = {
    */
   async getRoles(): Promise<RoleItem[]> {
     try {
-      const res = await apiClient.get<ApiResponse<RoleItem[]> | RoleItem[]>('/roles')
+      const res = await apiClient.get<ApiResponse<RoleItem[]> | RoleItem[]>('/roles', { skipToast: true })
       return Array.isArray(res) ? res : res.data
     } catch (error) {
       if (import.meta.env.DEV) {
@@ -192,7 +192,7 @@ export const roleService = {
    */
   async getPermissionModules(): Promise<PermissionModule[]> {
     try {
-      const res = await apiClient.get<ApiResponse<PermissionModule[]> | PermissionModule[]>('/permissions/modules')
+      const res = await apiClient.get<ApiResponse<PermissionModule[]> | PermissionModule[]>('/permissions/modules', { skipToast: true })
       return Array.isArray(res) ? res : res.data
     } catch (error) {
       if (import.meta.env.DEV) {
