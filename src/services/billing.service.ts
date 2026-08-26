@@ -51,6 +51,41 @@ export interface InvoiceItem {
   pdfUrl?: string
 }
 
+export interface InvoiceLineItem {
+  id: string
+  description: string
+  details?: string
+  quantity: number
+  unitPrice: number
+  total: number
+}
+
+export interface InvoiceParty {
+  name: string
+  company: string
+  email: string
+  phone?: string
+  address: string
+  taxId?: string
+  website?: string
+}
+
+export interface InvoiceDetail extends InvoiceItem {
+  dueDate: string
+  paidAt?: string
+  issuer: InvoiceParty
+  customer: InvoiceParty
+  items: InvoiceLineItem[]
+  subtotal: number
+  discountCode?: string
+  discountAmount?: number
+  taxRate: number
+  taxAmount: number
+  total: number
+  notes?: string
+  paymentTerms?: string
+}
+
 export interface BillingOverview {
   currentPlanId: string
   interval: BillingInterval
@@ -238,6 +273,80 @@ export const billingService = {
       return Array.isArray(res) ? res : (res as ApiResponse<InvoiceItem[]>).data || [...mockInvoices]
     } catch {
       return [...mockInvoices]
+    }
+  },
+
+  /**
+   * Fetch a detailed invoice by ID
+   */
+  async getInvoiceById(id: string): Promise<InvoiceDetail> {
+    try {
+      const res = await apiClient.get<ApiResponse<InvoiceDetail> | InvoiceDetail>(`/billing/invoices/${id}`, { skipToast: true })
+      return (res as ApiResponse<InvoiceDetail>).data || (res as InvoiceDetail)
+    } catch {
+      const baseInvoice = mockInvoices.find((inv) => inv.id === id) || mockInvoices[0]
+      const issueDate = new Date(baseInvoice.date)
+      const dueDate = new Date(issueDate.getTime() + 14 * 24 * 60 * 60 * 1000)
+
+      const isFree = baseInvoice.amount === 0
+      const subtotal = isFree ? 0 : baseInvoice.amount > 29 ? baseInvoice.amount : 29.00
+      const discount = isFree ? 0 : 0
+      const taxRate = 0.0825 // 8.25%
+      const taxAmount = isFree ? 0 : Math.round(subtotal * taxRate * 100) / 100
+      const total = isFree ? 0 : subtotal + taxAmount
+
+      return {
+        ...baseInvoice,
+        amount: total,
+        dueDate: dueDate.toISOString(),
+        paidAt: baseInvoice.status === 'paid' ? issueDate.toISOString() : undefined,
+        issuer: {
+          name: 'Nala Global Technologies, Inc.',
+          company: 'Nala Workspace Cloud',
+          email: 'billing@nala.dev',
+          phone: '+1 (555) 234-5678',
+          address: '548 Market St, Suite 29012\nSan Francisco, CA 94104, United States',
+          taxId: 'US-EIN-948201948',
+          website: 'https://nala.dev',
+        },
+        customer: {
+          name: 'Alex Morgan',
+          company: 'Acme SaaS Studio, Inc.',
+          email: 'alex.morgan@acme.com',
+          phone: '+1 (555) 891-2345',
+          address: '100 Montgomery St, Suite 1400\nSan Francisco, CA 94104, United States',
+          taxId: 'US-EIN-129849182',
+        },
+        items: isFree
+          ? [
+              {
+                id: 'item-0',
+                description: 'Starter Tier Trial Promotion',
+                details: 'Free evaluation tier with 3 seats, 50k monthly API calls, and community support',
+                quantity: 1,
+                unitPrice: 0.00,
+                total: 0.00,
+              },
+            ]
+          : [
+              {
+                id: 'item-1',
+                description: 'Pro Team Plan (Monthly Subscription)',
+                details: 'Includes 15 team seats, 250,000 monthly API throughput, and RBAC matrix',
+                quantity: 1,
+                unitPrice: 29.00,
+                total: 29.00,
+              },
+            ],
+        subtotal,
+        discountCode: isFree ? 'FREE-TRIAL' : undefined,
+        discountAmount: discount,
+        taxRate: taxRate * 100,
+        taxAmount,
+        total,
+        paymentTerms: 'Due upon receipt (NET-14)',
+        notes: 'Thank you for choosing Nala Workspace. For questions regarding this invoice, please email billing@nala.dev with your invoice number.',
+      }
     }
   },
 

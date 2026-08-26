@@ -2,6 +2,10 @@
 import { RouterView } from 'vue-router'
 import { Toaster } from '@/components/ui/sonner'
 import { LoadingBar } from '@/components/ui/loading-bar'
+import { useThemeConfig } from '@/composables/useThemeConfig'
+
+// Initialize dynamic theme & layout variables globally
+useThemeConfig()
 </script>
 
 <template>

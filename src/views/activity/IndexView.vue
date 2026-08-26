@@ -22,6 +22,7 @@ import {
   Database,
   CreditCard,
   User,
+  ArrowUpRight,
 } from '@lucide/vue'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -179,66 +180,61 @@ function copyToClipboard(text: string, label: string = 'Text') {
     <!-- ═════════════════════════════════════════════════════════════════════ -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <!-- 1. Total Events -->
-      <Card class="shadow-sm border">
-        <CardContent class="p-5 flex items-center justify-between">
-          <div class="space-y-1">
-            <p class="text-xs font-medium text-muted-foreground">Total Audited Events</p>
-            <p class="text-2xl font-bold tracking-tight text-foreground">
-              {{ activityStore.totalCount }}
-            </p>
-            <p class="text-[11px] text-muted-foreground">Across all environments</p>
+      <Card flush class="highlight-card shadow-xs border-border/80 bg-card hover:border-border transition-all duration-200">
+        <CardContent class="p-5 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-medium text-muted-foreground">Total Audited Events</span>
+            <History class="h-4 w-4 text-primary" />
           </div>
-          <div class="h-11 w-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center border border-primary/20">
-            <History class="h-5 w-5" />
-          </div>
+          <div class="text-2xl font-bold tracking-tight text-foreground">{{ activityStore.totalCount }}</div>
+          <p class="text-xs text-muted-foreground flex items-center gap-1">
+            <span>Across all environments</span>
+          </p>
         </CardContent>
       </Card>
 
       <!-- 2. Success Rate -->
-      <Card class="shadow-sm border">
-        <CardContent class="p-5 flex items-center justify-between">
-          <div class="space-y-1">
-            <p class="text-xs font-medium text-muted-foreground">Execution Success Rate</p>
-            <p class="text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">
-              {{ activityStore.successRate }}
-            </p>
-            <p class="text-[11px] text-muted-foreground">{{ activityStore.successCount }} successful operations</p>
+      <Card flush class="highlight-card shadow-xs border-border/80 bg-card hover:border-border transition-all duration-200">
+        <CardContent class="p-5 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-medium text-muted-foreground">Execution Success Rate</span>
+            <CheckCircle2 class="h-4 w-4 text-emerald-500" />
           </div>
-          <div class="h-11 w-11 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center border border-emerald-500/20">
-            <CheckCircle2 class="h-5 w-5" />
-          </div>
+          <div class="text-2xl font-bold tracking-tight text-emerald-600 dark:text-emerald-400">{{ activityStore.successRate }}</div>
+          <p class="text-xs text-muted-foreground flex items-center gap-1">
+            <span class="text-emerald-500 font-semibold inline-flex items-center gap-0.5">
+              <ArrowUpRight class="h-3.5 w-3.5" /> {{ activityStore.successCount }}
+            </span>
+            <span>successful operations</span>
+          </p>
         </CardContent>
       </Card>
 
       <!-- 3. Warnings / Security Events -->
-      <Card class="shadow-sm border">
-        <CardContent class="p-5 flex items-center justify-between">
-          <div class="space-y-1">
-            <p class="text-xs font-medium text-muted-foreground">Security &amp; Failure Alerts</p>
-            <p class="text-2xl font-bold tracking-tight text-amber-600 dark:text-amber-400">
-              {{ activityStore.warningCount }}
-            </p>
-            <p class="text-[11px] text-muted-foreground">Requires admin review</p>
+      <Card flush class="highlight-card shadow-xs border-border/80 bg-card hover:border-border transition-all duration-200">
+        <CardContent class="p-5 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-medium text-muted-foreground">Security &amp; Failure Alerts</span>
+            <ShieldAlert class="h-4 w-4 text-amber-500" />
           </div>
-          <div class="h-11 w-11 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center border border-amber-500/20">
-            <ShieldAlert class="h-5 w-5" />
-          </div>
+          <div class="text-2xl font-bold tracking-tight text-amber-600 dark:text-amber-400">{{ activityStore.warningCount }}</div>
+          <p class="text-xs text-muted-foreground flex items-center gap-1">
+            <span class="text-amber-500 font-medium">Requires admin review</span>
+          </p>
         </CardContent>
       </Card>
 
       <!-- 4. Active Operators -->
-      <Card class="shadow-sm border">
-        <CardContent class="p-5 flex items-center justify-between">
-          <div class="space-y-1">
-            <p class="text-xs font-medium text-muted-foreground">Active Operators</p>
-            <p class="text-2xl font-bold tracking-tight text-foreground">
-              {{ activityStore.activeOperatorsCount }}
-            </p>
-            <p class="text-[11px] text-muted-foreground">Unique admin/service actors</p>
+      <Card flush class="highlight-card shadow-xs border-border/80 bg-card hover:border-border transition-all duration-200">
+        <CardContent class="p-5 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-medium text-muted-foreground">Active Operators</span>
+            <UserCheck class="h-4 w-4 text-purple-500" />
           </div>
-          <div class="h-11 w-11 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center border border-purple-500/20">
-            <UserCheck class="h-5 w-5" />
-          </div>
+          <div class="text-2xl font-bold tracking-tight text-foreground">{{ activityStore.activeOperatorsCount }}</div>
+          <p class="text-xs text-muted-foreground flex items-center gap-1">
+            <span>Unique admin &amp; service actors</span>
+          </p>
         </CardContent>
       </Card>
     </div>

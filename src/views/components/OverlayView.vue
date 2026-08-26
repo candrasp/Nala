@@ -54,10 +54,33 @@ import {
   DropdownMenuTrigger,
   DropdownMenuShortcut,
 } from '@/components/ui/dropdown-menu'
+import {
+  ContextMenu,
+  ContextMenuCheckboxItem,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuLabel,
+  ContextMenuRadioGroup,
+  ContextMenuRadioItem,
+  ContextMenuSeparator,
+  ContextMenuShortcut,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuTrigger,
+} from '@/components/ui/context-menu'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 
 const isRightSheetOpen = ref(false)
 const isLeftSheetOpen = ref(false)
 const filterMinConnections = ref('10')
+const bookmarksChecked = ref(true)
+const urlsChecked = ref(false)
+const selectedPerson = ref('pedro')
+
+const tags = Array.from({ length: 50 }).map(
+  (_, i, a) => `v1.2.0-beta.${a.length - i}`
+)
 const filterMaxLatency = ref('50')
 
 // ─── Code Documentation Snippets ─────────────────────────────────────────────
@@ -257,6 +280,58 @@ const dropdownSnippet = `<!-- Dropdown Action Menus with Keyboard Shortcuts -->
     </DropdownMenuItem>
   </DropdownMenuContent>
 </DropdownMenu>`
+
+const contextMenuSnippet = `<!-- Context Menu triggered by Right Click -->
+<ContextMenu>
+  <ContextMenuTrigger class="flex h-36 w-full items-center justify-center rounded-md border border-dashed border-border text-xs text-muted-foreground bg-muted/20 select-none">
+    Right click inside this area to open Context Menu
+  </ContextMenuTrigger>
+  <ContextMenuContent class="w-64">
+    <ContextMenuItem inset>
+      Back <ContextMenuShortcut>⌘[</ContextMenuShortcut>
+    </ContextMenuItem>
+    <ContextMenuItem inset disabled>
+      Forward <ContextMenuShortcut>⌘]</ContextMenuShortcut>
+    </ContextMenuItem>
+    <ContextMenuItem inset>
+      Reload <ContextMenuShortcut>⌘R</ContextMenuShortcut>
+    </ContextMenuItem>
+    <ContextMenuSub>
+      <ContextMenuSubTrigger inset>More Tools</ContextMenuSubTrigger>
+      <ContextMenuSubContent class="w-48">
+        <ContextMenuItem>Save Page As... <ContextMenuShortcut>⇧⌘S</ContextMenuShortcut></ContextMenuItem>
+        <ContextMenuItem>Create Shortcut...</ContextMenuItem>
+        <ContextMenuItem>Name Window...</ContextMenuItem>
+        <ContextMenuSeparator />
+        <ContextMenuItem>Developer Tools</ContextMenuItem>
+      </ContextMenuSubContent>
+    </ContextMenuSub>
+    <ContextMenuSeparator />
+    <ContextMenuCheckboxItem v-model:checked="bookmarksChecked">
+      Show Bookmarks Bar <ContextMenuShortcut>⌘⇧B</ContextMenuShortcut>
+    </ContextMenuCheckboxItem>
+    <ContextMenuCheckboxItem v-model:checked="urlsChecked">
+      Show Full URLs
+    </ContextMenuCheckboxItem>
+    <ContextMenuSeparator />
+    <ContextMenuRadioGroup v-model="selectedPerson">
+      <ContextMenuLabel inset>People</ContextMenuLabel>
+      <ContextMenuSeparator />
+      <ContextMenuRadioItem value="pedro">Pedro Duarte</ContextMenuRadioItem>
+      <ContextMenuRadioItem value="colm">Colm Tuite</ContextMenuRadioItem>
+    </ContextMenuRadioGroup>
+  </ContextMenuContent>
+</ContextMenu>`
+
+const scrollAreaSnippet = `<!-- Scroll Area with custom styled slim scrollbar -->
+<ScrollArea class="h-72 w-full rounded-md border border-border p-4">
+  <div class="p-1">
+    <h4 class="mb-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Release Tags</h4>
+    <div v-for="tag in tags" :key="tag" class="text-xs py-1.5 border-b border-border/40 last:border-0">
+      {{ tag }}
+    </div>
+  </div>
+</ScrollArea>`
 </script>
 
 <template>
@@ -581,6 +656,107 @@ const dropdownSnippet = `<!-- Dropdown Action Menus with Keyboard Shortcuts -->
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+    </CodePreview>
+
+    <!-- 6. Context Menu Primitive -->
+    <CodePreview
+      title="Context Menu"
+      description="Displays a menu to the user — triggered by a right-click or long-press."
+      :code="contextMenuSnippet"
+    >
+      <ContextMenu>
+        <ContextMenuTrigger class="flex h-36 w-full items-center justify-center rounded-lg border border-dashed border-border text-xs text-muted-foreground bg-muted/20 hover:bg-muted/30 transition-colors select-none">
+          <div class="text-center space-y-1">
+            <div class="font-medium text-foreground">Right click inside this area</div>
+            <div class="text-[11px] text-muted-foreground">Context menu with submenus, checkboxes &amp; shortcuts</div>
+          </div>
+        </ContextMenuTrigger>
+        <ContextMenuContent class="w-64">
+          <ContextMenuItem inset>
+            Back
+            <ContextMenuShortcut>⌘[</ContextMenuShortcut>
+          </ContextMenuItem>
+          <ContextMenuItem inset disabled>
+            Forward
+            <ContextMenuShortcut>⌘]</ContextMenuShortcut>
+          </ContextMenuItem>
+          <ContextMenuItem inset>
+            Reload
+            <ContextMenuShortcut>⌘R</ContextMenuShortcut>
+          </ContextMenuItem>
+          <ContextMenuSub>
+            <ContextMenuSubTrigger inset>More Tools</ContextMenuSubTrigger>
+            <ContextMenuSubContent class="w-48">
+              <ContextMenuItem>
+                Save Page As...
+                <ContextMenuShortcut>⇧⌘S</ContextMenuShortcut>
+              </ContextMenuItem>
+              <ContextMenuItem>Create Shortcut...</ContextMenuItem>
+              <ContextMenuItem>Name Window...</ContextMenuItem>
+              <ContextMenuSeparator />
+              <ContextMenuItem>Developer Tools</ContextMenuItem>
+            </ContextMenuSubContent>
+          </ContextMenuSub>
+          <ContextMenuSeparator />
+          <ContextMenuCheckboxItem v-model:checked="bookmarksChecked">
+            Show Bookmarks Bar
+            <ContextMenuShortcut>⌘⇧B</ContextMenuShortcut>
+          </ContextMenuCheckboxItem>
+          <ContextMenuCheckboxItem v-model:checked="urlsChecked">
+            Show Full URLs
+          </ContextMenuCheckboxItem>
+          <ContextMenuSeparator />
+          <ContextMenuRadioGroup v-model="selectedPerson">
+            <ContextMenuLabel inset>People</ContextMenuLabel>
+            <ContextMenuSeparator />
+            <ContextMenuRadioItem value="pedro">Pedro Duarte</ContextMenuRadioItem>
+            <ContextMenuRadioItem value="colm">Colm Tuite</ContextMenuRadioItem>
+          </ContextMenuRadioGroup>
+        </ContextMenuContent>
+      </ContextMenu>
+    </CodePreview>
+
+    <!-- 7. Scroll Area Primitive -->
+    <CodePreview
+      title="Scroll Area"
+      description="Augments native scroll with custom cross-browser styling and smooth scrollbars."
+      :code="scrollAreaSnippet"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Vertical Scroll Area -->
+        <div>
+          <div class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Vertical Scroll</div>
+          <ScrollArea class="h-64 w-full rounded-md border border-border p-4 bg-card">
+            <div class="space-y-1">
+              <h4 class="mb-3 text-xs font-semibold text-foreground">Release Tags</h4>
+              <div v-for="tag in tags" :key="tag" class="text-xs py-1.5 border-b border-border/40 last:border-0 font-mono text-muted-foreground hover:text-foreground transition-colors">
+                {{ tag }}
+              </div>
+            </div>
+          </ScrollArea>
+        </div>
+
+        <!-- Horizontal Scroll Area -->
+        <div>
+          <div class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-2">Horizontal Scroll</div>
+          <ScrollArea class="w-full whitespace-nowrap rounded-md border border-border p-4 bg-card" orientation="horizontal">
+            <div class="flex w-max space-x-3 p-1">
+              <div
+                v-for="i in 10"
+                :key="i"
+                class="w-36 shrink-0 rounded-lg border border-border bg-muted/20 p-3 space-y-1.5"
+              >
+                <div class="h-16 rounded-md bg-muted/60 flex items-center justify-center text-xs font-mono text-muted-foreground">
+                  Card {{ i }}
+                </div>
+                <div class="text-xs font-semibold text-foreground">Module Item #{{ i }}</div>
+                <div class="text-[11px] text-muted-foreground">Horizontal scroll demo</div>
+              </div>
+            </div>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+        </div>
+      </div>
     </CodePreview>
   </div>
 </template>

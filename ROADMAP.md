@@ -340,3 +340,68 @@
 - [x] **Mock Data Customization Guide** — Dedicated `MOCKING.md` guide for replacing mock service data with a real REST or GraphQL API
 - [x] **`.env.example` Expansion** — Document all `VITE_*` variables with complete comments, defaults, and acceptable values
 - [x] **VS Code Workspace Config** — Shipped `.vscode/extensions.json` and `.vscode/settings.json` with recommended extensions (Volar, Tailwind CSS IntelliSense, ESLint, Prettier)
+
+---
+
+## 🔮 v1.7 — Live Theme Configurator & UI Primitives Expansion
+
+> **Target:** Interactive live customizer drawer, dynamic accent colors, and completing remaining UI primitive gaps.
+
+### Live Theme & Layout Configurator
+- [x] **Theme Customizer Drawer** (`src/components/layout/ThemeCustomizer.vue`)
+  - [x] Floating trigger / Navbar quick settings toggle
+  - [x] Dynamic Primary Accent Color palette switcher (Default / Indigo / Violet / Emerald / Rose / Amber / Cyan) modifying root `oklch` CSS variables
+  - [x] Border Radius scale selector (`0px`, `0.25rem`, `0.375rem`, `0.5rem`, `0.75rem`, `1.0rem`)
+  - [x] Content container mode switcher (`Fluid Full Width` vs `Boxed max-w-7xl`)
+  - [x] LocalStorage persistence for customized user preferences
+
+### UI Primitives Expansion
+- [x] **`<Toggle>` & `<ToggleGroup>` Primitive** (`src/components/ui/toggle/` & `src/components/ui/toggle-group/`) — Single and multi-select button groups for toolbars, alignments, and view mode toggles
+- [x] **`<ContextMenu>` Primitive** (`src/components/ui/context-menu/`) — Right-click context actions on data table rows, cards, and file items
+- [x] **`<ScrollArea>` Primitive** (`src/components/ui/scroll-area/`) — Cross-platform slim customized scrollbars
+- [x] **`<PinInput>` / `<OtpInput>` Standalone Primitive** (`src/components/ui/pin-input/`) — Reusable OTP/PIN segmented input with auto-advance, backspace handling, and paste support
+
+### UX & Accessibility
+- [ ] **Global Keyboard Shortcuts Helper (`?`)** — Pressing `?` displays an interactive modal showing all global hotkeys (`Ctrl+K`, `Ctrl+B`, `Ctrl+Shift+L`, `Esc`)
+- [ ] **Language Selector Mock Dropdown** — Navbar language switcher with flags (EN, ID, ES, JA) complementing the `useFormatter` Intl module
+
+---
+
+## 📄 v1.8 — Printable Invoice & Extended Auth / Status Pages
+
+> **Target:** High-demand business invoice view and expanded auth/error page variations.
+
+### Business & Invoicing
+- [x] **Dedicated Printable Invoice View** (`src/views/billing/InvoiceDetailView.vue` / `/billing/invoice/:id`)
+  - [x] Professional invoice template with company branding, invoice metadata, customer billing information, and line-item calculation table
+  - [x] Subtotal, tax/VAT calculations, discount chip, and total amount
+  - [x] Direct print trigger (`window.print()`) pre-configured with clean `@media print` styles
+  - [x] Action toolbar (Download PDF mock, Send Email mock, Back to Billing)
+
+### Extended Authentication & Error States
+- [x] **Lock Screen View** (`src/views/auth/LockScreenView.vue` / `/auth/lock-screen`) — Session lock state with avatar, username, password unlock input, and switch account link
+- [x] **Maintenance Mode View** (`src/views/errors/MaintenanceView.vue` / `/errors/maintenance`) — Under-maintenance illustrated page with countdown timer and notification subscription
+- [x] **Coming Soon View** (`src/views/errors/ComingSoonView.vue` / `/errors/coming-soon`) — Product launch countdown with email newsletter capture
+
+---
+
+## 💼 v2.0 — Enterprise App Templates & Specialized Dashboards
+
+> **Target:** Full-featured specialized admin mini-apps and alternate dashboard presets.
+
+### Enterprise App Templates (Mini Apps)
+- [ ] **Kanban / Task Management App** (`src/views/apps/KanbanView.vue` / `/apps/kanban`)
+  - [ ] Multi-column workflow board (*Backlog, In Progress, In Review, Done*)
+  - [ ] Task cards with priority badges, assignee avatars, due date indicators, and tag labels
+  - [ ] Create & edit task dialog modal
+- [ ] **File Manager / Media Library** (`src/views/apps/FileManagerView.vue` / `/apps/file-manager`)
+  - [ ] Grid and List view modes
+  - [ ] Folder breadcrumb tree, storage capacity progress widget, and file type category filters
+  - [ ] Quick file details preview drawer & drag-and-drop upload zone
+- [ ] **Chat / Messenger View** (`src/views/apps/ChatView.vue` / `/apps/chat`)
+  - [ ] Conversation sidebar with online presence indicators, unread count, and search
+  - [ ] Active message thread with bubble states, timestamps, attachments, and typing indicator
+
+### Specialized Dashboard Presets
+- [x] **E-Commerce / Sales Dashboard** (`src/views/dashboard/EcommerceView.vue` / `/dashboard/ecommerce`) — Top-selling products table, order fulfillment metrics, revenue breakdown, and conversion rate sparklines
+- [x] **Analytics & Traffic Dashboard** (`src/views/dashboard/AnalyticsView.vue` / `/dashboard/analytics`) — Traffic acquisition channels, user geography breakdown, bounce rates, and session durations

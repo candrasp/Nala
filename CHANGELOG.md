@@ -5,6 +5,94 @@ All notable changes to **Nala** — Vue 3 Admin Dashboard Template — are docum
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [Semantic Versioning](https://semver.org/).
 
+## [1.8.0] — 2026-08-26
+
+### Added
+
+#### 📊 Standardized Chart Primitives Suite (`src/components/ui/chart/`)
+- **Unovis Chart Integration (`@unovis/vue` & `@unovis/ts`)**:
+  - Integrated official shadcn-vue chart library `@unovis/vue` and core engine `@unovis/ts`.
+  - **`<AreaChart>` (`src/components/ui/chart/AreaChart.vue`)**: Multi-series area & spline charts supporting dynamic OKLCH color variables (`var(--primary)`), monotonic cubic bezier curves, crosshair tracking, and reactive timeframe switching.
+  - **`<LineChart>` (`src/components/ui/chart/LineChart.vue`)**: Continuous telemetry multi-series line chart with customizable line width and curve smoothing.
+  - **`<BarChart>` (`src/components/ui/chart/BarChart.vue`)**: Discrete categorical metric comparison supporting `grouped` and `stacked` modes with rounded corners.
+  - **`<DonutChart>` (`src/components/ui/chart/DonutChart.vue`)**: Proportional distribution chart with customizable arc widths, pad angles, and value formatters.
+  - **Central Barrel Re-Export (`src/components/ui/chart/index.ts` & `src/components/ui/index.ts`)**: Direct access via `import { AreaChart, BarChart, LineChart, DonutChart } from '@/components/ui'`.
+
+#### 🚀 Specialized Dashboard Presets Expansion
+- **E-Commerce / Sales Dashboard (`src/views/dashboard/EcommerceView.vue` / `/dashboard/ecommerce`)**:
+  - Order fulfillment KPI sparklines, gross sales metrics, top-selling products table, and real-time conversion rates.
+- **Analytics & Traffic Dashboard (`src/views/dashboard/AnalyticsView.vue` / `/dashboard/analytics`)**:
+  - Deep telemetry across acquisition channels, audience country distribution, bounce rates, session retention, and interactive `@unovis/vue` `<AreaChart>`.
+
+#### 🎨 Component Design System Showcase Refactor
+- **Refactored Chart Showcase (`src/views/components/ChartView.vue`)**:
+  - Replaced legacy manual SVG calculations with modern declarative `<AreaChart>`, `<BarChart>`, `<DonutChart>`, and `<LineChart>` live interactive demos and copy-pasteable `<CodePreview>` snippets.
+
+### Fixed & Improved
+
+#### 🎯 Chart Theme Integration & Tooltip Polish
+- **Tooltip Outer Box Artifact Elimination (`src/style.css` & chart components)**:
+  - Eliminated the double-card white border glitch on dark/light themes by attaching `[data-unovis-tooltip]` attributes and overriding Unovis CSS variables (`--vis-tooltip-*`) in `:root` and `.dark`.
+- **Subtle Dark Mode Grid Lines**:
+  - Replaced harsh solid axis grid lines with low-opacity dashed lines (`stroke-dasharray: 4 4; stroke-opacity: 0.25`).
+- **Standardized Metric & KPI Stats Cards Layout**:
+  - Replaced legacy sparkline-based metric cards with clean, typography-first `<Card flush class="highlight-card shadow-xs ...">` + `<CardContent class="p-5 space-y-2">` across all dashboard views (`IndexView.vue`, `AnalyticsView.vue`, `EcommerceView.vue`, `CardView.vue`).
+  - Eliminated the 44px vertical padding glitch caused by un-flushed `Card.vue` wrappers.
+
+---
+
+## [1.7.0] — 2026-08-26
+
+### Added
+
+#### 🎨 Live Theme & Layout Configurator
+- **Dynamic Theme Composable (`src/composables/useThemeConfig.ts`)**:
+  - Centralized reactive theme manager supporting **7 curated OKLCH color palettes** (*Emerald*, *Violet*, *Ocean Blue*, *Amber Sunset*, *Rose*, *Zinc*, *Slate*).
+  - Dynamic runtime color variable injection via `#nala-dynamic-theme-vars` `<style>` tag, updating both `:root` (light) and `.dark` variables synchronously.
+  - **6 Border Radius Presets** (`none: 0px`, `sm: 0.25rem`, `md: 0.5rem`, `lg: 0.75rem`, `xl: 1.0rem`, `full: 9999px`) adjusting global `--radius`.
+  - **Container Width Mode Switcher** (`fluid` full width vs `boxed max-w-7xl`).
+  - Persistent state management via `@vueuse/core` `useStorage` with reset-to-defaults capabilities.
+- **`<ThemeCustomizer>` Interactive Configuration Drawer (`src/components/layout/ThemeCustomizer.vue`)**:
+  - Accessible slideover drawer (`SheetContent`) featuring palette swatch rings with active checkmarks, interactive radius button tiles, and boxed/fluid toggles.
+  - Floating trigger button on the viewport edge and `<Paintbrush>` icon button in `src/components/layout/AppNavbar.vue`.
+  - Added `VITE_SHOW_THEME_CUSTOMIZER` environment flag support to `.env.example` and `README.md` to toggle the customizer on or off in white-labeled deployments.
+- **Comprehensive Theme Customization Architecture Documentation**:
+  - Documented complete architectural guide in Section 9 of `.agents/skills/nala-project/SKILL.md`.
+
+#### 🧩 UI Primitives Expansion (`src/components/ui/`)
+- **`<Toggle>` & `<ToggleGroup>` Primitives (`src/components/ui/toggle/` & `src/components/ui/toggle-group/`)**:
+  - `Toggle.vue` with CVA variants (`default`, `outline`) and size scale (`sm`, `default`, `lg`).
+  - `ToggleGroup.vue` and `ToggleGroupItem.vue` with context injection supporting single selection (e.g. text alignment, grid/list view) and multiple selection (e.g. rich text bold/italic/underline).
+  - Live interactive demos and code snippets added to `src/views/components/ButtonView.vue`.
+- **`<ContextMenu>` Primitive Suite (`src/components/ui/context-menu/`)**:
+  - Full suite of 14 components built with Reka UI (`ContextMenu`, `ContextMenuTrigger`, `ContextMenuContent`, `ContextMenuItem`, `ContextMenuCheckboxItem`, `ContextMenuRadioGroup`, `ContextMenuRadioItem`, `ContextMenuLabel`, `ContextMenuSeparator`, `ContextMenuShortcut`, `ContextMenuGroup`, `ContextMenuSub`, `ContextMenuSubTrigger`, `ContextMenuSubContent`).
+  - Live right-click demo zone with submenus, checkboxes, radio items, and keyboard shortcut chips added to `src/views/components/OverlayView.vue`.
+- **`<ScrollArea>` & `<ScrollBar>` Primitives (`src/components/ui/scroll-area/`)**:
+  - Custom cross-browser slim scrollbars with vertical and horizontal scroll support.
+  - Interactive demos (vertical release tags & horizontal cards track) added to `src/views/components/OverlayView.vue`.
+- **`<PinInput>` / `<OtpInput>` Standalone Primitives (`src/components/ui/pin-input/`)**:
+  - `PinInput.vue`, `PinInputGroup.vue`, `PinInputInput.vue`, and `PinInputSeparator.vue` with auto-advancing focus, backspace handling, and multi-digit paste support.
+  - Interactive 4-digit PIN and 6-digit 2FA token demos added to `src/views/components/FormView.vue`.
+- **Central Barrel Registry Update (`src/components/ui/index.ts`)**:
+  - Re-exported all new primitives (`toggle`, `toggle-group`, `context-menu`, `scroll-area`, `pin-input`).
+
+### Fixed & Improved
+
+#### 📐 Layout Shell, Scroll Containment & Component Polish
+- **Viewport Scroll Lock & Double Scrollbar Elimination**:
+  - Strictly constrained `AdminLayout.vue` to `h-dvh max-h-dvh min-h-0 w-full overflow-hidden`, ensuring `<main>` is the single dedicated scroll container.
+  - Cleaned up `body[style*="overflow: hidden"] { overflow: auto !important; }` in `src/style.css` which was previously forcing duplicate window scrolling alongside internal containers.
+- **Pin Input & OTP Segmented Border Fix (`src/components/ui/pin-input/PinInputInput.vue`)**:
+  - Fixed open left-borders and disconnected sharp corners by giving each input square a clean `rounded-md border border-input` box.
+- **Drawer / Sheet Form Sizing & Padding Alignment (`src/views/components/ModalView.vue`)**:
+  - Corrected zero horizontal padding glitch in `ModalView.vue` settings sheet panel by implementing `p-0` shell, `p-6` header/body, and responsive `w-full sm:max-w-md` dimensions.
+- **Tailwind CSS v4 Standard Scale Compliance (`src/components/ui/scroll-area/ScrollBar.vue`)**:
+  - Replaced arbitrary `p-[1px]` classes with standard `p-px`.
+- **Cleaned Unused Imports**:
+  - Removed lingering unused Lucide icon imports in `src/views/components/OverlayView.vue`.
+
+---
+
 ## [1.6.0] — 2026-08-26
 
 ### Added

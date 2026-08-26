@@ -17,22 +17,22 @@ Follow all the guidelines below strictly whenever writing, modifying, or buildin
 
 ## 🛠️ Tech Stack Overview
 
-| Layer | Technology | Notes |
-|---|---|---|
-| **Framework** | Vue 3 (Composition API) | Always use `<script setup lang="ts">` |
-| **Build Tool** | Vite 8 (`@vitejs/plugin-vue`) | Super fast HMR & build |
-| **Package Manager** | `pnpm` | pnpm v10 standard (`package.json` config) |
-| **Auto-Imports** | `unplugin-auto-import` & `unplugin-vue-components` | Auto-imports Vue, Router, Pinia, VueUse, & all UI components |
-| **Styling** | Tailwind CSS v4 (`@tailwindcss/vite`) + `tw-animate-css` | OKLCH color tokens in `src/style.css` |
-| **UI Primitives** | `reka-ui` + shadcn-vue (New York style) | 36+ primitive components in `src/components/ui/` |
-| **Data Table** | `@tanstack/vue-table` | Headless table logic with sorting & pagination |
-| **Form & Validation** | `vee-validate` + `@vee-validate/zod` + `zod` | Strictly-typed validation schemas |
-| **Icons** | `@lucide/vue` | Must be imported explicitly (`import { Plus } from '@lucide/vue'`) |
-| **State Management** | Pinia | Setup Stores pattern (`defineStore('name', () => { ... })`) |
-| **Routing** | Vue Router v5 | HTML5 history mode with route guards |
-| **API Client** | Axios + Enterprise Interceptors | Silent Token Refresh, Global Loading Bar, Auto Error Toast |
-| **Notifications** | `vue-sonner` | Toast notifications via `toast.success()`, `toast.error()` |
-| **Language & Types** | TypeScript 6 + `vue-tsc` | Strict static typing, zero `any` |
+| Layer                 | Technology                                               | Notes                                                              |
+| --------------------- | -------------------------------------------------------- | ------------------------------------------------------------------ |
+| **Framework**         | Vue 3 (Composition API)                                  | Always use `<script setup lang="ts">`                              |
+| **Build Tool**        | Vite 8 (`@vitejs/plugin-vue`)                            | Super fast HMR & build                                             |
+| **Package Manager**   | `pnpm`                                                   | pnpm v10 standard (`package.json` config)                          |
+| **Auto-Imports**      | `unplugin-auto-import` & `unplugin-vue-components`       | Auto-imports Vue, Router, Pinia, VueUse, & all UI components       |
+| **Styling**           | Tailwind CSS v4 (`@tailwindcss/vite`) + `tw-animate-css` | OKLCH color tokens in `src/style.css`                              |
+| **UI Primitives**     | `reka-ui` + shadcn-vue (New York style)                  | 36+ primitive components in `src/components/ui/`                   |
+| **Data Table**        | `@tanstack/vue-table`                                    | Headless table logic with sorting & pagination                     |
+| **Form & Validation** | `vee-validate` + `@vee-validate/zod` + `zod`             | Strictly-typed validation schemas                                  |
+| **Icons**             | `@lucide/vue`                                            | Must be imported explicitly (`import { Plus } from '@lucide/vue'`) |
+| **State Management**  | Pinia                                                    | Setup Stores pattern (`defineStore('name', () => { ... })`)        |
+| **Routing**           | Vue Router v5                                            | HTML5 history mode with route guards                               |
+| **API Client**        | Axios + Enterprise Interceptors                          | Silent Token Refresh, Global Loading Bar, Auto Error Toast         |
+| **Notifications**     | `vue-sonner`                                             | Toast notifications via `toast.success()`, `toast.error()`         |
+| **Language & Types**  | TypeScript 6 + `vue-tsc`                                 | Strict static typing, zero `any`                                   |
 
 ---
 
@@ -50,7 +50,10 @@ Follow all the guidelines below strictly whenever writing, modifying, or buildin
    - All code comments (JSDoc, inline code comments, TODO notes) inside `.vue` and `.ts` source files **MUST be written in English**.
    - (Internal agent documentation such as `SKILL.md` may be written in any language for the team's convenience.)
 9. **NEVER** run `git add`, `git commit`, or `git push` without explicit instruction from the user.
-10. **Prefer Tailwind CSS v4's Built-in Sizing Scale:** Use built-in scale values (e.g. `w-75`, `max-h-75`, `max-w-120`, `gap-3`) instead of arbitrary brackets (`max-h-[300px]`).
+10. **Tailwind CSS v4 Strict Syntax & Sizing Scale Compliance:**
+    - **Gradients:** ALWAYS use `bg-linear-to-r`, `bg-linear-to-b`, `bg-linear-to-tr`, etc. (NEVER write legacy v3 `bg-gradient-to-*`).
+    - **Sizing Scale:** NEVER write arbitrary pixel brackets like `max-w-[170px]`, `max-w-[110px]`, `w-[300px]`, or `p-[1px]`. ALWAYS use Tailwind v4 scale (`max-w-44`, `max-w-28`, `w-75`, `max-h-75`, `p-px`).
+    - **Shadows:** Use `shadow-2xs`, `shadow-xs`, `shadow-sm`, `shadow-md`, `shadow-lg`.
 11. **Single SPA Repository (Non-Monorepo):** This project is a pure Single Page Application. Do not create a `pnpm-workspace.yaml`. All pnpm configuration (e.g. `ignoredBuiltDependencies`) is managed in `package.json`.
 12. **Testing Scope & Execution:** This project is a Vite-based UI template. Creating and running unit tests (`vitest`, `pnpm test`, `pnpm test:run`) or E2E tests is strictly executed ONLY upon explicit instruction from the user. NEVER run unit tests autonomously after writing or modifying code.
 
@@ -59,6 +62,7 @@ Follow all the guidelines below strictly whenever writing, modifying, or buildin
 ## 🏗️ Project Architecture: Core App vs Showcase Demo
 
 When a developer clones the Nala template to build a real application (e.g. CRM, SaaS, E-Commerce, ERP):
+
 - **Core Production Shell (PERMANENT):**
   `src/components/ui/` (36+ components), `src/components/PageHeader.vue`, `src/components/CodePreview.vue`, `src/layouts/` (AdminLayout & AuthLayout), `src/lib/` (Axios, utils), `src/stores/`, `src/services/`, `src/views/auth/`, `src/views/settings/`, `src/views/users/`, `src/views/errors/`, and `src/views/_starter/BlankView.vue`.
 - **Showcase Demo Area (OPTIONAL / SAFE TO DELETE):**
@@ -70,18 +74,18 @@ When a developer clones the Nala template to build a real application (e.g. CRM,
 
 To avoid import hallucination:
 
-| Category | Auto-Import Status | Usage |
-|---|---|---|
-| **Vue Reactivity** (`ref`, `computed`, `watch`, `onMounted`, `reactive`, etc.) | ✅ **AUTOMATIC** | Use directly: `const count = ref(0)` (no `import { ref } from 'vue'` needed) |
-| **Vue Router** (`useRoute`, `useRouter`) | ✅ **AUTOMATIC** | Use directly: `const router = useRouter()` |
-| **VueUse** (`useColorMode`, `useLocalStorage`, `useDebounceFn`, etc.) | ✅ **AUTOMATIC** | Use directly: `const mode = useColorMode()` |
-| **Pinia** (`defineStore`, `storeToRefs`) | ✅ **AUTOMATIC** | Use directly: `defineStore(...)` |
-| **All UI Components** (`Button`, `Card`, `Dialog`, `Input`, `InputGroup`, `PageHeader`, `Select`, `Table`, `Tabs`, `CodePreview`, etc.) | ✅ **AUTOMATIC** | Use directly in template: `<PageHeader>`, `<Card>`, `<InputGroup>`, etc. |
-| **Lucide Icons** (`Plus`, `Search`, `Trash2`, `Edit`, etc.) | ⚠️ **MANUAL IMPORT REQUIRED** | `import { Plus, Search } from '@lucide/vue'` |
-| **Toast Notifications** (`toast`) | ⚠️ **MANUAL IMPORT REQUIRED** | `import { toast } from '@/components/ui/sonner'` |
-| **HTTP API Client** (`apiClient`) | ⚠️ **MANUAL IMPORT REQUIRED** | `import { apiClient } from '@/lib/axios'` |
-| **Class Merging Utility** (`cn`) | ⚠️ **MANUAL IMPORT REQUIRED** | `import { cn } from '@/lib/utils'` |
-| **Form Validation** (`zod`, `toTypedSchema`, `useForm`) | ⚠️ **MANUAL IMPORT REQUIRED** | `import { z } from 'zod'`, `import { useForm } from 'vee-validate'` |
+| Category                                                                                                                                | Auto-Import Status            | Usage                                                                        |
+| --------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- | ---------------------------------------------------------------------------- |
+| **Vue Reactivity** (`ref`, `computed`, `watch`, `onMounted`, `reactive`, etc.)                                                          | ✅ **AUTOMATIC**              | Use directly: `const count = ref(0)` (no `import { ref } from 'vue'` needed) |
+| **Vue Router** (`useRoute`, `useRouter`)                                                                                                | ✅ **AUTOMATIC**              | Use directly: `const router = useRouter()`                                   |
+| **VueUse** (`useColorMode`, `useLocalStorage`, `useDebounceFn`, etc.)                                                                   | ✅ **AUTOMATIC**              | Use directly: `const mode = useColorMode()`                                  |
+| **Pinia** (`defineStore`, `storeToRefs`)                                                                                                | ✅ **AUTOMATIC**              | Use directly: `defineStore(...)`                                             |
+| **All UI Components** (`Button`, `Card`, `Dialog`, `Input`, `InputGroup`, `PageHeader`, `Select`, `Table`, `Tabs`, `CodePreview`, etc.) | ✅ **AUTOMATIC**              | Use directly in template: `<PageHeader>`, `<Card>`, `<InputGroup>`, etc.     |
+| **Lucide Icons** (`Plus`, `Search`, `Trash2`, `Edit`, etc.)                                                                             | ⚠️ **MANUAL IMPORT REQUIRED** | `import { Plus, Search } from '@lucide/vue'`                                 |
+| **Toast Notifications** (`toast`)                                                                                                       | ⚠️ **MANUAL IMPORT REQUIRED** | `import { toast } from '@/components/ui/sonner'`                             |
+| **HTTP API Client** (`apiClient`)                                                                                                       | ⚠️ **MANUAL IMPORT REQUIRED** | `import { apiClient } from '@/lib/axios'`                                    |
+| **Class Merging Utility** (`cn`)                                                                                                        | ⚠️ **MANUAL IMPORT REQUIRED** | `import { cn } from '@/lib/utils'`                                           |
+| **Form Validation** (`zod`, `toTypedSchema`, `useForm`)                                                                                 | ⚠️ **MANUAL IMPORT REQUIRED** | `import { z } from 'zod'`, `import { useForm } from 'vee-validate'`          |
 
 ---
 
@@ -89,46 +93,55 @@ To avoid import hallucination:
 
 All components below are already registered in the template and can be used directly in Vue templates without manual import:
 
-| Component Directory | Available Components & Sub-Components |
-|---|---|
-| `PageHeader.vue` | `PageHeader` (standardized top page header with `title`, `description`, `badge`, `statusDot`, and `#actions` slot) |
-| `CodePreview.vue` | `CodePreview` (interactive documentation component with One Dark Pro syntax highlighting & clipboard copy) |
-| `alert/` | `Alert` (variant: `default`, `destructive`, `info`, `success`, `warning`), `AlertTitle`, `AlertDescription` |
-| `alert-dialog/` | `AlertDialog`, `AlertDialogTrigger`, `AlertDialogContent`, `AlertDialogHeader`, `AlertDialogTitle`, `AlertDialogDescription`, `AlertDialogFooter`, `AlertDialogAction`, `AlertDialogCancel` |
-| `avatar/` | `Avatar` (prop: `status: 'online'\|'busy'\|'away'\|'offline'` — renders built-in presence pip), `AvatarImage`, `AvatarFallback`, `AvatarGroup` (props: `max`, `overlap: 2\|3\|4`) |
-| `badge/` | `Badge` (variant: `default`, `secondary`, `destructive`, `outline`, `success`, `info`, `warning`; shape: `default`, `pill`; props: `dot`, `pulse`) |
-| `breadcrumb/` | `Breadcrumb`, `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbPage`, `BreadcrumbSeparator`, `BreadcrumbEllipsis` |
-| `button/` | `Button` (variant: `default`, `secondary`, `destructive`, `outline`, `ghost`, `link`; size: `xs`, `sm`, `default`, `lg`, `icon-xs`, `icon-sm`, `icon`, `icon-lg`) |
-| `card/` | `Card` (prop: `flush`), `CardHeader` (prop: `section`), `CardTitle`, `CardDescription`, `CardContent`, `CardFooter`, `CardAction` |
-| `checkbox/` | `Checkbox` |
-| `command/` | `Command`, `CommandInput`, `CommandList`, `CommandEmpty`, `CommandGroup`, `CommandItem`, `CommandSeparator`, `CommandShortcut`, `CommandDialog` |
-| `date-picker/` | `DatePicker` (single & range date selector) |
-| `dialog/` | `Dialog`, `DialogTrigger`, `DialogContent`, `DialogHeader`, `DialogTitle`, `DialogDescription`, `DialogFooter`, `DialogClose` |
-| `dropdown-menu/` | `DropdownMenu`, `DropdownMenuTrigger`, `DropdownMenuContent`, `DropdownMenuItem`, `DropdownMenuLabel`, `DropdownMenuSeparator`, `DropdownMenuShortcut`, `DropdownMenuGroup` |
-| `form/` | `Form`, `FormField`, `FormItem`, `FormLabel`, `FormControl`, `FormMessage`, `FormDescription` |
-| `hover-card/` | `HoverCard`, `HoverCardTrigger`, `HoverCardContent` |
-| `input/` | `Input`, `InputGroup` (relative flex wrapper), `InputIcon` (side: `left` \| `right`), `InputAddon` (side: `left` \| `right`) |
-| `kbd/` | `Kbd` (keyboard key badge) |
-| `label/` | `Label` |
-| `loading-bar/` | `LoadingBar` (top progress bar) |
-| `pagination/` | `Pagination`, `PaginationList`, `PaginationItem`, `PaginationFirst`, `PaginationPrev`, `PaginationNext`, `PaginationLast`, `PaginationEllipsis` |
-| `popover/` | `Popover`, `PopoverTrigger`, `PopoverContent` |
-| `progress/` | `Progress` (determinate & indeterminate) |
-| `radio-group/` | `RadioGroup`, `RadioGroupItem` |
-| `select/` | `Select`, `SelectTrigger`, `SelectValue`, `SelectContent`, `SelectItem`, `SelectGroup`, `SelectLabel`, `SelectSeparator` |
-| `separator/` | `Separator` (orientation: horizontal, vertical) |
-| `sheet/` | `Sheet`, `SheetTrigger`, `SheetContent`, `SheetHeader`, `SheetTitle`, `SheetDescription`, `SheetFooter`, `SheetClose` |
-| `sidebar/` | `SidebarProvider`, `Sidebar`, `SidebarContent`, `SidebarGroup`, `SidebarGroupLabel`, `SidebarMenu`, `SidebarMenuItem`, `SidebarMenuButton`, `SidebarTrigger`, `SidebarInset`, `SidebarHeader`, `SidebarFooter` |
-| `skeleton/` | `Skeleton` |
-| `slider/` | `Slider` |
-| `sonner/` | `Toaster`, `toast` (from `vue-sonner`) |
-| `stepper/` | `Stepper`, `StepperItem`, `StepperTrigger`, `StepperTitle`, `StepperDescription`, `StepperSeparator` |
-| `switch/` | `Switch` |
-| `table/` | `Table`, `TableHeader`, `TableBody`, `TableHead`, `TableRow`, `TableCell`, `TableCaption`, `TableEmpty` |
-| `tabs/` | `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent` |
-| `textarea/` | `Textarea` |
-| `timeline/` | `Timeline`, `TimelineItem`, `TimelineContent`, `TimelineTitle`, `TimelineDescription`, `TimelineTime`, `TimelineIndicator` |
-| `tooltip/` | `Tooltip`, `TooltipTrigger`, `TooltipContent`, `TooltipProvider` |
+| Component Directory | Available Components & Sub-Components                                                                                                                                                                                                                                                           |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `PageHeader.vue`    | `PageHeader` (standardized top page header with `title`, `description`, `badge`, `statusDot`, and `#actions` slot)                                                                                                                                                                              |
+| `CodePreview.vue`   | `CodePreview` (interactive documentation component with One Dark Pro syntax highlighting & clipboard copy)                                                                                                                                                                                      |
+| `accordion/`        | `Accordion`, `AccordionItem`, `AccordionHeader`, `AccordionTrigger`, `AccordionContent`                                                                                                                                                                                                         |
+| `alert/`            | `Alert` (variant: `default`, `destructive`, `info`, `success`, `warning`), `AlertTitle`, `AlertDescription`                                                                                                                                                                                     |
+| `alert-dialog/`     | `AlertDialog`, `AlertDialogTrigger`, `AlertDialogContent`, `AlertDialogHeader`, `AlertDialogTitle`, `AlertDialogDescription`, `AlertDialogFooter`, `AlertDialogAction`, `AlertDialogCancel`                                                                                                     |
+| `avatar/`           | `Avatar` (prop: `status: 'online'\|'busy'\|'away'\|'offline'` — renders built-in presence pip), `AvatarImage`, `AvatarFallback`, `AvatarGroup` (props: `max`, `overlap: 2\|3\|4`)                                                                                                               |
+| `badge/`            | `Badge` (variant: `default`, `secondary`, `destructive`, `outline`, `success`, `info`, `warning`; shape: `default`, `pill`; props: `dot`, `pulse`)                                                                                                                                              |
+| `breadcrumb/`       | `Breadcrumb`, `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbPage`, `BreadcrumbSeparator`, `BreadcrumbEllipsis`                                                                                                                                                               |
+| `button/`           | `Button` (variant: `default`, `secondary`, `destructive`, `outline`, `ghost`, `link`; size: `xs`, `sm`, `default`, `lg`, `icon-xs`, `icon-sm`, `icon`, `icon-lg`)                                                                                                                               |
+| `calendar/`         | `Calendar` (full month view calendar grid)                                                                                                                                                                                                                                                      |
+| `card/`             | `Card` (prop: `flush`), `CardHeader` (prop: `section`), `CardTitle`, `CardDescription`, `CardContent`, `CardFooter`, `CardAction`                                                                                                                                                               |
+| `chart/`            | `AreaChart`, `LineChart`, `BarChart`, `DonutChart` (Standardized Unovis/shadcn-vue chart components)                                                                                                                                                                                            |
+| `checkbox/`         | `Checkbox`                                                                                                                                                                                                                                                                                      |
+| `collapsible/`      | `Collapsible`, `CollapsibleTrigger`, `CollapsibleContent`                                                                                                                                                                                                                                       |
+| `command/`          | `Command`, `CommandInput`, `CommandList`, `CommandEmpty`, `CommandGroup`, `CommandItem`, `CommandSeparator`, `CommandShortcut`, `CommandDialog`                                                                                                                                                 |
+| `context-menu/`     | `ContextMenu`, `ContextMenuTrigger`, `ContextMenuContent`, `ContextMenuItem`, `ContextMenuCheckboxItem`, `ContextMenuRadioGroup`, `ContextMenuRadioItem`, `ContextMenuLabel`, `ContextMenuSeparator`, `ContextMenuShortcut`, `ContextMenuSub`, `ContextMenuSubTrigger`, `ContextMenuSubContent` |
+| `date-picker/`      | `DatePicker` (single & range date selector)                                                                                                                                                                                                                                                     |
+| `dialog/`           | `Dialog`, `DialogTrigger`, `DialogContent`, `DialogHeader`, `DialogTitle`, `DialogDescription`, `DialogFooter`, `DialogClose`                                                                                                                                                                   |
+| `dropdown-menu/`    | `DropdownMenu`, `DropdownMenuTrigger`, `DropdownMenuContent`, `DropdownMenuItem`, `DropdownMenuLabel`, `DropdownMenuSeparator`, `DropdownMenuShortcut`, `DropdownMenuGroup`                                                                                                                     |
+| `form/`             | `Form`, `FormField`, `FormItem`, `FormLabel`, `FormControl`, `FormMessage`, `FormDescription`                                                                                                                                                                                                   |
+| `hover-card/`       | `HoverCard`, `HoverCardTrigger`, `HoverCardContent`                                                                                                                                                                                                                                             |
+| `input/`            | `Input`, `InputGroup` (relative flex wrapper), `InputIcon` (side: `left` \| `right`), `InputAddon` (side: `left` \| `right`)                                                                                                                                                                    |
+| `kbd/`              | `Kbd` (keyboard key badge)                                                                                                                                                                                                                                                                      |
+| `label/`            | `Label`                                                                                                                                                                                                                                                                                         |
+| `loading-bar/`      | `LoadingBar` (top progress bar)                                                                                                                                                                                                                                                                 |
+| `pagination/`       | `Pagination`, `PaginationList`, `PaginationItem`, `PaginationFirst`, `PaginationPrev`, `PaginationNext`, `PaginationLast`, `PaginationEllipsis`                                                                                                                                                 |
+| `pin-input/`        | `PinInput`, `PinInputGroup`, `PinInputInput`, `PinInputSeparator`                                                                                                                                                                                                                               |
+| `popover/`          | `Popover`, `PopoverTrigger`, `PopoverContent`                                                                                                                                                                                                                                                   |
+| `progress/`         | `Progress` (determinate & indeterminate)                                                                                                                                                                                                                                                        |
+| `radio-group/`      | `RadioGroup`, `RadioGroupItem`                                                                                                                                                                                                                                                                  |
+| `scroll-area/`      | `ScrollArea`, `ScrollBar`                                                                                                                                                                                                                                                                       |
+| `select/`           | `Select`, `SelectTrigger`, `SelectValue`, `SelectContent`, `SelectItem`, `SelectGroup`, `SelectLabel`, `SelectSeparator`                                                                                                                                                                        |
+| `separator/`        | `Separator` (orientation: horizontal, vertical)                                                                                                                                                                                                                                                 |
+| `sheet/`            | `Sheet`, `SheetTrigger`, `SheetContent`, `SheetHeader`, `SheetTitle`, `SheetDescription`, `SheetFooter`, `SheetClose`                                                                                                                                                                           |
+| `sidebar/`          | `SidebarProvider`, `Sidebar`, `SidebarContent`, `SidebarGroup`, `SidebarGroupLabel`, `SidebarMenu`, `SidebarMenuItem`, `SidebarMenuButton`, `SidebarTrigger`, `SidebarInset`, `SidebarHeader`, `SidebarFooter`                                                                                  |
+| `skeleton/`         | `Skeleton`                                                                                                                                                                                                                                                                                      |
+| `slider/`           | `Slider`                                                                                                                                                                                                                                                                                        |
+| `sonner/`           | `Toaster`, `toast` (from `vue-sonner`)                                                                                                                                                                                                                                                          |
+| `stepper/`          | `Stepper`, `StepperItem`, `StepperTrigger`, `StepperTitle`, `StepperDescription`, `StepperSeparator`                                                                                                                                                                                            |
+| `switch/`           | `Switch`                                                                                                                                                                                                                                                                                        |
+| `table/`            | `Table`, `TableHeader`, `TableBody`, `TableHead`, `TableRow`, `TableCell`, `TableCaption`, `TableEmpty`                                                                                                                                                                                         |
+| `tabs/`             | `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent`                                                                                                                                                                                                                                                |
+| `textarea/`         | `Textarea`                                                                                                                                                                                                                                                                                      |
+| `timeline/`         | `Timeline`, `TimelineItem`, `TimelineContent`, `TimelineTitle`, `TimelineDescription`, `TimelineTime`, `TimelineIndicator`                                                                                                                                                                      |
+| `toggle/`           | `Toggle` (variant: `default`, `outline`; size: `sm`, `default`, `lg`)                                                                                                                                                                                                                           |
+| `toggle-group/`     | `ToggleGroup`, `ToggleGroupItem` (type: `single` \| `multiple`)                                                                                                                                                                                                                                 |
+| `tooltip/`          | `Tooltip`, `TooltipTrigger`, `TooltipContent`, `TooltipProvider`                                                                                                                                                                                                                                |
 
 ---
 
@@ -137,171 +150,203 @@ All components below are already registered in the template and can be used dire
 Use this 5-part pattern when asked to build a new module/feature (e.g. "Products", "Invoices", "Customers"):
 
 ### 1. API Service with Safe DEV Fallback (`src/services/product.service.ts`)
+
 > **Enterprise Rule:** Mock fallback may ONLY be active when `import.meta.env.DEV`. In production mode, throw the real error (`throw error`) so the app never displays fake data when the backend is offline.
 
 ```ts
-import { apiClient } from '@/lib/axios'
-import type { ApiResponse } from './types'
+import { apiClient } from "@/lib/axios";
+import type { ApiResponse } from "./types";
 
 export interface ProductItem {
-  id: string
-  name: string
-  sku: string
-  price: number
-  stock: number
-  status: 'active' | 'draft' | 'archived'
+  id: string;
+  name: string;
+  sku: string;
+  price: number;
+  stock: number;
+  status: "active" | "draft" | "archived";
 }
 
 // Explicit payload interface is preferred over Omit<> for AI readability & API contract clarity
 export interface CreateProductPayload {
-  name: string
-  sku: string
-  price: number
-  stock: number
+  name: string;
+  sku: string;
+  price: number;
+  stock: number;
 }
 
 // In-memory mock store for local development only (resets on full page reload / Vite HMR)
 const mockProducts: ProductItem[] = [
-  { id: '1', name: 'MacBook Pro 14"', sku: 'MBP-14', price: 1999, stock: 12, status: 'active' },
-  { id: '2', name: 'Dell XPS 15', sku: 'XPS-15', price: 1499, stock: 5, status: 'active' },
-]
+  {
+    id: "1",
+    name: 'MacBook Pro 14"',
+    sku: "MBP-14",
+    price: 1999,
+    stock: 12,
+    status: "active",
+  },
+  {
+    id: "2",
+    name: "Dell XPS 15",
+    sku: "XPS-15",
+    price: 1499,
+    stock: 5,
+    status: "active",
+  },
+];
 
 export const productService = {
   async getProducts(): Promise<ProductItem[]> {
     try {
-      const res = await apiClient.get<ApiResponse<ProductItem[]> | ProductItem[]>('/products')
-      return Array.isArray(res) ? res : res.data
+      const res = await apiClient.get<
+        ApiResponse<ProductItem[]> | ProductItem[]
+      >("/products");
+      return Array.isArray(res) ? res : res.data;
     } catch (error) {
       if (import.meta.env.DEV) {
-        console.warn('[DEV MOCK] Backend offline, returning mock products.')
-        return mockProducts
+        console.warn("[DEV MOCK] Backend offline, returning mock products.");
+        return mockProducts;
       }
-      throw error
+      throw error;
     }
   },
 
   async createProduct(payload: CreateProductPayload): Promise<ProductItem> {
     try {
-      const res = await apiClient.post<ProductItem>('/products', payload)
-      return res
+      const res = await apiClient.post<ProductItem>("/products", payload);
+      return res;
     } catch (error) {
       if (import.meta.env.DEV) {
-        const newItem: ProductItem = { id: String(Date.now()), ...payload, status: 'active' }
-        mockProducts.unshift(newItem)
-        return newItem
+        const newItem: ProductItem = {
+          id: String(Date.now()),
+          ...payload,
+          status: "active",
+        };
+        mockProducts.unshift(newItem);
+        return newItem;
       }
-      throw error
+      throw error;
     }
   },
 
   async deleteProduct(id: string): Promise<void> {
     try {
-      await apiClient.delete(`/products/${id}`)
+      await apiClient.delete(`/products/${id}`);
     } catch (error) {
       if (import.meta.env.DEV) {
-        const idx = mockProducts.findIndex(p => p.id === id)
-        if (idx !== -1) mockProducts.splice(idx, 1)
-        return
+        const idx = mockProducts.findIndex((p) => p.id === id);
+        if (idx !== -1) mockProducts.splice(idx, 1);
+        return;
       }
-      throw error
+      throw error;
     }
-  }
-}
+  },
+};
 ```
 
 ### 2. Pinia Store (`src/stores/product.ts`)
-```ts
-import { defineStore } from 'pinia'
-import { productService, type ProductItem, type CreateProductPayload } from '@/services/product.service'
-import { toast } from '@/components/ui/sonner'
 
-export const useProductStore = defineStore('product', () => {
-  const products = ref<ProductItem[]>([])
-  const isLoading = ref(false)
+```ts
+import { defineStore } from "pinia";
+import {
+  productService,
+  type ProductItem,
+  type CreateProductPayload,
+} from "@/services/product.service";
+import { toast } from "@/components/ui/sonner";
+
+export const useProductStore = defineStore("product", () => {
+  const products = ref<ProductItem[]>([]);
+  const isLoading = ref(false);
 
   async function loadProducts() {
-    isLoading.value = true
+    isLoading.value = true;
     try {
-      products.value = await productService.getProducts()
+      products.value = await productService.getProducts();
     } catch {
-      toast.error('Failed to load products.')
+      toast.error("Failed to load products.");
     } finally {
-      isLoading.value = false
+      isLoading.value = false;
     }
   }
 
   async function addProduct(payload: CreateProductPayload) {
     try {
-      const created = await productService.createProduct(payload)
-      products.value.unshift(created)
-      toast.success('Product created successfully!')
-      return true
+      const created = await productService.createProduct(payload);
+      products.value.unshift(created);
+      toast.success("Product created successfully!");
+      return true;
     } catch {
-      toast.error('Failed to create product.')
-      return false
+      toast.error("Failed to create product.");
+      return false;
     }
   }
 
   async function removeProduct(id: string) {
     try {
-      await productService.deleteProduct(id)
-      products.value.filter(p => p.id !== id)
-      toast.success('Product deleted successfully.')
+      await productService.deleteProduct(id);
+      products.value = products.value.filter((p) => p.id !== id);
+      toast.success("Product deleted successfully.");
     } catch {
-      toast.error('Failed to delete product.')
+      toast.error("Failed to delete product.");
     }
   }
 
-  return { products, isLoading, loadProducts, addProduct, removeProduct }
-})
+  return { products, isLoading, loadProducts, addProduct, removeProduct };
+});
 ```
 
 ### 3. Modal Form with Zod & Vee-Validate (`src/views/products/components/ProductFormDialog.vue`)
+
 ```vue
 <script setup lang="ts">
-import { z } from 'zod'
-import { useForm } from 'vee-validate'
-import { toTypedSchema } from '@vee-validate/zod'
-import { useProductStore } from '@/stores/product'
-import { Loader2 } from '@lucide/vue'
+import { z } from "zod";
+import { useForm } from "vee-validate";
+import { toTypedSchema } from "@vee-validate/zod";
+import { useProductStore } from "@/stores/product";
+import { Loader2 } from "@lucide/vue";
 
 const props = defineProps<{
-  open: boolean
-}>()
+  open: boolean;
+}>();
 
 const emit = defineEmits<{
-  (e: 'update:open', val: boolean): void
-}>()
+  (e: "update:open", val: boolean): void;
+}>();
 
-const productStore = useProductStore()
+const productStore = useProductStore();
 
 // Strict validation schema using Zod
 const productSchema = toTypedSchema(
   z.object({
-    name: z.string().min(3, 'Product name must be at least 3 characters'),
-    sku: z.string().min(2, 'SKU must be at least 2 characters').toUpperCase(),
-    price: z.number({ invalid_type_error: 'Price is required' }).positive('Price must be greater than 0'),
-    stock: z.number({ invalid_type_error: 'Stock is required' }).int().min(0, 'Stock cannot be negative'),
-  })
-)
+    name: z.string().min(3, "Product name must be at least 3 characters"),
+    sku: z.string().min(2, "SKU must be at least 2 characters").toUpperCase(),
+    price: z
+      .number({ invalid_type_error: "Price is required" })
+      .positive("Price must be greater than 0"),
+    stock: z
+      .number({ invalid_type_error: "Stock is required" })
+      .int()
+      .min(0, "Stock cannot be negative"),
+  }),
+);
 
 const { handleSubmit, isSubmitting, resetForm } = useForm({
   validationSchema: productSchema,
   initialValues: {
-    name: '',
-    sku: '',
+    name: "",
+    sku: "",
     price: 0,
     stock: 1,
-  }
-})
+  },
+});
 
 const onSubmit = handleSubmit(async (values) => {
-  const success = await productStore.addProduct(values)
+  const success = await productStore.addProduct(values);
   if (success) {
-    resetForm()
-    emit('update:open', false)
+    resetForm();
+    emit("update:open", false);
   }
-})
+});
 </script>
 
 <template>
@@ -309,7 +354,9 @@ const onSubmit = handleSubmit(async (values) => {
     <DialogContent class="sm:max-w-120">
       <DialogHeader>
         <DialogTitle>Add New Product</DialogTitle>
-        <DialogDescription>Fill in product details to add to inventory.</DialogDescription>
+        <DialogDescription
+          >Fill in product details to add to inventory.</DialogDescription
+        >
       </DialogHeader>
 
       <form @submit="onSubmit" class="space-y-4 py-2">
@@ -317,7 +364,10 @@ const onSubmit = handleSubmit(async (values) => {
           <FormItem>
             <FormLabel>Product Name</FormLabel>
             <FormControl>
-              <Input v-bind="componentField" placeholder="e.g. MacBook Pro 14" />
+              <Input
+                v-bind="componentField"
+                placeholder="e.g. MacBook Pro 14"
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -338,7 +388,12 @@ const onSubmit = handleSubmit(async (values) => {
             <FormItem>
               <FormLabel>Price ($)</FormLabel>
               <FormControl>
-                <Input type="number" step="0.01" v-bind="componentField" placeholder="1999" />
+                <Input
+                  type="number"
+                  step="0.01"
+                  v-bind="componentField"
+                  placeholder="1999"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -356,9 +411,17 @@ const onSubmit = handleSubmit(async (values) => {
         </FormField>
 
         <DialogFooter class="pt-4">
-          <Button type="button" variant="outline" @click="emit('update:open', false)">Cancel</Button>
+          <Button
+            type="button"
+            variant="outline"
+            @click="emit('update:open', false)"
+            >Cancel</Button
+          >
           <Button type="submit" :disabled="isSubmitting">
-            <Loader2 v-if="isSubmitting" class="h-3.5 w-3.5 animate-spin mr-1.5" />
+            <Loader2
+              v-if="isSubmitting"
+              class="h-3.5 w-3.5 animate-spin mr-1.5"
+            />
             Save Product
           </Button>
         </DialogFooter>
@@ -369,27 +432,29 @@ const onSubmit = handleSubmit(async (values) => {
 ```
 
 ### 4. Main Page View with Standard Components (`src/views/products/IndexView.vue`)
+
 ```vue
 <script setup lang="ts">
-import { Plus, Search, Trash2, Package } from '@lucide/vue'
-import { useProductStore } from '@/stores/product'
-import ProductFormDialog from './components/ProductFormDialog.vue'
+import { Plus, Search, Trash2, Package } from "@lucide/vue";
+import { useProductStore } from "@/stores/product";
+import ProductFormDialog from "./components/ProductFormDialog.vue";
 
-const productStore = useProductStore()
-const searchQuery = ref('')
-const isDialogOpen = ref(false)
+const productStore = useProductStore();
+const searchQuery = ref("");
+const isDialogOpen = ref(false);
 
 onMounted(() => {
-  productStore.loadProducts()
-})
+  productStore.loadProducts();
+});
 
 const filteredProducts = computed(() => {
-  if (!searchQuery.value) return productStore.products
-  return productStore.products.filter(p => 
-    p.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    p.sku.toLowerCase().includes(searchQuery.value.toLowerCase())
-  )
-})
+  if (!searchQuery.value) return productStore.products;
+  return productStore.products.filter(
+    (p) =>
+      p.name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      p.sku.toLowerCase().includes(searchQuery.value.toLowerCase()),
+  );
+});
 </script>
 
 <template>
@@ -409,21 +474,30 @@ const filteredProducts = computed(() => {
 
     <!-- Main Card with Flush & Section Header -->
     <Card flush class="shadow-sm border">
-      <CardHeader section class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <CardHeader
+        section
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
+      >
         <div>
           <CardTitle class="text-base font-semibold">Product Catalog</CardTitle>
-          <CardDescription class="text-xs mt-0.5">Showing all active items in warehouse.</CardDescription>
+          <CardDescription class="text-xs mt-0.5"
+            >Showing all active items in warehouse.</CardDescription
+          >
         </div>
         <div class="w-full sm:w-64">
           <InputGroup>
             <InputIcon>
               <Search class="h-3.5 w-3.5" />
             </InputIcon>
-            <Input v-model="searchQuery" placeholder="Search product or SKU..." class="pl-8 h-8 text-xs" />
+            <Input
+              v-model="searchQuery"
+              placeholder="Search product or SKU..."
+              class="pl-8 h-8 text-xs"
+            />
           </InputGroup>
         </div>
       </CardHeader>
-      
+
       <CardContent class="p-0">
         <Table>
           <TableHeader>
@@ -443,7 +517,9 @@ const filteredProducts = computed(() => {
                 <TableCell><Skeleton class="h-4 w-20" /></TableCell>
                 <TableCell><Skeleton class="h-4 w-16" /></TableCell>
                 <TableCell><Skeleton class="h-4 w-24" /></TableCell>
-                <TableCell class="text-right"><Skeleton class="h-8 w-8 ml-auto rounded-md" /></TableCell>
+                <TableCell class="text-right"
+                  ><Skeleton class="h-8 w-8 ml-auto rounded-md"
+                /></TableCell>
               </TableRow>
             </template>
 
@@ -451,11 +527,18 @@ const filteredProducts = computed(() => {
             <template v-else>
               <TableRow v-for="item in filteredProducts" :key="item.id">
                 <TableCell class="font-medium">{{ item.name }}</TableCell>
-                <TableCell class="font-mono text-xs text-muted-foreground">{{ item.sku }}</TableCell>
+                <TableCell class="font-mono text-xs text-muted-foreground">{{
+                  item.sku
+                }}</TableCell>
                 <TableCell>${{ item.price.toLocaleString() }}</TableCell>
                 <TableCell>{{ item.stock }} in stock</TableCell>
                 <TableCell class="text-right">
-                  <Button variant="ghost" size="icon-sm" class="text-destructive hover:bg-destructive/10" @click="productStore.removeProduct(item.id)">
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    class="text-destructive hover:bg-destructive/10"
+                    @click="productStore.removeProduct(item.id)"
+                  >
                     <Trash2 class="h-3.5 w-3.5" />
                   </Button>
                 </TableCell>
@@ -463,11 +546,16 @@ const filteredProducts = computed(() => {
 
               <!-- 3. Empty State -->
               <TableRow v-if="filteredProducts.length === 0">
-                <TableCell colspan="5" class="h-48 text-center text-muted-foreground">
+                <TableCell
+                  colspan="5"
+                  class="h-48 text-center text-muted-foreground"
+                >
                   <div class="flex flex-col items-center justify-center gap-2">
                     <Package class="h-8 w-8 text-muted-foreground/50" />
                     <p class="text-sm font-medium">No products found</p>
-                    <p class="text-xs text-muted-foreground">Try adjusting your search query or add a new product.</p>
+                    <p class="text-xs text-muted-foreground">
+                      Try adjusting your search query or add a new product.
+                    </p>
                   </div>
                 </TableCell>
               </TableRow>
@@ -484,7 +572,8 @@ const filteredProducts = computed(() => {
 ```
 
 ### 5. Register in Router & Sidebar Navigation
-> **Architecture Note:** `AdminLayout.vue` is the *Single Source of Truth* for all sidebar navigation and Command Palette search items (`searchItems`). Register each new feature manually so entries stay easy to trace (*searchable*):
+
+> **Architecture Note:** `AdminLayout.vue` is the _Single Source of Truth_ for all sidebar navigation and Command Palette search items (`searchItems`). Register each new feature manually so entries stay easy to trace (_searchable_):
 
 - **`src/router/index.ts`:**
   ```ts
@@ -495,16 +584,29 @@ const filteredProducts = computed(() => {
   }
   ```
 - **`src/layouts/AdminLayout.vue` (`mainNav`):**
+
   ```ts
-  import { Package } from '@lucide/vue'
+  import { Package } from "@lucide/vue";
 
   const mainNav = [
-    { name: 'Dashboard', routeName: 'dashboard', href: '/', icon: LayoutDashboard },
-    { name: 'Products', routeName: 'products', href: '/products', icon: Package },
-    { name: 'Users', routeName: 'users', href: '/users', icon: Users },
-  ]
+    {
+      name: "Dashboard",
+      routeName: "dashboard",
+      href: "/",
+      icon: LayoutDashboard,
+    },
+    {
+      name: "Products",
+      routeName: "products",
+      href: "/products",
+      icon: Package,
+    },
+    { name: "Users", routeName: "users", href: "/users", icon: Users },
+  ];
   ```
+
 - **`src/layouts/AdminLayout.vue` (`searchItems` & `pageTitle`):**
+
   ```ts
   // searchItems (Command Palette Ctrl+K)
   { title: 'Products', href: '/products', icon: Package, category: 'Main' },
@@ -518,7 +620,9 @@ const filteredProducts = computed(() => {
 ## 🎨 UI/UX & Layout Best Practices (Global Guidelines)
 
 ### 1. Standard Page Header (`<PageHeader>`)
+
 Instead of duplicating the ~12-line header layout in every view, always use the `<PageHeader>` component:
+
 ```vue
 <PageHeader
   title="Page Title"
@@ -533,14 +637,18 @@ Instead of duplicating the ~12-line header layout in every view, always use the 
 ```
 
 ### 2. Edge-to-Edge Card Layouts (`<Card flush>` & `<CardHeader section>`)
+
 The base `Card.vue` component has built-in `py-6` and `gap-6` utilities. When building a card (form, stat widget, banner dialog, table wrapper) that has a header/footer with a distinct background (`bg-muted/10`, separator lines `border-t`/`border-b`):
+
 - **Card Container:** Use `<Card flush>` (applies `overflow-hidden py-0 gap-0` automatically).
 - **CardHeader:** Use `<CardHeader section>` (applies `p-6 border-b border-border bg-muted/10` automatically).
 - **CardContent:** Provide explicit internal padding (e.g. `p-6`, or `p-0` for Tables).
 - **CardFooter:** Provide internal padding and a separator border (`border-t border-border bg-muted/20 px-6 py-4 flex items-center justify-between`).
 
 ### 3. Input Affixes & Addons (`<InputGroup>`, `<InputIcon>`, `<InputAddon>`)
+
 Never write manual absolute positioning (`absolute left-3 top-1/2 -translate-y-1/2`) for input icons or prefix/suffix text:
+
 ```vue
 <!-- Leading Icon Input -->
 <InputGroup>
@@ -557,7 +665,9 @@ Never write manual absolute positioning (`absolute left-3 top-1/2 -translate-y-1
 ```
 
 ### 4. Mobile Page & Form Layout Standard (Keyboard-Safe & Scrollable)
+
 When building auth pages, wizards, onboarding flows, or fullscreen dialogs:
+
 - **NEVER** use static vertical centering (`items-center justify-center min-h-screen`) on mobile screens, since input fields will be covered by the virtual keyboard while typing.
 - **ALWAYS USE** the dynamic viewport height pattern:
   `min-h-dvh flex flex-col items-center justify-start pt-6 sm:pt-8 pb-12 px-4 sm:justify-center sm:py-8 sm:px-6 overflow-y-auto`
@@ -565,11 +675,14 @@ When building auth pages, wizards, onboarding flows, or fullscreen dialogs:
 - **Desktop (`≥ sm`):** Card automatically re-centers on screen for a polished look (`sm:justify-center sm:py-8`).
 
 ### 5. Precise Horizontal Alignment Between Navbar and Sidebar
+
 When building a top navbar/header that sits above a collapsible sidebar:
+
 - **Sidebar Icon Column Width:** Collapsed width is `3.5rem` = 56px (`w-14`), with the icon's center point at $x = 28\text{px}$.
 - **Navbar Left Element Container:** The logo or collapse trigger in the header MUST be wrapped in a `w-14 h-14 flex items-center justify-center` container flush against the leftmost edge ($x = 0$), with right padding `pr-4 sm:pr-6` on the header (no left padding `pl-*`).
 
 ### 6. Dialog / Modal Accessibility Standard
+
 - **IMPORTANT:** Every `DialogContent` MUST have a `DialogTitle` and `DialogDescription` (use the `sr-only` class if you want them visually hidden) to meet Reka UI's ARIA standards and prevent runtime warnings.
 - **Avoid Native `autoFocus` in Dialogs:** Do not add the native HTML `autoFocus` attribute to `<input>` elements inside a Dialog/Modal, since Reka UI already manages keyboard focus transitions automatically.
 
@@ -580,7 +693,7 @@ Never write raw inline `<span>` pills for semantic state badges. Use `<Badge>` w
 ```vue
 <!-- Semantic color tint variants (pill shape recommended) -->
 <Badge variant="success" shape="pill">Active</Badge>
-<Badge variant="info"    shape="pill">Syncing</Badge>
+<Badge variant="info" shape="pill">Syncing</Badge>
 <Badge variant="warning" shape="pill">Degraded</Badge>
 
 <!-- Built-in status dot (dot prop inherits bg-current from variant) -->
@@ -620,6 +733,49 @@ Never write manual `div.relative` + `span.absolute` for presence indicators, and
 </AvatarGroup>
 ```
 
+### 9. Dynamic Theme & Layout Customization Architecture
+
+Nala ships with a runtime Theme & Layout Configurator powered by `useThemeConfig()` composable and `ThemeCustomizer.vue`.
+
+#### How it Works:
+
+- **Dynamic Palette:** Updating `themeConfig.primaryColor` injects root CSS variables (`--primary`, `--ring`, `--primary-foreground`) for both Light and Dark mode using exact `oklch` formulas.
+- **Corner Radius Scale:** Updates `--radius` (`0rem` to `1rem`), which automatically cascades to `--radius-xs`, `--radius-sm`, `--radius-md`, `--radius-lg`, and `--radius-xl`.
+- **Layout Width:** Supports `fluid` (100% full width) and `boxed` (`max-w-7xl mx-auto`).
+- **Persistence:** Automatically synced to `localStorage` under `nala-theme-config`.
+
+#### Developer Guide: Hardcoding or Disabling the Customizer in Production
+
+When building a client or production app where the end-user should NOT see the customizer drawer:
+
+1. **To hide the Customizer UI completely:**
+   Set `VITE_SHOW_THEME_CUSTOMIZER=false` in `.env`. Both the floating button and the navbar paintbrush icon will disappear.
+2. **To hardcode a specific default brand color & radius in TypeScript:**
+   Modify `DEFAULT_CONFIG` in `src/composables/useThemeConfig.ts`:
+   ```ts
+   const DEFAULT_CONFIG: ThemeConfig = {
+     primaryColor: "emerald", // 'emerald' | 'indigo' | 'violet' | 'rose' | 'amber' | 'cyan' | 'zinc'
+     radius: "0.375", // '0' | '0.25' | '0.375' | '0.5' | '0.75' | '1.0'
+     contentWidth: "fluid", // 'fluid' | 'boxed'
+   };
+   ```
+3. **To hardcode directly in pure CSS (Zero JS overhead):**
+   Update `--primary`, `--ring`, and `--radius` in `src/style.css` under `:root` and `.dark`, then remove `<ThemeCustomizer />` from `AdminLayout.vue`.
+
+### 10. Tailwind CSS v4 Syntax Reference & Anti-Patterns (CRITICAL)
+
+Agents frequently make mistakes when writing CSS classes by using legacy Tailwind v3 syntax. Always consult this reference table:
+
+| Category                   | ❌ NEVER USE (v3 / Anti-Pattern)                                | ✅ ALWAYS USE (Tailwind v4)                                          | Notes                                                     |
+| -------------------------- | --------------------------------------------------------------- | -------------------------------------------------------------------- | --------------------------------------------------------- |
+| **Linear Gradients**       | `bg-gradient-to-r`<br>`bg-gradient-to-b`<br>`bg-gradient-to-tr` | `bg-linear-to-r`<br>`bg-linear-to-b`<br>`bg-linear-to-tr`            | In v4, `bg-gradient-*` is renamed to `bg-linear-*`        |
+| **Arbitrary Max Width**    | `max-w-[170px]`<br>`max-w-[110px]`<br>`max-w-[300px]`           | `max-w-44` / `max-w-42.5`<br>`max-w-28` / `max-w-27.5`<br>`max-w-75` | Use standard numerical scale; v4 supports `.5` increments |
+| **Arbitrary Width/Height** | `w-[300px]`<br>`h-[400px]`<br>`max-h-[300px]`                   | `w-75`<br>`h-100`<br>`max-h-75`                                      | Multiply rems by 4 (e.g. 300px = 18.75rem = `75`)         |
+| **1-pixel Padding/Border** | `p-[1px]`<br>`m-[1px]`                                          | `p-px`<br>`m-px`                                                     | Built-in `px` scale (`1px`)                               |
+| **Shadow Scale**           | `shadow-[0_1px_2px_...]`                                        | `shadow-2xs`<br>`shadow-xs`<br>`shadow-sm`<br>`shadow-md`            | Standard built-in shadows                                 |
+| **Viewport Heights**       | `min-h-screen`<br>`h-screen`                                    | `min-h-dvh`<br>`h-dvh` / `h-svh`                                     | Prevents mobile address-bar viewport overflow bugs        |
+| **Color Opacity**          | `bg-primary/0.5`                                                | `bg-primary/50`<br>`border-border/40`<br>`text-muted-foreground/70`  | Use integer percentage (1-100) after `/`                  |
+
 ---
 
 ## 🛠️ Dev Commands
@@ -629,3 +785,121 @@ pnpm dev      # Vite dev server + HMR (http://localhost:5173)
 pnpm preview  # Preview production build locally
 # DO NOT run pnpm build (unless explicitly requested by the user)
 ```
+
+---
+
+### 11. Standardized Metric & KPI Stats Cards Blueprint (CRITICAL)
+
+All KPI / metric summary cards in Nala MUST follow the exact structural blueprint below.
+
+#### 📐 Structural Blueprint:
+
+```vue
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+  <Card
+    v-for="stat in stats"
+    :key="stat.title"
+    flush
+    class="highlight-card shadow-xs border-border/80 bg-card hover:border-border transition-all duration-200"
+  >
+    <CardContent class="p-5 space-y-2">
+      <!-- 1. Top Row: Title + Indicator Icon -->
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-medium text-muted-foreground">{{ stat.title }}</span>
+        <component :is="stat.icon" class="h-4 w-4" :class="stat.color ?? 'text-primary'" />
+      </div>
+
+      <!-- 2. Value: Bold, crisp, tightly balanced -->
+      <div class="text-2xl font-bold tracking-tight text-foreground">{{ stat.value }}</div>
+
+      <!-- 3. Trend & Context: Arrow indicator + percentage + comparison label -->
+      <p class="text-xs text-muted-foreground flex items-center gap-1">
+        <span
+          class="font-semibold inline-flex items-center gap-0.5"
+          :class="stat.positive ? 'text-emerald-500' : 'text-rose-500'"
+        >
+          <component :is="stat.positive ? ArrowUpRight : ArrowDownRight" class="h-3.5 w-3.5" />
+          {{ stat.change }}
+        </span>
+        <span>{{ stat.changeLabel }}</span>
+      </p>
+    </CardContent>
+  </Card>
+</div>
+```
+
+#### 🛑 KPI Card Anti-Patterns (DO NOT DO):
+
+- ❌ **DO NOT use `<Card>` without `flush`:** Without `flush`, `Card.vue` adds default `py-6 gap-6`, stacking 44px of empty vertical space above and below the card content. ALWAYS pass `flush` on metric cards.
+- ❌ **DO NOT draw manual raw SVG sparklines inside KPI cards:** Cluttered, inconsistent, and causes ugly text wrapping. Keep KPI cards typography-focused and clean.
+- ❌ **DO NOT put horizontal dividing lines (`border-t`):** Dividing lines cut the card in half and break visual coherence.
+- ❌ **DO NOT use colored square icon containers in the header:** Use clean, subtle Lucide icons directly with `text-primary`, `text-emerald-500`, etc.
+
+#### 📊 KPI Metric Trend Indicator Semantics:
+
+When building KPI stat cards with a `positive: boolean` flag and delta values (e.g., `+12.5%`, `-4.1%`), the `positive` field means **"this change is good for the business"**:
+
+| Metric Type                                      | Decrease (`-`) | Increase (`+`) | `positive` when delta is...                  |
+| ------------------------------------------------ | -------------- | -------------- | -------------------------------------------- |
+| Revenue, Users, Signups, Conversion Rate         | ❌ Bad         | ✅ Good        | `positive: true` when delta starts with `+`  |
+| **Bounce Rate, Churn Rate, Error Rate, Latency** | ✅ Good        | ❌ Bad         | `positive: false` when delta starts with `-` |
+
+**Color Semantic Rules:**
+
+- `positive: true` → `text-emerald-500`, `ArrowUpRight` icon
+- `positive: false` → `text-rose-500`, `ArrowDownRight` icon
+
+**Example Data:**
+
+```ts
+// ✅ Revenue going up = positive: true
+{ title: 'Gross Revenue', value: '$128,430.00', change: '+18.4%', changeLabel: 'from last month', positive: true, icon: DollarSign, color: 'text-emerald-500' }
+
+// ✅ Bounce Rate going DOWN = positive: false (it uses negative/rose color)
+{ title: 'Bounce Rate', value: '36.4%', change: '-2.1%', changeLabel: 'vs yesterday', positive: false, icon: Activity, color: 'text-violet-500' }
+```
+
+---
+
+### 12. Standardized Chart Primitives (`@unovis/vue` / `@/components/ui/chart`)
+
+**CRITICAL RULE:** DO NOT write manual raw `<svg>` spline bezier math for full charts. Always use the standardized chart components in `@/components/ui/chart`:
+
+- `<AreaChart :data="data" index="date" :categories="['series1', 'series2']" />`
+- `<LineChart :data="data" index="date" :categories="['series1']" />`
+- `<BarChart :data="data" index="month" :categories="['sales']" type="grouped|stacked" />`
+- `<DonutChart :data="data" index="name" category="value" />`
+
+#### Example Usage:
+
+```vue
+<script setup lang="ts">
+import { AreaChart } from "@/components/ui/chart";
+
+const chartData = [
+  { month: "Jan", revenue: 4200, profit: 1200 },
+  { month: "Feb", revenue: 5800, profit: 1900 },
+];
+</script>
+
+<template>
+  <div class="h-64 w-full">
+    <AreaChart
+      :data="chartData"
+      index="month"
+      :categories="['revenue', 'profit']"
+      :colors="['var(--primary)', '#3b82f6']"
+      showTooltip
+      showLegend
+    />
+  </div>
+</template>
+```
+
+#### Why this matters:
+
+1. **Powered by `@unovis/vue` + `@unovis/ts`** (official shadcn-vue standard).
+2. **Native CSS Variable & OKLCH Theme Integration** (`var(--primary)`).
+3. **Zero spline loopback bugs**, zero viewBox distortion, responsive resize by default.
+4. **Clean Single-Card Tooltips**: Tooltips automatically use `[data-unovis-tooltip]` and `--vis-tooltip-*` variables to render unified popovers without double-card borders in Light and Dark mode.
+5. **Clean Minimalist Design**: Grid lines are disabled by default (`showGridLine: false`) across Area, Line, and Bar charts for a clutter-free interface.

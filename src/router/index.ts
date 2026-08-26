@@ -45,6 +45,24 @@ const router = createRouter({
           component: () => import('@/views/dashboard/IndexView.vue'),
         },
         {
+          path: 'dashboard/ecommerce',
+          name: 'dashboard-ecommerce',
+          component: () => import('@/views/dashboard/EcommerceView.vue'),
+        },
+        {
+          path: 'ecommerce',
+          redirect: '/dashboard/ecommerce',
+        },
+        {
+          path: 'dashboard/analytics',
+          name: 'dashboard-analytics',
+          component: () => import('@/views/dashboard/AnalyticsView.vue'),
+        },
+        {
+          path: 'analytics',
+          redirect: '/dashboard/analytics',
+        },
+        {
           path: 'users',
           name: 'users',
           component: () => import('@/views/users/IndexView.vue'),
@@ -68,6 +86,15 @@ const router = createRouter({
           path: 'billing',
           name: 'billing',
           component: () => import('@/views/billing/IndexView.vue'),
+        },
+        {
+          path: 'billing/invoice/:id',
+          name: 'billing-invoice',
+          component: () => import('@/views/billing/InvoiceDetailView.vue'),
+        },
+        {
+          path: 'billing/invoices/:id',
+          redirect: (to) => `/billing/invoice/${to.params.id}`,
         },
         {
           path: 'components/buttons',
@@ -182,6 +209,24 @@ const router = createRouter({
           path: 'unauthorized',
           redirect: '/errors/403',
         },
+        {
+          path: 'errors/maintenance',
+          name: 'maintenance',
+          component: () => import('@/views/errors/MaintenanceView.vue'),
+        },
+        {
+          path: 'maintenance',
+          redirect: '/errors/maintenance',
+        },
+        {
+          path: 'errors/coming-soon',
+          name: 'coming-soon',
+          component: () => import('@/views/errors/ComingSoonView.vue'),
+        },
+        {
+          path: 'coming-soon',
+          redirect: '/errors/coming-soon',
+        },
       ],
     },
     {
@@ -222,6 +267,11 @@ const router = createRouter({
           path: 'verify-otp',
           name: 'verify-otp',
           component: () => import('@/views/auth/VerifyOtpView.vue'),
+        },
+        {
+          path: 'lock-screen',
+          name: 'lock-screen',
+          component: () => import('@/views/auth/LockScreenView.vue'),
         },
       ],
     },

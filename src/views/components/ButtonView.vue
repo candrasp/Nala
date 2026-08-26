@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Button } from '@/components/ui/button'
+import { Toggle } from '@/components/ui/toggle'
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
 import {
   Plus,
   Trash2,
@@ -24,12 +26,27 @@ import {
   RotateCcw,
   Zap,
   ShieldCheck,
+  Bold,
+  Italic,
+  Underline,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  AlignJustify,
+  LayoutGrid,
+  List,
 } from '@lucide/vue'
 
 const isLoading = ref(false)
 const isCopied = ref(false)
 const liked = ref(false)
 const selectedSegment = ref('day')
+const isBold = ref(true)
+const isItalic = ref(false)
+const isUnderline = ref(false)
+const textAlign = ref('left')
+const textFormats = ref<string[]>(['bold'])
+const viewMode = ref('grid')
 
 // Danger confirm pattern
 type ConfirmStep = 'idle' | 'confirm' | 'deleted'
@@ -204,6 +221,48 @@ const dangerSnippet = `<!-- Two-Step Inline Confirmation -->
 <Button v-else variant="outline" class="text-destructive" @click="confirmStep = 'confirm'">
   <Trash2 class="h-4 w-4" /> Delete Record
 </Button>`
+
+const toggleSnippet = `<!-- Single Toggle Button -->
+<Toggle v-model:pressed="isBold" aria-label="Toggle bold">
+  <Bold class="h-4 w-4" />
+</Toggle>
+
+<Toggle v-model:pressed="isItalic" variant="outline" aria-label="Toggle italic">
+  <Italic class="h-4 w-4" />
+</Toggle>
+
+<Toggle size="sm" variant="outline" aria-label="Toggle underline">
+  <Underline class="h-3.5 w-3.5" />
+</Toggle>`
+
+const toggleGroupSnippet = `<!-- Single Selection Mode (e.g. Text Alignment) -->
+<ToggleGroup v-model="textAlign" type="single" variant="outline">
+  <ToggleGroupItem value="left" aria-label="Align left">
+    <AlignLeft class="h-4 w-4" />
+  </ToggleGroupItem>
+  <ToggleGroupItem value="center" aria-label="Align center">
+    <AlignCenter class="h-4 w-4" />
+  </ToggleGroupItem>
+  <ToggleGroupItem value="right" aria-label="Align right">
+    <AlignRight class="h-4 w-4" />
+  </ToggleGroupItem>
+  <ToggleGroupItem value="justify" aria-label="Align justify">
+    <AlignJustify class="h-4 w-4" />
+  </ToggleGroupItem>
+</ToggleGroup>
+
+<!-- Multiple Selection Mode (e.g. Formatting & View) -->
+<ToggleGroup v-model="textFormats" type="multiple" variant="outline">
+  <ToggleGroupItem value="bold" aria-label="Toggle bold">
+    <Bold class="h-4 w-4" />
+  </ToggleGroupItem>
+  <ToggleGroupItem value="italic" aria-label="Toggle italic">
+    <Italic class="h-4 w-4" />
+  </ToggleGroupItem>
+  <ToggleGroupItem value="underline" aria-label="Toggle underline">
+    <Underline class="h-4 w-4" />
+  </ToggleGroupItem>
+</ToggleGroup>`
 </script>
 
 <template>
@@ -623,6 +682,100 @@ const dangerSnippet = `<!-- Two-Step Inline Confirmation -->
             </Transition>
           </div>
           <p class="mt-3 text-xs text-muted-foreground">Click <em>Delete Record</em>, then confirm — resets automatically after deletion.</p>
+        </div>
+      </div>
+    </CodePreview>
+
+    <!-- 8. Toggle Primitives -->
+    <CodePreview
+      title="Toggle Primitive"
+      description="A two-state button that can be either on or off, with variants and size options."
+      :code="toggleSnippet"
+    >
+      <div class="space-y-6">
+        <div>
+          <div class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Variants & Sizes</div>
+          <div class="flex items-center gap-3 flex-wrap">
+            <Toggle v-model:pressed="isBold" aria-label="Toggle bold">
+              <Bold class="h-4 w-4" />
+            </Toggle>
+            <Toggle v-model:pressed="isItalic" variant="outline" aria-label="Toggle italic">
+              <Italic class="h-4 w-4" />
+            </Toggle>
+            <Toggle v-model:pressed="isUnderline" variant="outline" size="sm" aria-label="Toggle underline">
+              <Underline class="h-3.5 w-3.5" />
+            </Toggle>
+            <Toggle variant="outline" size="lg" aria-label="Toggle large">
+              <Sparkles class="h-5 w-5 text-primary" />
+            </Toggle>
+            <Toggle disabled aria-label="Disabled toggle">
+              <ShieldCheck class="h-4 w-4" />
+            </Toggle>
+          </div>
+          <p class="mt-2.5 text-xs text-muted-foreground">
+            Active state: Bold: <strong class="text-foreground">{{ isBold }}</strong>, Italic: <strong class="text-foreground">{{ isItalic }}</strong>, Underline: <strong class="text-foreground">{{ isUnderline }}</strong>
+          </p>
+        </div>
+      </div>
+    </CodePreview>
+
+    <!-- 9. Toggle Group Primitives -->
+    <CodePreview
+      title="Toggle Group"
+      description="A set of two-state buttons that can be toggled on or off together in single or multiple mode."
+      :code="toggleGroupSnippet"
+    >
+      <div class="space-y-6">
+        <!-- Single selection mode -->
+        <div>
+          <div class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Single Selection (Text Align)</div>
+          <div class="flex items-center gap-4 flex-wrap">
+            <ToggleGroup v-model="textAlign" type="single" variant="outline">
+              <ToggleGroupItem value="left" aria-label="Align left">
+                <AlignLeft class="h-4 w-4" />
+              </ToggleGroupItem>
+              <ToggleGroupItem value="center" aria-label="Align center">
+                <AlignCenter class="h-4 w-4" />
+              </ToggleGroupItem>
+              <ToggleGroupItem value="right" aria-label="Align right">
+                <AlignRight class="h-4 w-4" />
+              </ToggleGroupItem>
+              <ToggleGroupItem value="justify" aria-label="Align justify">
+                <AlignJustify class="h-4 w-4" />
+              </ToggleGroupItem>
+            </ToggleGroup>
+
+            <ToggleGroup v-model="viewMode" type="single" variant="default" size="sm">
+              <ToggleGroupItem value="grid" aria-label="Grid view">
+                <LayoutGrid class="h-3.5 w-3.5" />
+              </ToggleGroupItem>
+              <ToggleGroupItem value="list" aria-label="List view">
+                <List class="h-3.5 w-3.5" />
+              </ToggleGroupItem>
+            </ToggleGroup>
+          </div>
+          <p class="mt-2.5 text-xs text-muted-foreground">
+            Current alignment: <span class="font-mono font-medium text-foreground capitalize">{{ textAlign }}</span> | View: <span class="font-mono font-medium text-foreground capitalize">{{ viewMode }}</span>
+          </p>
+        </div>
+
+        <!-- Multiple selection mode -->
+        <div>
+          <div class="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Multiple Selection (Rich Text)</div>
+          <ToggleGroup v-model="textFormats" type="multiple" variant="outline">
+            <ToggleGroupItem value="bold" aria-label="Toggle bold">
+              <Bold class="h-4 w-4" />
+            </ToggleGroupItem>
+            <ToggleGroupItem value="italic" aria-label="Toggle italic">
+              <Italic class="h-4 w-4" />
+            </ToggleGroupItem>
+            <ToggleGroupItem value="underline" aria-label="Toggle underline">
+              <Underline class="h-4 w-4" />
+            </ToggleGroupItem>
+          </ToggleGroup>
+          <p class="mt-2.5 text-xs text-muted-foreground">
+            Active formats: <span class="font-mono font-medium text-foreground">{{ textFormats.join(', ') || 'none' }}</span>
+          </p>
         </div>
       </div>
     </CodePreview>

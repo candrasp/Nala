@@ -50,6 +50,7 @@ import {
   Clock,
   ShieldCheck,
   ShieldAlert,
+  ArrowUpRight,
   Edit2,
   Trash2,
   Copy,
@@ -311,56 +312,62 @@ const statusConfig: Record<string, { label: string; dotClass: string; badgeClass
     </PageHeader>
 
     <!-- 1. Stats Summary Cards -->
-    <div class="grid gap-4 grid-cols-2 lg:grid-cols-4">
-      <Card flush class="shadow-sm">
-        <CardContent class="p-4 flex items-center justify-between">
-          <div>
+    <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      <Card flush class="highlight-card shadow-xs border-border/80 bg-card hover:border-border transition-all duration-200">
+        <CardContent class="p-5 space-y-2">
+          <div class="flex items-center justify-between">
             <span class="text-xs font-medium text-muted-foreground">Total Members</span>
-            <p class="text-2xl font-bold tracking-tight text-foreground mt-0.5">{{ stats.total }}</p>
-            <span class="text-[11px] text-muted-foreground">Registered accounts</span>
+            <Users class="h-4 w-4 text-primary" />
           </div>
-          <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0">
-            <Users class="h-5 w-5" />
-          </div>
+          <div class="text-2xl font-bold tracking-tight text-foreground">{{ stats.total }}</div>
+          <p class="text-xs text-muted-foreground flex items-center gap-1">
+            <span class="text-emerald-500 font-semibold inline-flex items-center gap-0.5">
+              <ArrowUpRight class="h-3.5 w-3.5" /> +12%
+            </span>
+            <span>from last month</span>
+          </p>
         </CardContent>
       </Card>
 
-      <Card flush class="shadow-sm">
-        <CardContent class="p-4 flex items-center justify-between">
-          <div>
+      <Card flush class="highlight-card shadow-xs border-border/80 bg-card hover:border-border transition-all duration-200">
+        <CardContent class="p-5 space-y-2">
+          <div class="flex items-center justify-between">
             <span class="text-xs font-medium text-muted-foreground">Active Now</span>
-            <p class="text-2xl font-bold tracking-tight text-foreground mt-0.5">{{ stats.active }}</p>
-            <span class="text-[11px] text-emerald-500 font-medium">Full access enabled</span>
+            <UserCheck class="h-4 w-4 text-emerald-500" />
           </div>
-          <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500 shrink-0">
-            <UserCheck class="h-5 w-5" />
-          </div>
+          <div class="text-2xl font-bold tracking-tight text-foreground">{{ stats.active }}</div>
+          <p class="text-xs text-muted-foreground flex items-center gap-1">
+            <span class="text-emerald-500 font-semibold inline-flex items-center gap-0.5">
+              <ArrowUpRight class="h-3.5 w-3.5" /> 92.4%
+            </span>
+            <span>active rate</span>
+          </p>
         </CardContent>
       </Card>
 
-      <Card flush class="shadow-sm">
-        <CardContent class="p-4 flex items-center justify-between">
-          <div>
+      <Card flush class="highlight-card shadow-xs border-border/80 bg-card hover:border-border transition-all duration-200">
+        <CardContent class="p-5 space-y-2">
+          <div class="flex items-center justify-between">
             <span class="text-xs font-medium text-muted-foreground">Pending Invites</span>
-            <p class="text-2xl font-bold tracking-tight text-foreground mt-0.5">{{ stats.pending }}</p>
-            <span class="text-[11px] text-amber-500 font-medium">Awaiting acceptance</span>
+            <Clock class="h-4 w-4 text-amber-500" />
           </div>
-          <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/10 text-amber-500 shrink-0">
-            <Clock class="h-5 w-5" />
-          </div>
+          <div class="text-2xl font-bold tracking-tight text-foreground">{{ stats.pending }}</div>
+          <p class="text-xs text-muted-foreground flex items-center gap-1">
+            <span class="text-amber-500 font-medium">Awaiting acceptance</span>
+          </p>
         </CardContent>
       </Card>
 
-      <Card flush class="shadow-sm">
-        <CardContent class="p-4 flex items-center justify-between">
-          <div>
+      <Card flush class="highlight-card shadow-xs border-border/80 bg-card hover:border-border transition-all duration-200">
+        <CardContent class="p-5 space-y-2">
+          <div class="flex items-center justify-between">
             <span class="text-xs font-medium text-muted-foreground">Suspended</span>
-            <p class="text-2xl font-bold tracking-tight text-foreground mt-0.5">{{ stats.suspended }}</p>
-            <span class="text-[11px] text-red-500 font-medium">Access revoked</span>
+            <UserX class="h-4 w-4 text-rose-500" />
           </div>
-          <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-red-500/10 text-red-500 shrink-0">
-            <UserX class="h-5 w-5" />
-          </div>
+          <div class="text-2xl font-bold tracking-tight text-foreground">{{ stats.suspended }}</div>
+          <p class="text-xs text-muted-foreground flex items-center gap-1">
+            <span class="text-rose-500 font-medium">Access revoked</span>
+          </p>
         </CardContent>
       </Card>
     </div>

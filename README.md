@@ -14,14 +14,18 @@
 
 - 🎨 **Beautiful UI** — Built with [shadcn-vue](https://www.shadcn-vue.com/) primitives via `reka-ui` (New York style)
 - 🌗 **Dark / Light / Auto Theme** — System preference detection + manual toggle via `@vueuse/core`
-- 📐 **Collapsible Sidebar** — Responsive layout with pixel-perfect icon alignment
+- 🎛️ **Live Theme Configurator** — Runtime palette switcher (7 OKLCH colors), radius presets, and fluid/boxed layout toggle with `localStorage` persistence
+- 🚀 **Specialized Dashboard Presets** — Main Analytics Console (`/dashboard`), E-Commerce Sales (`/dashboard/ecommerce`), and Traffic & Audience Telemetry (`/dashboard/analytics`)
+- 📐 **Collapsible Sidebar** — Responsive layout with hover, locked, and icon-collapsed modes
 - 🔍 **Global Search** — Command palette with `Ctrl+K` / `Cmd+K` shortcut
-- 🔔 **Notification Center** — Dropdown with unread badge counter
-- 📊 **Chart Components** — SVG-based charts (area, bar, donut, sparkline) — no external chart library needed
+- 🔔 **Notification Center** — Slide-out drawer with unread badge counter and bulk actions
+- 📊 **Chart Primitives** — Declarative charts powered by `@unovis/vue` & `@unovis/ts` (`AreaChart`, `BarChart`, `LineChart`, `DonutChart`) with dynamic theme color, dark mode support, and reactive timeframe switching
+- 📈 **Standardized KPI Cards** — Reusable metric stats blueprint (`<Card flush>` + `<CardContent class="p-5 space-y-2">`) with semantic trend indicators (`ArrowUpRight` / `ArrowDownRight`) applied consistently across all dashboards
 - 📋 **Data Table** — Powered by `@tanstack/vue-table` with sorting, filtering, and pagination
-- ✅ **Form & Validation** — `vee-validate` + `zod` schema validation
-- 🗂️ **Auth Flow** — Login, Register, Forgot Password, OTP Verify, Reset Password, Confirm Email
+- ✅ **Form & Validation** — `vee-validate` + `zod` schema validation with rich input primitives (PIN/OTP, date picker, combobox, file upload)
+- 🗂️ **Auth Flow** — Login, Register, Forgot Password, OTP Verify, Reset Password, Confirm Email, Lock Screen
 - 🚫 **Error Pages** — 404 Not Found, 500 Server Error, 403 Access Denied
+- 🧩 **44+ UI Primitives** — Chart, Toggle, ToggleGroup, ContextMenu, ScrollArea, PinInput, and all shadcn-vue primitives ready to use
 - 🎯 **Component Showcase** — Buttons, Forms, Modals, Cards, Tables, Charts, Overlays, Badges, Toasts, Navigation, Typography, Colors, Icons
 
 ---
@@ -35,6 +39,7 @@
 | Package Manager | `pnpm` |
 | Styling | Tailwind CSS v4 + `tw-animate-css` |
 | UI Primitives | `reka-ui` + shadcn-vue (New York style) |
+| Charts & Visualization | `@unovis/vue` + `@unovis/ts` |
 | Data Table | `@tanstack/vue-table` |
 | Form & Validation | `vee-validate` + `@vee-validate/zod` + `zod` |
 | Icons | `@lucide/vue` |
@@ -95,17 +100,23 @@ nala/
 │   │   │   ├── AppNavbar.vue
 │   │   │   ├── AppSidebar.vue
 │   │   │   ├── CommandSearchDialog.vue
-│   │   │   └── NotificationDrawer.vue
+│   │   │   ├── NotificationDrawer.vue
+│   │   │   └── ThemeCustomizer.vue    # Live Theme & Layout Configurator Drawer
 │   │   ├── ui/                # UI primitive components (shadcn-vue / reka-ui)
+│   │   │   ├── accordion/
 │   │   │   ├── alert/
 │   │   │   ├── alert-dialog/
 │   │   │   ├── avatar/
 │   │   │   ├── badge/
 │   │   │   ├── breadcrumb/
 │   │   │   ├── button/
+│   │   │   ├── calendar/
 │   │   │   ├── card/
+│   │   │   ├── chart/             # Standardized Unovis charts (Area, Bar, Line, Donut)
 │   │   │   ├── checkbox/
+│   │   │   ├── collapsible/
 │   │   │   ├── command/
+│   │   │   ├── context-menu/
 │   │   │   ├── date-picker/
 │   │   │   ├── dialog/
 │   │   │   ├── dropdown-menu/
@@ -116,9 +127,11 @@ nala/
 │   │   │   ├── label/
 │   │   │   ├── loading-bar/
 │   │   │   ├── pagination/
+│   │   │   ├── pin-input/
 │   │   │   ├── popover/
 │   │   │   ├── progress/
 │   │   │   ├── radio-group/
+│   │   │   ├── scroll-area/
 │   │   │   ├── select/
 │   │   │   ├── separator/
 │   │   │   ├── sheet/
@@ -132,60 +145,93 @@ nala/
 │   │   │   ├── tabs/
 │   │   │   ├── textarea/
 │   │   │   ├── timeline/
-│   │   │   └── tooltip/
+│   │   │   ├── toggle/
+│   │   │   ├── toggle-group/
+│   │   │   ├── tooltip/
+│   │   │   └── index.ts
 │   │   ├── AppLogo.vue
 │   │   ├── CodePreview.vue    # Interactive snippet highlighter with One Dark Pro theme
+│   │   ├── EmptyState.vue     # Reusable empty state placeholder component
 │   │   └── PageHeader.vue     # Reusable standard page header primitive
 │   ├── composables/
-│   │   └── useFormatter.ts    # Single access point for Intl formatters (auto-imported)
+│   │   ├── useFormatter.ts    # Single access point for Intl formatters (auto-imported)
+│   │   └── useThemeConfig.ts  # Dynamic theme palettes, radius, container width (auto-imported)
 │   ├── layouts/
 │   │   ├── AdminLayout.vue    # Lightweight main admin shell
 │   │   └── AuthLayout.vue     # Auth pages layout (login, register, etc.)
 │   ├── lib/
 │   │   ├── axios.ts           # Axios client with interceptors and DEV mock fallback
 │   │   ├── formatters.ts      # Native Intl data formatting helpers (env-aware)
+│   │   ├── loading-bar.ts     # Global top loading bar progress controller
 │   │   ├── utils.ts           # cn() helper = clsx + tailwind-merge
 │   │   └── validation.ts      # Zod form validation schemas
 │   ├── router/
-│   │   └── index.ts           # Route definitions
-│   ├── services/              # Real API service layer modules
+│   │   └── index.ts           # Route definitions & navigation guards
+│   ├── services/              # Real API service layer modules (with DEV mock fallback)
+│   │   ├── activity.service.ts
 │   │   ├── auth.service.ts
+│   │   ├── billing.service.ts
+│   │   ├── notification.service.ts
+│   │   ├── role.service.ts
 │   │   ├── user.service.ts
-│   │   └── types.ts
-│   ├── stores/
-│   │   └── auth.ts            # Auth store (user session)
+│   │   ├── types.ts
+│   │   └── index.ts
+│   ├── stores/                # Pinia state stores
+│   │   ├── activity.ts
+│   │   ├── auth.ts
+│   │   ├── billing.ts
+│   │   ├── notification.ts
+│   │   └── role.ts
 │   ├── views/
 │   │   ├── _starter/
 │   │   │   └── BlankView.vue  # Blank starter page template
+│   │   ├── activity/
+│   │   │   └── IndexView.vue  # Audit logs, activity timeline, filter & export
 │   │   ├── auth/
 │   │   │   ├── LoginView.vue
 │   │   │   ├── RegisterView.vue
 │   │   │   ├── ForgotPasswordView.vue
 │   │   │   ├── ResetPasswordView.vue
 │   │   │   ├── VerifyOtpView.vue
-│   │   │   └── ConfirmEmailView.vue
+│   │   │   ├── ConfirmEmailView.vue
+│   │   │   └── LockScreenView.vue     # Session lock state with avatar & quick unlock
+│   │   ├── billing/
+│   │   │   ├── IndexView.vue          # Subscription plans, payment methods, invoices
+│   │   │   └── InvoiceDetailView.vue  # Printable official tax invoice view (@media print)
 │   │   ├── components/        # Component showcase / documentation pages
-│   │   │   ├── ButtonView.vue
-│   │   │   ├── FormView.vue
-│   │   │   ├── ModalView.vue
-│   │   │   ├── CardView.vue
-│   │   │   ├── TableView.vue
-│   │   │   ├── ChartView.vue
-│   │   │   ├── OverlayView.vue
-│   │   │   ├── FeedbackView.vue
 │   │   │   ├── BadgeAvatarView.vue
-│   │   │   ├── FormatterView.vue
-│   │   │   ├── ToastView.vue
-│   │   │   ├── NavigationView.vue
-│   │   │   ├── TypographyView.vue
+│   │   │   ├── ButtonView.vue
+│   │   │   ├── CardView.vue
+│   │   │   ├── ChartView.vue
 │   │   │   ├── ColorsView.vue
-│   │   │   └── IconsView.vue
+│   │   │   ├── FeedbackView.vue
+│   │   │   ├── FormatterView.vue
+│   │   │   ├── FormView.vue
+│   │   │   ├── IconsView.vue
+│   │   │   ├── ModalView.vue
+│   │   │   ├── NavigationView.vue
+│   │   │   ├── OverlayView.vue
+│   │   │   ├── TableView.vue
+│   │   │   ├── ToastView.vue
+│   │   │   └── TypographyView.vue
 │   │   ├── dashboard/
-│   │   │   └── IndexView.vue  # Main dashboard with KPI cards + charts + table
+│   │   │   ├── IndexView.vue          # Main admin dashboard with KPI cards + charts + table
+│   │   │   ├── EcommerceView.vue      # E-Commerce sales, revenue timeline & fulfillment pipeline
+│   │   │   └── AnalyticsView.vue      # Audience acquisition, device mix & geographic traffic
 │   │   ├── errors/
 │   │   │   ├── NotFoundView.vue
 │   │   │   ├── ServerErrorView.vue
-│   │   │   └── UnauthorizedView.vue
+│   │   │   ├── UnauthorizedView.vue
+│   │   │   ├── MaintenanceView.vue    # Scheduled maintenance page with live countdown & subscription
+│   │   │   └── ComingSoonView.vue     # Product launch countdown with VIP waitlist capture
+│   │   ├── landing/
+│   │   │   └── IndexView.vue  # Marketing / product landing showcase page
+│   │   ├── notifications/
+│   │   │   └── IndexView.vue  # Notification center with filter, search & actions
+│   │   ├── profile/
+│   │   │   └── IndexView.vue  # User profile overview, stats & activity
+│   │   ├── roles/
+│   │   │   └── IndexView.vue  # Role & Permission matrix management
 │   │   ├── settings/
 │   │   │   └── IndexView.vue  # Profile, Security, Notifications, Appearance tabs
 │   │   └── users/
@@ -194,6 +240,7 @@ nala/
 │   ├── main.ts
 │   └── style.css              # Global styles + Tailwind v4 + CSS variables (oklch)
 ├── .env.example
+├── components.json
 ├── package.json
 └── vite.config.ts
 ```
@@ -206,8 +253,16 @@ nala/
 
 | Route | Name | Description |
 |---|---|---|
-| `/` | Dashboard | KPI stats, area charts, sparklines, recent activity table |
+| `/` | Dashboard | Main overview KPI stats (standardized metric cards), area charts with timeframe switching, recent activity table |
+| `/dashboard/ecommerce` | E-Commerce | Sales revenue timeline, top-selling products & order fulfillment |
+| `/dashboard/analytics` | Analytics | Traffic volume, acquisition channels, device mix & country demographics |
 | `/users` | User Management | Full CRUD dialogs with dev offline mock fallback |
+| `/roles` | Role & Permissions | Interactive permission matrix, role management & assignment |
+| `/activity` | Activity Logs | System audit log viewer with search, filtering & export |
+| `/billing` | Billing & Plans | Subscription tier cards, payment methods & invoice history |
+| `/billing/invoice/:id` | Invoice Detail | Printable official tax invoice view with @media print & action toolbar |
+| `/notifications` | Notifications | Full notification center with filter, search & action triggers |
+| `/profile` | User Profile | User profile overview, account stats, activity timeline |
 | `/settings` | Settings | Multi-tab settings (Profile, Security 2FA, Notifications, Appearance) |
 
 ### 🎨 Design System & Foundations
@@ -228,7 +283,7 @@ nala/
 | `/components/cards` | Cards & Surfaces | Stats cards, flush cards, ambient glow, interactive cards |
 | `/components/forms` | Form & Inputs | Input variants, select, date picker, switch, slider, stepper |
 | `/components/tables` | Data Tables | Sortable columns, row selection, pagination, and filters |
-| `/components/charts` | Charts & Analytics | Pure SVG area, bar, donut, and sparkline inline charts |
+| `/components/charts` | Charts & Analytics | Unovis-powered area, bar, line, and donut charts with dark mode & theme color support |
 | `/components/modals` | Modals & Dialogs | Standard dialog, alert confirm, form in modal, drawer sheet |
 | `/components/overlays` | Overlays & Drawers | Tooltip, popover, hover card, and sheet panels |
 | `/components/toasts` | Toast & Alerts | Sonner toast triggers (success, error, promise, action) |
@@ -245,15 +300,19 @@ nala/
 | `/auth/verify-otp` | Verify OTP | 6-digit segmented OTP input with auto-advance & paste |
 | `/auth/reset-password` | Reset Password | Token-based new password setup |
 | `/auth/confirm-email` | Confirm Email | Email confirmation waiting state with polling simulation |
+| `/auth/lock-screen` | Lock Screen | Session lock with avatar, password unlock & switch account |
 
 ### 📄 Pages & Error States
 
 | Route | Name | Description |
 |---|---|---|
+| `/landing` | Landing Page | Clean product landing page showcase |
 | `/starter/blank` | Blank Page | Clean starter canvas for building new features |
 | `/errors/404` | 404 Not Found | Illustrated not found page with quick recovery links |
 | `/errors/500` | 500 Server Error | Server error page with trace ID chip and retry simulation |
 | `/errors/403` | 403 Access Denied | Polished unauthorized access guidance |
+| `/errors/maintenance` | Maintenance | Scheduled maintenance with live countdown & email notification |
+| `/errors/coming-soon` | Coming Soon | Product launch countdown with VIP early access waitlist |
 
 ---
 
@@ -292,18 +351,18 @@ Theme is managed via `useColorMode` from `@vueuse/core`. Three modes supported:
 
 1. **Create the view** — `src/views/<feature>/IndexView.vue`
 2. **Register the route** — Add to `children[]` in `src/router/index.ts`
-3. **Add to sidebar** — Add entry to the appropriate `nav` array in `src/layouts/AdminLayout.vue`
-4. **Update page title** — Add a case to `pageTitle` computed in `AdminLayout.vue`
+3. **Add to sidebar** — Add entry to the appropriate `nav` array in `src/components/layout/AppSidebar.vue`
+4. **Add to command palette** — Add entry in `src/components/layout/CommandSearchDialog.vue`
 
 ```ts
 // 1. router/index.ts
 { path: 'products', name: 'products', component: () => import('@/views/products/IndexView.vue') }
 
-// 2. AdminLayout.vue — mainNav array
+// 2. AppSidebar.vue — add to the relevant nav group array
 { name: 'Products', routeName: 'products', href: '/products', icon: Package }
 
-// 3. AdminLayout.vue — pageTitle computed
-if (route.name === 'products') return 'Product Management'
+// 3. CommandSearchDialog.vue — add to the search items list
+{ name: 'Products', description: 'Product management', href: '/products', icon: Package }
 ```
 
 ### Adding a Pinia Store
@@ -407,6 +466,7 @@ cp .env.example .env
 | `VITE_DEFAULT_CURRENCY` | Global currency code (`USD`, `IDR`, `EUR`, etc.) | `USD` |
 | `VITE_DEFAULT_TIMEZONE` | Global timezone (`Asia/Jakarta`, `UTC`, etc.) | `Asia/Jakarta` |
 | `VITE_DEFAULT_TIME_FORMAT` | Global time clock format (`24h`, `12h`, `auto`) | `24h` |
+| `VITE_SHOW_THEME_CUSTOMIZER` | Show/hide the live theme customizer drawer and navbar trigger | `true` |
 
 ---
 

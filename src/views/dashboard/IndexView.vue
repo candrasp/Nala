@@ -14,9 +14,9 @@ import {
 import {
   Users,
   DollarSign,
-  TrendingUp,
   TrendingDown,
   ArrowUpRight,
+  ArrowDownRight,
   Download,
   RefreshCw,
   ShieldCheck,
@@ -39,8 +39,6 @@ const stats = [
     positive: true,
     icon: DollarSign,
     color: 'text-emerald-500',
-    bg: 'bg-emerald-500/10',
-    sparkline: [28, 35, 30, 42, 38, 50, 45, 58, 52, 60, 55, 68],
   },
   {
     title: 'Active Users',
@@ -49,9 +47,7 @@ const stats = [
     changeLabel: 'vs last month',
     positive: true,
     icon: Users,
-    color: 'text-blue-500',
-    bg: 'bg-blue-500/10',
-    sparkline: [40, 38, 45, 42, 55, 50, 60, 58, 65, 70, 68, 75],
+    color: 'text-primary',
   },
   {
     title: 'New Signups',
@@ -61,8 +57,6 @@ const stats = [
     positive: true,
     icon: UserPlus,
     color: 'text-violet-500',
-    bg: 'bg-violet-500/10',
-    sparkline: [20, 28, 24, 35, 30, 45, 38, 52, 48, 60, 55, 72],
   },
   {
     title: 'Churn Rate',
@@ -72,26 +66,8 @@ const stats = [
     positive: false,
     icon: TrendingDown,
     color: 'text-amber-500',
-    bg: 'bg-amber-500/10',
-    sparkline: [32, 28, 35, 30, 28, 32, 27, 25, 28, 24, 22, 20],
   },
 ]
-
-function buildSparkline(points: number[]): string {
-  const w = 80
-  const h = 32
-  const min = Math.min(...points)
-  const max = Math.max(...points)
-  const range = max - min || 1
-  const step = w / (points.length - 1)
-  return points
-    .map((v, i) => {
-      const x = i * step
-      const y = h - ((v - min) / range) * h
-      return `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`
-    })
-    .join(' ')
-}
 
 // ─── Quick Metrics ────────────────────────────────────────────────────────────
 const quickMetrics = computed(() => [
@@ -244,42 +220,24 @@ const services = ref([
         v-for="stat in stats"
         :key="stat.title"
         flush
-        class="shadow-sm"
+        class="highlight-card shadow-xs border-border/80 bg-card hover:border-border transition-all duration-200"
       >
-        <CardContent class="p-4">
-          <div class="flex items-start justify-between">
-            <div class="flex flex-col gap-1">
-              <span class="text-xs font-medium text-muted-foreground">{{ stat.title }}</span>
-              <span class="text-2xl font-bold tracking-tight text-foreground">{{ stat.value }}</span>
-              <div class="flex items-center gap-1">
-                <component
-                  :is="stat.positive ? TrendingUp : TrendingDown"
-                  :class="['h-3 w-3', stat.positive ? 'text-emerald-500' : 'text-red-500']"
-                />
-                <span :class="['text-xs font-medium', stat.positive ? 'text-emerald-500' : 'text-red-500']">
-                  {{ stat.change }}
-                </span>
-                <span class="text-xs text-muted-foreground">{{ stat.changeLabel }}</span>
-              </div>
-            </div>
-            <div :class="['flex h-9 w-9 items-center justify-center rounded-lg shrink-0', stat.bg]">
-              <component :is="stat.icon" :class="['h-4 w-4', stat.color]" />
-            </div>
+        <CardContent class="p-5 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-medium text-muted-foreground">{{ stat.title }}</span>
+            <component :is="stat.icon" class="h-4 w-4" :class="stat.color" />
           </div>
-
-          <!-- Sparkline SVG -->
-          <div class="mt-4">
-            <svg viewBox="0 0 80 32" class="w-full h-8" preserveAspectRatio="none">
-              <path
-                :d="buildSparkline(stat.sparkline)"
-                fill="none"
-                :stroke="stat.positive ? 'oklch(0.7 0.15 159)' : 'oklch(0.75 0.14 80)'"
-                stroke-width="1.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </div>
+          <div class="text-2xl font-bold tracking-tight text-foreground">{{ stat.value }}</div>
+          <p class="text-xs text-muted-foreground flex items-center gap-1">
+            <span
+              class="font-semibold inline-flex items-center gap-0.5"
+              :class="stat.positive ? 'text-emerald-500' : 'text-rose-500'"
+            >
+              <component :is="stat.positive ? ArrowUpRight : ArrowDownRight" class="h-3.5 w-3.5" />
+              {{ stat.change }}
+            </span>
+            <span>{{ stat.changeLabel }}</span>
+          </p>
         </CardContent>
       </Card>
     </div>

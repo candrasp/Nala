@@ -50,7 +50,10 @@ Follow all the guidelines below strictly whenever writing, modifying, or buildin
    - All code comments (JSDoc, inline code comments, TODO notes) inside `.vue` and `.ts` source files **MUST be written in English**.
    - (Internal agent documentation such as `SKILL.md` may be written in any language for the team's convenience.)
 9. **NEVER** run `git add`, `git commit`, or `git push` without explicit instruction from the user.
-10. **Prefer Tailwind CSS v4's Built-in Sizing Scale:** Use built-in scale values (e.g. `w-75`, `max-h-75`, `max-w-120`, `gap-3`) instead of arbitrary brackets (`max-h-[300px]`).
+10. **Tailwind CSS v4 Strict Syntax & Sizing Scale Compliance:**
+    - **Gradients:** ALWAYS use `bg-linear-to-r`, `bg-linear-to-b`, `bg-linear-to-tr`, etc. (NEVER write legacy v3 `bg-gradient-to-*`).
+    - **Sizing Scale:** NEVER write arbitrary pixel brackets like `max-w-[170px]`, `max-w-[110px]`, `w-[300px]`, or `p-[1px]`. ALWAYS use Tailwind v4 scale (`max-w-44`, `max-w-28`, `w-75`, `max-h-75`, `p-px`).
+    - **Shadows:** Use `shadow-2xs`, `shadow-xs`, `shadow-sm`, `shadow-md`, `shadow-lg`.
 11. **Single SPA Repository (Non-Monorepo):** This project is a pure Single Page Application. Do not create a `pnpm-workspace.yaml`. All pnpm configuration (e.g. `ignoredBuiltDependencies`) is managed in `package.json`.
 12. **Testing Scope & Execution:** This project is a Vite-based UI template. Creating and running unit tests (`vitest`, `pnpm test`, `pnpm test:run`) or E2E tests is strictly executed ONLY upon explicit instruction from the user. NEVER run unit tests autonomously after writing or modifying code.
 
@@ -93,15 +96,20 @@ All components below are already registered in the template and can be used dire
 |---|---|
 | `PageHeader.vue` | `PageHeader` (standardized top page header with `title`, `description`, `badge`, `statusDot`, and `#actions` slot) |
 | `CodePreview.vue` | `CodePreview` (interactive documentation component with One Dark Pro syntax highlighting & clipboard copy) |
+| `accordion/` | `Accordion`, `AccordionItem`, `AccordionHeader`, `AccordionTrigger`, `AccordionContent` |
 | `alert/` | `Alert` (variant: `default`, `destructive`, `info`, `success`, `warning`), `AlertTitle`, `AlertDescription` |
 | `alert-dialog/` | `AlertDialog`, `AlertDialogTrigger`, `AlertDialogContent`, `AlertDialogHeader`, `AlertDialogTitle`, `AlertDialogDescription`, `AlertDialogFooter`, `AlertDialogAction`, `AlertDialogCancel` |
 | `avatar/` | `Avatar` (prop: `status: 'online'\|'busy'\|'away'\|'offline'` — renders built-in presence pip), `AvatarImage`, `AvatarFallback`, `AvatarGroup` (props: `max`, `overlap: 2\|3\|4`) |
 | `badge/` | `Badge` (variant: `default`, `secondary`, `destructive`, `outline`, `success`, `info`, `warning`; shape: `default`, `pill`; props: `dot`, `pulse`) |
 | `breadcrumb/` | `Breadcrumb`, `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbPage`, `BreadcrumbSeparator`, `BreadcrumbEllipsis` |
 | `button/` | `Button` (variant: `default`, `secondary`, `destructive`, `outline`, `ghost`, `link`; size: `xs`, `sm`, `default`, `lg`, `icon-xs`, `icon-sm`, `icon`, `icon-lg`) |
+| `calendar/` | `Calendar` (full month view calendar grid) |
 | `card/` | `Card` (prop: `flush`), `CardHeader` (prop: `section`), `CardTitle`, `CardDescription`, `CardContent`, `CardFooter`, `CardAction` |
+| `chart/` | `AreaChart`, `LineChart`, `BarChart`, `DonutChart` (Standardized Unovis/shadcn-vue chart components) |
 | `checkbox/` | `Checkbox` |
+| `collapsible/` | `Collapsible`, `CollapsibleTrigger`, `CollapsibleContent` |
 | `command/` | `Command`, `CommandInput`, `CommandList`, `CommandEmpty`, `CommandGroup`, `CommandItem`, `CommandSeparator`, `CommandShortcut`, `CommandDialog` |
+| `context-menu/` | `ContextMenu`, `ContextMenuTrigger`, `ContextMenuContent`, `ContextMenuItem`, `ContextMenuCheckboxItem`, `ContextMenuRadioGroup`, `ContextMenuRadioItem`, `ContextMenuLabel`, `ContextMenuSeparator`, `ContextMenuShortcut`, `ContextMenuSub`, `ContextMenuSubTrigger`, `ContextMenuSubContent` |
 | `date-picker/` | `DatePicker` (single & range date selector) |
 | `dialog/` | `Dialog`, `DialogTrigger`, `DialogContent`, `DialogHeader`, `DialogTitle`, `DialogDescription`, `DialogFooter`, `DialogClose` |
 | `dropdown-menu/` | `DropdownMenu`, `DropdownMenuTrigger`, `DropdownMenuContent`, `DropdownMenuItem`, `DropdownMenuLabel`, `DropdownMenuSeparator`, `DropdownMenuShortcut`, `DropdownMenuGroup` |
@@ -112,9 +120,11 @@ All components below are already registered in the template and can be used dire
 | `label/` | `Label` |
 | `loading-bar/` | `LoadingBar` (top progress bar) |
 | `pagination/` | `Pagination`, `PaginationList`, `PaginationItem`, `PaginationFirst`, `PaginationPrev`, `PaginationNext`, `PaginationLast`, `PaginationEllipsis` |
+| `pin-input/` | `PinInput`, `PinInputGroup`, `PinInputInput`, `PinInputSeparator` |
 | `popover/` | `Popover`, `PopoverTrigger`, `PopoverContent` |
 | `progress/` | `Progress` (determinate & indeterminate) |
 | `radio-group/` | `RadioGroup`, `RadioGroupItem` |
+| `scroll-area/` | `ScrollArea`, `ScrollBar` |
 | `select/` | `Select`, `SelectTrigger`, `SelectValue`, `SelectContent`, `SelectItem`, `SelectGroup`, `SelectLabel`, `SelectSeparator` |
 | `separator/` | `Separator` (orientation: horizontal, vertical) |
 | `sheet/` | `Sheet`, `SheetTrigger`, `SheetContent`, `SheetHeader`, `SheetTitle`, `SheetDescription`, `SheetFooter`, `SheetClose` |
@@ -128,6 +138,8 @@ All components below are already registered in the template and can be used dire
 | `tabs/` | `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent` |
 | `textarea/` | `Textarea` |
 | `timeline/` | `Timeline`, `TimelineItem`, `TimelineContent`, `TimelineTitle`, `TimelineDescription`, `TimelineTime`, `TimelineIndicator` |
+| `toggle/` | `Toggle` (variant: `default`, `outline`; size: `sm`, `default`, `lg`) |
+| `toggle-group/` | `ToggleGroup`, `ToggleGroupItem` (type: `single` \| `multiple`) |
 | `tooltip/` | `Tooltip`, `TooltipTrigger`, `TooltipContent`, `TooltipProvider` |
 
 ---
@@ -620,8 +632,47 @@ Never write manual `div.relative` + `span.absolute` for presence indicators, and
 </AvatarGroup>
 ```
 
----
+### 9. Dynamic Theme & Layout Customization Architecture
 
+Nala ships with a runtime Theme & Layout Configurator powered by `useThemeConfig()` composable and `ThemeCustomizer.vue`.
+
+#### How it Works:
+- **Dynamic Palette:** Updating `themeConfig.primaryColor` injects root CSS variables (`--primary`, `--ring`, `--primary-foreground`) for both Light and Dark mode using exact `oklch` formulas.
+- **Corner Radius Scale:** Updates `--radius` (`0rem` to `1rem`), which automatically cascades to `--radius-xs`, `--radius-sm`, `--radius-md`, `--radius-lg`, and `--radius-xl`.
+- **Layout Width:** Supports `fluid` (100% full width) and `boxed` (`max-w-7xl mx-auto`).
+- **Persistence:** Automatically synced to `localStorage` under `nala-theme-config`.
+
+#### Developer Guide: Hardcoding or Disabling the Customizer in Production
+When building a client or production app where the end-user should NOT see the customizer drawer:
+1. **To hide the Customizer UI completely:**
+   Set `VITE_SHOW_THEME_CUSTOMIZER=false` in `.env`. Both the floating button and the navbar paintbrush icon will disappear.
+2. **To hardcode a specific default brand color & radius in TypeScript:**
+   Modify `DEFAULT_CONFIG` in `src/composables/useThemeConfig.ts`:
+   ```ts
+   const DEFAULT_CONFIG: ThemeConfig = {
+     primaryColor: 'emerald', // 'emerald' | 'indigo' | 'violet' | 'rose' | 'amber' | 'cyan' | 'zinc'
+     radius: '0.375',         // '0' | '0.25' | '0.375' | '0.5' | '0.75' | '1.0'
+     contentWidth: 'fluid',   // 'fluid' | 'boxed'
+   }
+   ```
+3. **To hardcode directly in pure CSS (Zero JS overhead):**
+   Update `--primary`, `--ring`, and `--radius` in `src/style.css` under `:root` and `.dark`, then remove `<ThemeCustomizer />` from `AdminLayout.vue`.
+
+### 10. Tailwind CSS v4 Syntax Reference & Anti-Patterns (CRITICAL)
+
+Agents frequently make mistakes when writing CSS classes by using legacy Tailwind v3 syntax. Always consult this reference table:
+
+| Category | ❌ NEVER USE (v3 / Anti-Pattern) | ✅ ALWAYS USE (Tailwind v4) | Notes |
+|---|---|---|---|
+| **Linear Gradients** | `bg-gradient-to-r`<br>`bg-gradient-to-b`<br>`bg-gradient-to-tr` | `bg-linear-to-r`<br>`bg-linear-to-b`<br>`bg-linear-to-tr` | In v4, `bg-gradient-*` is renamed to `bg-linear-*` |
+| **Arbitrary Max Width** | `max-w-[170px]`<br>`max-w-[110px]`<br>`max-w-[300px]` | `max-w-44` / `max-w-42.5`<br>`max-w-28` / `max-w-27.5`<br>`max-w-75` | Use standard numerical scale; v4 supports `.5` increments |
+| **Arbitrary Width/Height** | `w-[300px]`<br>`h-[400px]`<br>`max-h-[300px]` | `w-75`<br>`h-100`<br>`max-h-75` | Multiply rems by 4 (e.g. 300px = 18.75rem = `75`) |
+| **1-pixel Padding/Border** | `p-[1px]`<br>`m-[1px]` | `p-px`<br>`m-px` | Built-in `px` scale (`1px`) |
+| **Shadow Scale** | `shadow-[0_1px_2px_...]` | `shadow-2xs`<br>`shadow-xs`<br>`shadow-sm`<br>`shadow-md` | Standard built-in shadows |
+| **Viewport Heights** | `min-h-screen`<br>`h-screen` | `min-h-dvh`<br>`h-dvh` / `h-svh` | Prevents mobile address-bar viewport overflow bugs |
+| **Color Opacity** | `bg-primary/0.5` | `bg-primary/50`<br>`border-border/40`<br>`text-muted-foreground/70` | Use integer percentage (1-100) after `/` |
+
+---
 
 ## 🛠️ Dev Commands
 
@@ -630,3 +681,115 @@ pnpm dev      # Vite dev server + HMR (http://localhost:5173)
 pnpm preview  # Preview production build locally
 # DO NOT run pnpm build (unless explicitly requested by the user)
 ```
+
+---
+
+### 11. Standardized Metric & KPI Stats Cards Blueprint (CRITICAL)
+
+All KPI / metric summary cards in Nala MUST follow the exact structural blueprint below.
+
+#### 📐 Structural Blueprint:
+```vue
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+  <Card
+    v-for="stat in stats"
+    :key="stat.title"
+    flush
+    class="highlight-card shadow-xs border-border/80 bg-card hover:border-border transition-all duration-200"
+  >
+    <CardContent class="p-5 space-y-2">
+      <!-- 1. Top Row: Title + Indicator Icon -->
+      <div class="flex items-center justify-between">
+        <span class="text-xs font-medium text-muted-foreground">{{ stat.title }}</span>
+        <component :is="stat.icon" class="h-4 w-4" :class="stat.color ?? 'text-primary'" />
+      </div>
+
+      <!-- 2. Value: Bold, crisp, tightly balanced -->
+      <div class="text-2xl font-bold tracking-tight text-foreground">{{ stat.value }}</div>
+
+      <!-- 3. Trend & Context: Arrow indicator + percentage + comparison label -->
+      <p class="text-xs text-muted-foreground flex items-center gap-1">
+        <span
+          class="font-semibold inline-flex items-center gap-0.5"
+          :class="stat.positive ? 'text-emerald-500' : 'text-rose-500'"
+        >
+          <component :is="stat.positive ? ArrowUpRight : ArrowDownRight" class="h-3.5 w-3.5" />
+          {{ stat.change }}
+        </span>
+        <span>{{ stat.changeLabel }}</span>
+      </p>
+    </CardContent>
+  </Card>
+</div>
+```
+
+#### 🛑 KPI Card Anti-Patterns (DO NOT DO):
+- ❌ **DO NOT use `<Card>` without `flush`:** Without `flush`, `Card.vue` adds default `py-6 gap-6`, stacking 44px of empty vertical space above and below the card content. ALWAYS pass `flush` on metric cards.
+- ❌ **DO NOT draw manual raw SVG sparklines inside KPI cards:** Cluttered, inconsistent, and causes ugly text wrapping. Keep KPI cards typography-focused and clean.
+- ❌ **DO NOT put horizontal dividing lines (`border-t`):** Dividing lines cut the card in half and break visual coherence.
+- ❌ **DO NOT use colored square icon containers in the header:** Use clean, subtle Lucide icons directly with `text-primary`, `text-emerald-500`, etc.
+
+#### 📊 KPI Metric Trend Indicator Semantics:
+When building KPI stat cards with a `positive: boolean` flag and delta values (e.g., `+12.5%`, `-4.1%`), the `positive` field means **"this change is good for the business"**:
+
+| Metric Type | Decrease (`-`) | Increase (`+`) | `positive` when delta is... |
+|---|---|---|---|
+| Revenue, Users, Signups, Conversion Rate | ❌ Bad | ✅ Good | `positive: true` when delta starts with `+` |
+| **Bounce Rate, Churn Rate, Error Rate, Latency** | ✅ Good | ❌ Bad | `positive: false` when delta starts with `-` |
+
+**Color Semantic Rules:**
+- `positive: true` → `text-emerald-500`, `ArrowUpRight` icon
+- `positive: false` → `text-rose-500`, `ArrowDownRight` icon
+
+**Example Data:**
+```ts
+// ✅ Revenue going up = positive: true
+{ title: 'Gross Revenue', value: '$128,430.00', change: '+18.4%', changeLabel: 'from last month', positive: true, icon: DollarSign, color: 'text-emerald-500' }
+
+// ✅ Bounce Rate going DOWN = positive: false (it uses negative/rose color)
+{ title: 'Bounce Rate', value: '36.4%', change: '-2.1%', changeLabel: 'vs yesterday', positive: false, icon: Activity, color: 'text-violet-500' }
+```
+
+---
+
+### 12. Standardized Chart Primitives (`@unovis/vue` / `@/components/ui/chart`)
+
+**CRITICAL RULE:** DO NOT write manual raw `<svg>` spline bezier math for full charts. Always use the standardized chart components in `@/components/ui/chart`:
+
+- `<AreaChart :data="data" index="date" :categories="['series1', 'series2']" />`
+- `<LineChart :data="data" index="date" :categories="['series1']" />`
+- `<BarChart :data="data" index="month" :categories="['sales']" type="grouped|stacked" />`
+- `<DonutChart :data="data" index="name" category="value" />`
+
+#### Example Usage:
+```vue
+<script setup lang="ts">
+import { AreaChart } from '@/components/ui/chart'
+
+const chartData = [
+  { month: 'Jan', revenue: 4200, profit: 1200 },
+  { month: 'Feb', revenue: 5800, profit: 1900 },
+]
+</script>
+
+<template>
+  <div class="h-64 w-full">
+    <AreaChart
+      :data="chartData"
+      index="month"
+      :categories="['revenue', 'profit']"
+      :colors="['var(--primary)', '#3b82f6']"
+      showTooltip
+      showLegend
+    />
+  </div>
+</template>
+```
+
+#### Why this matters:
+1. **Powered by `@unovis/vue` + `@unovis/ts`** (official shadcn-vue standard).
+2. **Native CSS Variable & OKLCH Theme Integration** (`var(--primary)`).
+3. **Zero spline loopback bugs**, zero viewBox distortion, responsive resize by default.
+4. **Clean Single-Card Tooltips**: Tooltips automatically use `[data-unovis-tooltip]` and `--vis-tooltip-*` variables to render unified popovers without double-card borders in Light and Dark mode.
+5. **Clean Minimalist Design**: Grid lines are disabled by default (`showGridLine: false`) across Area, Line, and Bar charts for a clutter-free interface.
+

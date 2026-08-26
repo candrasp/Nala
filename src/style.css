@@ -80,6 +80,18 @@
   --sidebar-accent-foreground: oklch(0.145 0 0);
   --sidebar-border: oklch(0.92 0.003 159);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* Unovis CSS Variable Resets (eliminates default white outer card/padding) */
+  --vis-tooltip-background-color: transparent;
+  --vis-tooltip-border-color: transparent;
+  --vis-tooltip-shadow-color: transparent;
+  --vis-tooltip-backdrop-filter: none;
+  --vis-tooltip-padding: 0px;
+  --vis-tooltip-border-radius: 0px;
+  --vis-tooltip-box-shadow: none;
+  --vis-dark-tooltip-background-color: transparent;
+  --vis-dark-tooltip-border-color: transparent;
+  --vis-dark-tooltip-shadow-color: transparent;
 }
 
 @theme inline {
@@ -194,6 +206,18 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 8%);
   --sidebar-ring: oklch(0.55 0.145 163.2 / 35%);
+
+  /* Unovis CSS Variable Resets (Dark) */
+  --vis-tooltip-background-color: transparent;
+  --vis-tooltip-border-color: transparent;
+  --vis-tooltip-shadow-color: transparent;
+  --vis-tooltip-backdrop-filter: none;
+  --vis-tooltip-padding: 0px;
+  --vis-tooltip-border-radius: 0px;
+  --vis-tooltip-box-shadow: none;
+  --vis-dark-tooltip-background-color: transparent;
+  --vis-dark-tooltip-border-color: transparent;
+  --vis-dark-tooltip-shadow-color: transparent;
 }
 
 @layer base {
@@ -210,13 +234,11 @@
     @apply bg-background text-foreground font-sans antialiased;
     font-weight: 450;
     letter-spacing: -0.011em;
+    height: 100%;
   }
 
-  body[data-reka-scroll-lock],
-  body[data-radix-scroll-lock],
-  body[style*="overflow: hidden"] {
-    overflow: auto !important;
-    padding-right: 0px !important;
+  #app {
+    height: 100%;
   }
 
   /* Disable spinner buttons / arrows on type="number" inputs globally */
@@ -497,4 +519,69 @@
       box-shadow: none !important;
     }
   }
+
+}
+
+/* ─── Unovis Chart Global Styling ─────────────────────────────────────────── */
+.unovis-xy-container svg,
+.unovis-single-container svg {
+  overflow: visible;
+}
+
+/* Grid lines — light mode */
+.unovis-axis g line {
+  stroke: oklch(0.92 0.003 159) !important;
+  stroke-dasharray: 4 4 !important;
+  stroke-opacity: 0.7 !important;
+}
+
+/* Grid lines — dark mode */
+.dark .unovis-axis g line {
+  stroke: oklch(1 0 0 / 12%) !important;
+  stroke-dasharray: 4 4 !important;
+  stroke-opacity: 1 !important;
+}
+
+/* Hide axis domain & tick lines */
+.unovis-axis path.domain {
+  display: none !important;
+}
+
+/* Axis tick text */
+.unovis-axis text {
+  fill: oklch(0.556 0 0) !important;
+  font-size: 11px !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+}
+.dark .unovis-axis text {
+  fill: oklch(0.708 0 0) !important;
+}
+
+/* Crosshair */
+.unovis-crosshair line {
+  stroke: oklch(0.48 0.125 163.2) !important;
+  stroke-dasharray: 3 3 !important;
+  stroke-opacity: 0.6 !important;
+}
+.dark .unovis-crosshair line {
+  stroke: oklch(0.48 0.125 163.2) !important;
+}
+
+/* Crosshair circle dots */
+.unovis-crosshair circle {
+  stroke-width: 2px !important;
+}
+
+/* Tooltip outer wrapper resets (eliminates outer white card & padding) */
+[data-unovis-tooltip],
+.unovis-tooltip,
+div[class*="tooltip_root"],
+div[class*="tooltip"] {
+  background-color: transparent !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  backdrop-filter: none !important;
 }

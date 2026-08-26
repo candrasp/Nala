@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import {
   CreditCard,
   Check,
@@ -17,6 +18,7 @@ import {
   Receipt,
   RefreshCw,
   FileText,
+  Eye,
 } from '@lucide/vue'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -56,6 +58,7 @@ import type { InvoiceStatus, SubscriptionPlan } from '@/services/billing.service
 
 const billingStore = useBillingStore()
 const fmt = useFormatter()
+const router = useRouter()
 
 // ─── Add Card Form State ───────────────────────────────────────────────────────
 const cardHolder = ref('')
@@ -578,13 +581,13 @@ function getPlanPrice(plan: SubscriptionPlan): number {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead class="w-36 font-semibold">Invoice ID</TableHead>
+              <TableHead class="w-40 font-semibold">Invoice ID</TableHead>
               <TableHead class="w-36">Billing Date</TableHead>
               <TableHead class="w-56">Plan &amp; Period</TableHead>
               <TableHead class="w-28">Amount</TableHead>
               <TableHead class="w-28">Status</TableHead>
               <TableHead class="w-44">Payment Instrument</TableHead>
-              <TableHead class="w-24 text-right">Receipt</TableHead>
+              <TableHead class="w-36 text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -593,11 +596,15 @@ function getPlanPrice(plan: SubscriptionPlan): number {
               <TableRow
                 v-for="inv in billingStore.filteredInvoices"
                 :key="inv.id"
-                class="hover:bg-muted/30 transition-colors"
+                class="hover:bg-muted/30 transition-colors cursor-pointer group"
+                @click="router.push(`/billing/invoice/${inv.id}`)"
               >
                 <!-- Invoice ID -->
                 <TableCell class="font-mono text-xs font-semibold text-foreground">
-                  {{ inv.invoiceNumber }}
+                  <div class="flex items-center gap-1.5 text-primary group-hover:underline">
+                    <span>{{ inv.invoiceNumber }}</span>
+                    <ArrowUpRight class="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
                 </TableCell>
 
                 <!-- Date -->
@@ -630,17 +637,30 @@ function getPlanPrice(plan: SubscriptionPlan): number {
                   {{ inv.paymentMethod }}
                 </TableCell>
 
-                <!-- Download Action -->
-                <TableCell class="text-right">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    class="h-7 text-xs gap-1 text-primary hover:text-primary"
-                    @click="billingStore.downloadInvoice(inv)"
-                  >
-                    <Download class="h-3 w-3" />
-                    <span>PDF</span>
-                  </Button>
+                <!-- Actions -->
+                <TableCell class="text-right" @click.stop>
+                  <div class="flex items-center justify-end gap-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      class="h-7 px-2 text-xs gap-1 text-muted-foreground hover:text-foreground"
+                      title="View & Print Invoice"
+                      @click="router.push(`/billing/invoice/${inv.id}`)"
+                    >
+                      <Eye class="h-3 w-3" />
+                      <span class="hidden sm:inline">View</span>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      class="h-7 px-2 text-xs gap-1 text-primary hover:text-primary"
+                      title="Download receipt text"
+                      @click="billingStore.downloadInvoice(inv)"
+                    >
+                      <Download class="h-3 w-3" />
+                      <span class="hidden sm:inline">PDF</span>
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             </template>

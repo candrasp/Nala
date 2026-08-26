@@ -208,34 +208,42 @@ const sheetSnippet = `<!-- Drawer / Sheet Panel (slides in from the right) -->
   </SheetTrigger>
 
   <!-- side="right" | "left" | "top" | "bottom" -->
-  <SheetContent side="right" class="w-96 flex flex-col">
-    <SheetHeader>
-      <SheetTitle class="flex items-center gap-2">
+  <SheetContent side="right" class="w-full sm:max-w-md p-0 flex flex-col h-full">
+    <SheetHeader class="p-6 pb-4 border-b border-border text-left">
+      <SheetTitle class="flex items-center gap-2 text-base font-semibold">
         <Settings class="h-4 w-4 text-primary" />
         Cluster Settings
       </SheetTitle>
-      <SheetDescription>
+      <SheetDescription class="text-xs text-muted-foreground mt-0.5">
         Adjust resource limits and auto-scaling rules for eu-central-1a.
       </SheetDescription>
     </SheetHeader>
 
     <!-- Scrollable body content -->
-    <div class="flex-1 overflow-y-auto py-6 space-y-4">
+    <div class="flex-1 overflow-y-auto p-6 space-y-4">
       <div class="space-y-1.5">
-        <Label for="max-conn">Max Connections</Label>
-        <Input id="max-conn" type="number" placeholder="200" />
+        <Label for="max-conn" class="text-xs font-medium">Max Connections</Label>
+        <Input id="max-conn" type="number" placeholder="200" class="h-9 text-xs" />
       </div>
       <div class="space-y-1.5">
-        <Label for="pool-mode">Pool Mode</Label>
-        <Input id="pool-mode" placeholder="transaction" />
+        <Label for="pool-mode" class="text-xs font-medium">Pool Mode</Label>
+        <Input id="pool-mode" placeholder="transaction" class="h-9 text-xs" />
+      </div>
+      <div class="space-y-1.5">
+        <Label for="region" class="text-xs font-medium">Primary Region</Label>
+        <Input id="region" placeholder="eu-central-1" class="h-9 text-xs" />
+      </div>
+      <div class="space-y-1.5">
+        <Label for="replicas" class="text-xs font-medium">Read Replicas</Label>
+        <Input id="replicas" type="number" placeholder="2" class="h-9 text-xs" />
       </div>
     </div>
 
-    <SheetFooter class="border-t border-border pt-4">
+    <SheetFooter class="p-4 border-t border-border bg-muted/20 flex flex-col gap-2">
+      <Button class="w-full" size="sm">Save Settings</Button>
       <SheetClose as-child>
-        <Button variant="outline" class="w-full">Discard Changes</Button>
+        <Button variant="outline" size="sm" class="w-full">Discard Changes</Button>
       </SheetClose>
-      <Button class="w-full">Save Settings</Button>
     </SheetFooter>
   </SheetContent>
 </Sheet>`
@@ -466,40 +474,40 @@ const sheetSnippet = `<!-- Drawer / Sheet Panel (slides in from the right) -->
             Open Settings Panel
           </Button>
         </SheetTrigger>
-        <SheetContent side="right" class="w-96 flex flex-col">
-          <SheetHeader>
-            <SheetTitle class="flex items-center gap-2">
+        <SheetContent side="right" class="w-full sm:max-w-md p-0 flex flex-col h-full">
+          <SheetHeader class="p-6 pb-4 border-b border-border text-left">
+            <SheetTitle class="flex items-center gap-2 text-base font-semibold">
               <Settings class="h-4 w-4 text-primary" />
               Cluster Settings
             </SheetTitle>
-            <SheetDescription>
+            <SheetDescription class="text-xs text-muted-foreground mt-0.5">
               Adjust resource limits and auto-scaling rules for eu-central-1a.
             </SheetDescription>
           </SheetHeader>
 
-          <div class="flex-1 overflow-y-auto py-6 space-y-4">
+          <div class="flex-1 overflow-y-auto p-6 space-y-4">
             <div class="space-y-1.5">
-              <Label for="sheet-max-conn">Max Connections</Label>
-              <Input id="sheet-max-conn" type="number" placeholder="200" />
+              <Label for="sheet-max-conn" class="text-xs font-medium">Max Connections</Label>
+              <Input id="sheet-max-conn" type="number" placeholder="200" class="h-9 text-xs" />
             </div>
             <div class="space-y-1.5">
-              <Label for="sheet-pool-mode">Pool Mode</Label>
-              <Input id="sheet-pool-mode" placeholder="transaction" />
+              <Label for="sheet-pool-mode" class="text-xs font-medium">Pool Mode</Label>
+              <Input id="sheet-pool-mode" placeholder="transaction" class="h-9 text-xs" />
             </div>
             <div class="space-y-1.5">
-              <Label for="sheet-region">Primary Region</Label>
-              <Input id="sheet-region" placeholder="eu-central-1" />
+              <Label for="sheet-region" class="text-xs font-medium">Primary Region</Label>
+              <Input id="sheet-region" placeholder="eu-central-1" class="h-9 text-xs" />
             </div>
             <div class="space-y-1.5">
-              <Label for="sheet-replicas">Read Replicas</Label>
-              <Input id="sheet-replicas" type="number" placeholder="2" />
+              <Label for="sheet-replicas" class="text-xs font-medium">Read Replicas</Label>
+              <Input id="sheet-replicas" type="number" placeholder="2" class="h-9 text-xs" />
             </div>
           </div>
 
-          <SheetFooter class="border-t border-border pt-4 flex-col gap-2">
-            <Button class="w-full">Save Settings</Button>
+          <SheetFooter class="p-4 border-t border-border bg-muted/20 flex flex-col gap-2">
+            <Button class="w-full" size="sm">Save Settings</Button>
             <SheetClose as-child>
-              <Button variant="outline" class="w-full">Discard Changes</Button>
+              <Button variant="outline" size="sm" class="w-full">Discard Changes</Button>
             </SheetClose>
           </SheetFooter>
         </SheetContent>

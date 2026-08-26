@@ -34,6 +34,11 @@ import {
   Settings,
   User,
   LayoutTemplate,
+  Lock,
+  Wrench,
+  Rocket,
+  ShoppingBag,
+  TrendingUp,
 } from '@lucide/vue'
 import {
   Sidebar,
@@ -67,6 +72,8 @@ const closeMobileSidebar = () => {
 // 1. Overview Group (Core Admin)
 const mainNav: NavItem[] = [
   { name: 'Dashboard', routeName: 'dashboard', href: '/', icon: LayoutDashboard },
+  { name: 'E-Commerce', routeName: 'dashboard-ecommerce', href: '/dashboard/ecommerce', icon: ShoppingBag },
+  { name: 'Analytics', routeName: 'dashboard-analytics', href: '/dashboard/analytics', icon: TrendingUp },
   { name: 'Users', routeName: 'users', href: '/users', icon: Users },
   { name: 'Roles & Permissions', routeName: 'roles', href: '/roles', icon: ShieldCheck },
   { name: 'Activity Log', routeName: 'activity', href: '/activity', icon: Activity },
@@ -111,12 +118,15 @@ const authNav: NavItem[] = [
   { name: 'Verify OTP', routeName: 'verify-otp', href: '/auth/verify-otp', icon: ScanLine },
   { name: 'Reset Password', routeName: 'reset-password', href: '/auth/reset-password', icon: LockKeyhole },
   { name: 'Confirm Email', routeName: 'confirm-email', href: '/auth/confirm-email', icon: MailCheck },
+  { name: 'Lock Screen', routeName: 'lock-screen', href: '/auth/lock-screen', icon: Lock },
 ]
 
 // 6. Pages & Errors Group
 const pagesNav: NavItem[] = [
   { name: 'Landing Page', routeName: 'landing', href: '/landing', icon: LayoutTemplate },
   { name: 'Blank Page', routeName: 'starter-blank', href: '/starter/blank', icon: FileCode2 },
+  { name: 'Maintenance', routeName: 'maintenance', href: '/errors/maintenance', icon: Wrench },
+  { name: 'Coming Soon', routeName: 'coming-soon', href: '/errors/coming-soon', icon: Rocket },
   { name: '404 Not Found', routeName: 'not-found', href: '/errors/404', icon: FileQuestion },
   { name: '500 Server Error', routeName: 'server-error', href: '/errors/500', icon: ServerCrash },
   { name: '403 Access Denied', routeName: 'unauthorized', href: '/errors/403', icon: ShieldAlert },

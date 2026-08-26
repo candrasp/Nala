@@ -9,6 +9,8 @@
 export {}
 declare global {
   const EffectScope: typeof import('vue').EffectScope
+  const PRIMARY_COLORS: typeof import('./composables/useThemeConfig').PRIMARY_COLORS
+  const RADIUS_PRESETS: typeof import('./composables/useThemeConfig').RADIUS_PRESETS
   const REFRESH_TOKEN_KEY: typeof import('./lib/axios').REFRESH_TOKEN_KEY
   const TOKEN_KEY: typeof import('./lib/axios').TOKEN_KEY
   const acceptHMRUpdate: typeof import('pinia').acceptHMRUpdate
@@ -288,6 +290,7 @@ declare global {
   const useTextDirection: typeof import('@vueuse/core').useTextDirection
   const useTextSelection: typeof import('@vueuse/core').useTextSelection
   const useTextareaAutosize: typeof import('@vueuse/core').useTextareaAutosize
+  const useThemeConfig: typeof import('./composables/useThemeConfig').useThemeConfig
   const useThrottle: typeof import('@vueuse/core').useThrottle
   const useThrottleFn: typeof import('@vueuse/core').useThrottleFn
   const useThrottledRefHistory: typeof import('@vueuse/core').useThrottledRefHistory
@@ -347,6 +350,9 @@ declare global {
   // @ts-ignore
   export type { LoadingBarState } from './lib/loading-bar'
   import('./lib/loading-bar')
+  // @ts-ignore
+  export type { PrimaryColorKey, RadiusKey, ContentWidthKey, PrimaryColorDefinition, RadiusDefinition, ThemeConfig } from './composables/useThemeConfig'
+  import('./composables/useThemeConfig')
 }
 
 // for vue template auto import
@@ -355,6 +361,8 @@ declare module 'vue' {
   interface GlobalComponents {}
   interface ComponentCustomProperties {
     readonly EffectScope: UnwrapRef<typeof import('vue')['EffectScope']>
+    readonly PRIMARY_COLORS: UnwrapRef<typeof import('./composables/useThemeConfig')['PRIMARY_COLORS']>
+    readonly RADIUS_PRESETS: UnwrapRef<typeof import('./composables/useThemeConfig')['RADIUS_PRESETS']>
     readonly REFRESH_TOKEN_KEY: UnwrapRef<typeof import('./lib/axios')['REFRESH_TOKEN_KEY']>
     readonly TOKEN_KEY: UnwrapRef<typeof import('./lib/axios')['TOKEN_KEY']>
     readonly acceptHMRUpdate: UnwrapRef<typeof import('pinia')['acceptHMRUpdate']>
@@ -634,6 +642,7 @@ declare module 'vue' {
     readonly useTextDirection: UnwrapRef<typeof import('@vueuse/core')['useTextDirection']>
     readonly useTextSelection: UnwrapRef<typeof import('@vueuse/core')['useTextSelection']>
     readonly useTextareaAutosize: UnwrapRef<typeof import('@vueuse/core')['useTextareaAutosize']>
+    readonly useThemeConfig: UnwrapRef<typeof import('./composables/useThemeConfig')['useThemeConfig']>
     readonly useThrottle: UnwrapRef<typeof import('@vueuse/core')['useThrottle']>
     readonly useThrottleFn: UnwrapRef<typeof import('@vueuse/core')['useThrottleFn']>
     readonly useThrottledRefHistory: UnwrapRef<typeof import('@vueuse/core')['useThrottledRefHistory']>

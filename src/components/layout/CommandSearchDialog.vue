@@ -36,6 +36,12 @@ import {
   Search,
   ExternalLink,
   LayoutTemplate,
+  Lock,
+  Wrench,
+  Rocket,
+  Receipt,
+  ShoppingBag,
+  TrendingUp,
 } from '@lucide/vue'
 import {
   Dialog,
@@ -64,7 +70,9 @@ const router = useRouter()
 const searchQuery = ref('')
 
 const searchItems: SearchItem[] = [
-  { title: 'Dashboard', href: '/', icon: LayoutDashboard, category: 'Overview' },
+  { title: 'Dashboard Overview', href: '/', icon: LayoutDashboard, category: 'Overview' },
+  { title: 'E-Commerce & Sales Dashboard', href: '/dashboard/ecommerce', icon: ShoppingBag, category: 'Overview' },
+  { title: 'Analytics & Traffic Dashboard', href: '/dashboard/analytics', icon: TrendingUp, category: 'Overview' },
   { title: 'Notifications Center', href: '/notifications', icon: Bell, category: 'Overview' },
   { title: 'Activity Log & Audit Trail', href: '/activity', icon: Activity, category: 'Overview' },
   { title: 'Roles & Permissions Matrix', href: '/roles', icon: ShieldCheck, category: 'Overview' },
@@ -86,11 +94,15 @@ const searchItems: SearchItem[] = [
   { title: 'Toast & Alerts', href: '/components/toasts', icon: BellDot, category: 'UI Components' },
   { title: 'Feedback & Loading', href: '/components/feedback', icon: BellRing, category: 'UI Components' },
   { title: 'Navigation & Flow', href: '/components/navigation', icon: Compass, category: 'UI Components' },
+  { title: 'Invoice Detail & Print', href: '/billing/invoice/inv-101', icon: Receipt, category: 'Overview' },
   { title: 'Landing Page', href: '/landing', icon: LayoutTemplate, category: 'Pages' },
   { title: 'Blank Starter Page', href: '/starter/blank', icon: FileCode2, category: 'Pages' },
+  { title: 'Maintenance Mode Page', href: '/errors/maintenance', icon: Wrench, category: 'Pages' },
+  { title: 'Coming Soon Teaser Page', href: '/errors/coming-soon', icon: Rocket, category: 'Pages' },
   { title: '404 Not Found Page', href: '/errors/404', icon: FileQuestion, category: 'Pages' },
   { title: '500 Server Error Page', href: '/errors/500', icon: ServerCrash, category: 'Pages' },
   { title: '403 Access Denied', href: '/errors/403', icon: ShieldAlert, category: 'Pages' },
+  { title: 'Lock Screen', href: '/auth/lock-screen', icon: Lock, category: 'Auth' },
   { title: 'Login', href: '/auth/login', icon: LogIn, category: 'Auth' },
   { title: 'Register', href: '/auth/register', icon: UserRound, category: 'Auth' },
   { title: 'Forgot Password', href: '/auth/forgot-password', icon: KeyRound, category: 'Auth' },

@@ -22,11 +22,19 @@ import {
   CalendarDays,
 } from '@lucide/vue'
 import { Calendar } from '@/components/ui/calendar'
+import {
+  PinInput,
+  PinInputGroup,
+  PinInputInput,
+  PinInputSeparator,
+} from '@/components/ui/pin-input'
 
 // ─── 1. Text Inputs & Basic States ────────────────────────────────────────────
 const showPassword = ref(false)
 const emailInput = ref('developer@supabase.io')
 const passwordInput = ref('supabase-secret-key-2026')
+const pinValue = ref<string[]>(['', '', '', ''])
+const otpValue = ref<string[]>(['1', '2', '3', '', '', ''])
 const projectSlug = ref('supabase-cloud-eu')
 const selectedRegion = ref('eu-central-1')
 const selectedDatabase = ref('pg-16')
@@ -341,6 +349,24 @@ const switchesCheckboxesSnippet = `<!-- Switches -->
     <p class="text-xs text-muted-foreground">By checking this box, you agree to our Enterprise SLA.</p>
   </div>
 </div>`
+
+const pinInputSnippet = `<!-- 4-Digit Security PIN Input -->
+<PinInput v-model="pinValue" placeholder="○">
+  <PinInputGroup>
+    <PinInputInput v-for="(id, index) in 4" :key="id" :index="index" />
+  </PinInputGroup>
+</PinInput>
+
+<!-- 6-Digit 2FA / OTP Segmented with Separator -->
+<PinInput v-model="otpValue" placeholder="-" otp>
+  <PinInputGroup>
+    <PinInputInput v-for="(id, index) in 3" :key="id" :index="index" />
+  </PinInputGroup>
+  <PinInputSeparator />
+  <PinInputGroup>
+    <PinInputInput v-for="(id, index) in 3" :key="id" :index="index + 3" />
+  </PinInputGroup>
+</PinInput>`
 </script>
 
 <template>
@@ -979,6 +1005,51 @@ const switchesCheckboxesSnippet = `<!-- Switches -->
               </p>
             </div>
           </div>
+        </div>
+      </div>
+    </CodePreview>
+
+    <!-- 8. Pin Input / OTP Primitives -->
+    <CodePreview
+      title="Pin Input & OTP"
+      description="Segmented PIN and One-Time Password inputs with auto-advance, backspace handling, and multi-digit paste support."
+      :code="pinInputSnippet"
+    >
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- 4-digit PIN -->
+        <div class="space-y-3">
+          <div>
+            <Label class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">4-Digit Security PIN</Label>
+            <p class="text-xs text-muted-foreground mt-0.5">For device unlock and authorization</p>
+          </div>
+          <PinInput v-model="pinValue" placeholder="○">
+            <PinInputGroup>
+              <PinInputInput v-for="(id, index) in 4" :key="id" :index="index" />
+            </PinInputGroup>
+          </PinInput>
+          <p class="text-xs text-muted-foreground">
+            Current PIN: <span class="font-mono font-medium text-foreground">{{ pinValue.join('') || '(empty)' }}</span>
+          </p>
+        </div>
+
+        <!-- 6-digit OTP -->
+        <div class="space-y-3">
+          <div>
+            <Label class="text-xs font-semibold uppercase tracking-wider text-muted-foreground">6-Digit 2FA Token</Label>
+            <p class="text-xs text-muted-foreground mt-0.5">Segmented with separator for authenticator codes</p>
+          </div>
+          <PinInput v-model="otpValue" placeholder="-" otp>
+            <PinInputGroup>
+              <PinInputInput v-for="(id, index) in 3" :key="id" :index="index" />
+            </PinInputGroup>
+            <PinInputSeparator />
+            <PinInputGroup>
+              <PinInputInput v-for="(id, index) in 3" :key="id" :index="index + 3" />
+            </PinInputGroup>
+          </PinInput>
+          <p class="text-xs text-muted-foreground">
+            Current Token: <span class="font-mono font-medium text-foreground">{{ otpValue.join('') || '(empty)' }}</span>
+          </p>
         </div>
       </div>
     </CodePreview>

@@ -5,6 +5,8 @@ import {
   User,
   Settings,
   LogOut,
+  Paintbrush,
+  Lock,
 } from '@lucide/vue'
 import {
   Breadcrumb,
@@ -30,6 +32,10 @@ import { SidebarTrigger } from '@/components/ui/sidebar'
 import AppLogo from '@/components/AppLogo.vue'
 import NotificationDrawer from '@/components/layout/NotificationDrawer.vue'
 import { useAuthStore } from '@/stores/auth'
+import { useThemeConfig } from '@/composables/useThemeConfig'
+
+const { toggleCustomizer } = useThemeConfig()
+const showThemeCustomizer = import.meta.env.VITE_SHOW_THEME_CUSTOMIZER !== 'false'
 
 const emit = defineEmits<{
   (e: 'open-search'): void
@@ -152,6 +158,18 @@ const handleLogout = () => {
         </svg>
       </a>
 
+      <!-- Theme & Layout Customizer Trigger -->
+      <button
+        v-if="showThemeCustomizer"
+        type="button"
+        class="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:bg-accent hover:text-foreground transition-colors cursor-pointer"
+        aria-label="Theme Customizer"
+        title="Customize Theme & Layout"
+        @click="toggleCustomizer(true)"
+      >
+        <Paintbrush class="h-4 w-4 text-muted-foreground hover:text-primary transition-colors" />
+      </button>
+
       <!-- Notifications Sheet Drawer -->
       <NotificationDrawer />
 
@@ -181,6 +199,10 @@ const handleLogout = () => {
           <DropdownMenuItem @click="$router.push('/settings')">
             <Settings class="mr-2 h-4 w-4" />
             <span>Settings</span>
+          </DropdownMenuItem>
+          <DropdownMenuItem @click="$router.push('/auth/lock-screen')">
+            <Lock class="mr-2 h-4 w-4" />
+            <span>Lock Screen</span>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuLabel class="text-xs text-muted-foreground font-normal px-2 py-1.5">Theme</DropdownMenuLabel>

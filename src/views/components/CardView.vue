@@ -30,35 +30,35 @@ const basicCardSnippet = `<Card class="shadow-sm">
 
 const kpiCardsSnippet = `<!-- 4-Column Metric Stats Grid -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-  <Card class="highlight-card shadow-xs">
+  <Card flush class="highlight-card shadow-xs">
     <CardContent class="p-5 space-y-2">
       <div class="flex items-center justify-between">
-        <span class="label-mono">Total API Requests</span>
-        <Activity class="h-4 w-4 text-primary" />
+        <span class="text-xs font-medium text-muted-foreground">Total API Requests</span>
+        <Activity class="h-4 w-4 text-emerald-500" />
       </div>
-      <div class="flex items-baseline justify-between">
-        <h2 class="text-2xl font-bold tracking-tight text-foreground">1.48M</h2>
-        <span class="inline-flex items-center text-xs font-medium text-emerald-600 dark:text-emerald-400 gap-0.5">
-          <TrendingUp class="h-3.5 w-3.5" /> +14.2%
+      <div class="text-2xl font-bold tracking-tight text-foreground">1.48M</div>
+      <p class="text-xs text-muted-foreground flex items-center gap-1">
+        <span class="text-emerald-500 font-semibold inline-flex items-center gap-0.5">
+          <ArrowUpRight class="h-3.5 w-3.5" /> +14.2%
         </span>
-      </div>
-      <p class="text-xs text-muted-foreground">Compared to last 30 days</p>
+        <span>from last month</span>
+      </p>
     </CardContent>
   </Card>
 
-  <Card class="highlight-card shadow-xs">
+  <Card flush class="highlight-card shadow-xs">
     <CardContent class="p-5 space-y-2">
       <div class="flex items-center justify-between">
-        <span class="label-mono">Active Connections</span>
-        <Users class="h-4 w-4 text-primary" />
+        <span class="text-xs font-medium text-muted-foreground">Active Connections</span>
+        <Server class="h-4 w-4 text-primary" />
       </div>
-      <div class="flex items-baseline justify-between">
-        <h2 class="text-2xl font-bold tracking-tight text-foreground">842</h2>
-        <span class="inline-flex items-center text-xs font-medium text-emerald-600 dark:text-emerald-400 gap-0.5">
-          <TrendingUp class="h-3.5 w-3.5" /> +5.8%
+      <div class="text-2xl font-bold tracking-tight text-foreground">14,290</div>
+      <p class="text-xs text-muted-foreground flex items-center gap-1">
+        <span class="text-emerald-500 font-semibold inline-flex items-center gap-0.5">
+          <ArrowUpRight class="h-3.5 w-3.5" /> +4.8%
         </span>
-      </div>
-      <p class="text-xs text-muted-foreground">Pool capacity at 42%</p>
+        <span>concurrent websockets</span>
+      </p>
     </CardContent>
   </Card>
 </div>`
@@ -212,65 +212,65 @@ const glowCardsSnippet = `<!-- Pro Ambient Glow Card -->
     >
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- Metric 1 -->
-        <Card class="shadow-sm">
-          <CardHeader class="flex flex-row items-center justify-between pb-2">
-            <CardTitle class="text-sm font-medium text-muted-foreground">Total API Requests</CardTitle>
-            <Activity class="h-4 w-4 text-emerald-500" />
-          </CardHeader>
-          <CardContent>
-            <div class="text-2xl font-bold text-foreground">2,845,920</div>
-            <p class="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-              <span class="text-emerald-500 font-semibold inline-flex items-center">
-                <ArrowUpRight class="h-3 w-3" /> +14.2%
+        <Card flush class="highlight-card shadow-xs">
+          <CardContent class="p-5 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-medium text-muted-foreground">Total API Requests</span>
+              <Activity class="h-4 w-4 text-emerald-500" />
+            </div>
+            <div class="text-2xl font-bold tracking-tight text-foreground">2,845,920</div>
+            <p class="text-xs text-muted-foreground flex items-center gap-1">
+              <span class="text-emerald-500 font-semibold inline-flex items-center gap-0.5">
+                <ArrowUpRight class="h-3.5 w-3.5" /> +14.2%
               </span>
-              from last month
+              <span>from last month</span>
             </p>
           </CardContent>
         </Card>
 
         <!-- Metric 2 -->
-        <Card class="shadow-sm">
-          <CardHeader class="flex flex-row items-center justify-between pb-2">
-            <CardTitle class="text-sm font-medium text-muted-foreground">Active Connections</CardTitle>
-            <Server class="h-4 w-4 text-primary" />
-          </CardHeader>
-          <CardContent>
-            <div class="text-2xl font-bold text-foreground">14,290</div>
-            <p class="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-              <span class="text-emerald-500 font-semibold inline-flex items-center">
-                <ArrowUpRight class="h-3 w-3" /> +4.8%
+        <Card flush class="highlight-card shadow-xs">
+          <CardContent class="p-5 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-medium text-muted-foreground">Active Connections</span>
+              <Server class="h-4 w-4 text-primary" />
+            </div>
+            <div class="text-2xl font-bold tracking-tight text-foreground">14,290</div>
+            <p class="text-xs text-muted-foreground flex items-center gap-1">
+              <span class="text-emerald-500 font-semibold inline-flex items-center gap-0.5">
+                <ArrowUpRight class="h-3.5 w-3.5" /> +4.8%
               </span>
-              concurrent websockets
+              <span>concurrent websockets</span>
             </p>
           </CardContent>
         </Card>
 
         <!-- Metric 3 -->
-        <Card class="shadow-sm">
-          <CardHeader class="flex flex-row items-center justify-between pb-2">
-            <CardTitle class="text-sm font-medium text-muted-foreground">Database Latency</CardTitle>
-            <Database class="h-4 w-4 text-amber-500" />
-          </CardHeader>
-          <CardContent>
-            <div class="text-2xl font-bold text-foreground">1.42 ms</div>
-            <p class="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-              <span class="text-emerald-500 font-semibold inline-flex items-center">
-                <ArrowDownRight class="h-3 w-3" /> -0.3ms
+        <Card flush class="highlight-card shadow-xs">
+          <CardContent class="p-5 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-medium text-muted-foreground">Database Latency</span>
+              <Database class="h-4 w-4 text-amber-500" />
+            </div>
+            <div class="text-2xl font-bold tracking-tight text-foreground">1.42 ms</div>
+            <p class="text-xs text-muted-foreground flex items-center gap-1">
+              <span class="text-emerald-500 font-semibold inline-flex items-center gap-0.5">
+                <ArrowDownRight class="h-3.5 w-3.5" /> -0.3ms
               </span>
-              p95 response time
+              <span>p95 response time</span>
             </p>
           </CardContent>
         </Card>
 
         <!-- Metric 4 -->
-        <Card class="shadow-sm">
-          <CardHeader class="flex flex-row items-center justify-between pb-2">
-            <CardTitle class="text-sm font-medium text-muted-foreground">Cluster CPU Load</CardTitle>
-            <Cpu class="h-4 w-4 text-blue-500" />
-          </CardHeader>
-          <CardContent>
-            <div class="text-2xl font-bold text-foreground">28.4%</div>
-            <p class="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+        <Card flush class="highlight-card shadow-xs">
+          <CardContent class="p-5 space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-medium text-muted-foreground">Cluster CPU Load</span>
+              <Cpu class="h-4 w-4 text-blue-500" />
+            </div>
+            <div class="text-2xl font-bold tracking-tight text-foreground">28.4%</div>
+            <p class="text-xs text-muted-foreground flex items-center gap-1">
               <span class="text-muted-foreground font-normal">8 nodes operational</span>
             </p>
           </CardContent>
