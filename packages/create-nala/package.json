@@ -1,0 +1,48 @@
+{
+  "name": "create-nala",
+  "version": "3.0.0",
+  "description": "Scaffolding CLI tool for Nala Admin Dashboard Template",
+  "author": "candrasp",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "create-nala": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "template"
+  ],
+  "keywords": [
+    "nala",
+    "vue3",
+    "admin",
+    "dashboard",
+    "template",
+    "scaffold",
+    "create",
+    "starter",
+    "tailwind-v4",
+    "reka-ui",
+    "shadcn-vue"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/candrasp/Nala.git",
+    "directory": "packages/create-nala"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "dependencies": {
+    "@clack/prompts": "^0.9.1",
+    "kolorist": "^1.8.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "tsup": "^8.4.0",
+    "typescript": "~6.0.2"
+  }
+}

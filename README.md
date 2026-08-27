@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](./LICENSE)
 [![Vue 3](https://img.shields.io/badge/Vue-3.x-42b883?style=for-the-badge&logo=vue.js&logoColor=white)](https://vuejs.org/)
 
-![Nala Dashboard Preview](./public/screenshot.png)
+![Nala Dashboard Preview](./packages/showcase/public/screenshot.png)
 
 ---
 
@@ -57,193 +57,115 @@
 
 ---
 
-## 🚀 Getting Started
+## ⚡ Quick Start (Create a New Project)
+
+Scaffold a clean, production-ready Nala admin application in seconds using the official CLI:
+
+### with `pnpm` (Recommended)
+```bash
+pnpm create nala my-admin-app
+```
+
+### with `npm`
+```bash
+npm create nala@latest my-admin-app
+```
+
+### with `bun`
+```bash
+bun create nala my-admin-app
+```
+
+Then navigate into your project and start the development server:
+```bash
+cd my-admin-app
+pnpm install
+pnpm dev
+```
+
+---
+
+## 🛠️ Monorepo & Development Setup
+
+This repository is organized as a **pnpm monorepo**:
+- **`packages/showcase/`** — Full enterprise demo application with 44+ UI primitives, interactive documentation, and comprehensive showcase views.
+- **`packages/create-nala/`** — The official scaffolding CLI and clean starter template published to npm.
 
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) v20+
 - [pnpm](https://pnpm.io/) v9+ (`npm install -g pnpm`)
 
-### Installation
+### Local Monorepo Setup
 
 ```bash
 # 1. Clone the repository
 git clone https://github.com/candrasp/Nala.git
 cd nala
 
-# 2. Install dependencies
+# 2. Install workspace dependencies
 pnpm install
 
-# 3. Copy environment variables
-cp .env.example .env
-
-# 4. Start the dev server
+# 3. Start the showcase demo server
 pnpm dev
 ```
 
-The app will be available at **http://localhost:5173**.
+The showcase app will be available at **http://localhost:5173**.
 
 ---
 
-## 📁 Project Structure
+## 📁 Repository Structure
 
 ```
-nala/
-├── public/
-│   ├── favicon.svg
-│   └── screenshot.png
-├── src/
-│   ├── assets/
-│   │   └── fonts/             # Local Inter font files (woff2)
-│   ├── components/
-│   │   ├── layout/            # Modular shell components (auto-imported)
-│   │   │   ├── AppNavbar.vue
-│   │   │   ├── AppSidebar.vue
-│   │   │   ├── CommandSearchDialog.vue
-│   │   │   ├── NotificationDrawer.vue
-│   │   │   └── ThemeCustomizer.vue    # Live Theme & Layout Configurator Drawer
-│   │   ├── ui/                # UI primitive components (shadcn-vue / reka-ui)
-│   │   │   ├── accordion/
-│   │   │   ├── alert/
-│   │   │   ├── alert-dialog/
-│   │   │   ├── avatar/
-│   │   │   ├── badge/
-│   │   │   ├── breadcrumb/
-│   │   │   ├── button/
-│   │   │   ├── calendar/
-│   │   │   ├── card/
-│   │   │   ├── chart/             # Standardized Unovis charts (Area, Bar, Line, Donut)
-│   │   │   ├── checkbox/
-│   │   │   ├── collapsible/
-│   │   │   ├── command/
-│   │   │   ├── context-menu/
-│   │   │   ├── date-picker/
-│   │   │   ├── dialog/
-│   │   │   ├── dropdown-menu/
-│   │   │   ├── form/
-│   │   │   ├── hover-card/
-│   │   │   ├── input/
-│   │   │   ├── kbd/
-│   │   │   ├── label/
-│   │   │   ├── loading-bar/
-│   │   │   ├── pagination/
-│   │   │   ├── pin-input/
-│   │   │   ├── popover/
-│   │   │   ├── progress/
-│   │   │   ├── radio-group/
-│   │   │   ├── scroll-area/
-│   │   │   ├── select/
-│   │   │   ├── separator/
-│   │   │   ├── sheet/
-│   │   │   ├── sidebar/
-│   │   │   ├── skeleton/
-│   │   │   ├── slider/
-│   │   │   ├── sonner/
-│   │   │   ├── stepper/
-│   │   │   ├── switch/
-│   │   │   ├── table/
-│   │   │   ├── tabs/
-│   │   │   ├── textarea/
-│   │   │   ├── timeline/
-│   │   │   ├── toggle/
-│   │   │   ├── toggle-group/
-│   │   │   ├── tooltip/
-│   │   │   └── index.ts
-│   │   ├── AppLogo.vue
-│   │   ├── CodePreview.vue    # Interactive snippet highlighter with One Dark Pro theme
-│   │   ├── EmptyState.vue     # Reusable empty state placeholder component
-│   │   └── PageHeader.vue     # Reusable standard page header primitive
-│   ├── composables/
-│   │   ├── useFormatter.ts    # Single access point for Intl formatters (auto-imported)
-│   │   └── useThemeConfig.ts  # Dynamic theme palettes, radius, container width (auto-imported)
-│   ├── layouts/
-│   │   ├── AdminLayout.vue    # Lightweight main admin shell
-│   │   └── AuthLayout.vue     # Auth pages layout (login, register, etc.)
-│   ├── lib/
-│   │   ├── axios.ts           # Axios client with interceptors and DEV mock fallback
-│   │   ├── formatters.ts      # Native Intl data formatting helpers (env-aware)
-│   │   ├── loading-bar.ts     # Global top loading bar progress controller
-│   │   ├── utils.ts           # cn() helper = clsx + tailwind-merge
-│   │   └── validation.ts      # Zod form validation schemas
-│   ├── router/
-│   │   └── index.ts           # Route definitions & navigation guards
-│   ├── services/              # Real API service layer modules (with DEV mock fallback)
-│   │   ├── activity.service.ts
-│   │   ├── auth.service.ts
-│   │   ├── billing.service.ts
-│   │   ├── notification.service.ts
-│   │   ├── role.service.ts
-│   │   ├── user.service.ts
-│   │   ├── types.ts
-│   │   └── index.ts
-│   ├── stores/                # Pinia state stores
-│   │   ├── activity.ts
-│   │   ├── auth.ts
-│   │   ├── billing.ts
-│   │   ├── notification.ts
-│   │   └── role.ts
-│   ├── views/
-│   │   ├── _starter/
-│   │   │   └── BlankView.vue  # Blank starter page template
-│   │   ├── activity/
-│   │   │   └── IndexView.vue  # Audit logs, activity timeline, filter & export
-│   │   ├── auth/
-│   │   │   ├── LoginView.vue
-│   │   │   ├── RegisterView.vue
-│   │   │   ├── ForgotPasswordView.vue
-│   │   │   ├── ResetPasswordView.vue
-│   │   │   ├── VerifyOtpView.vue
-│   │   │   ├── ConfirmEmailView.vue
-│   │   │   └── LockScreenView.vue     # Session lock state with avatar & quick unlock
-│   │   ├── billing/
-│   │   │   ├── IndexView.vue          # Subscription plans, payment methods, invoices
-│   │   │   └── InvoiceDetailView.vue  # Printable official tax invoice view (@media print)
-│   │   ├── components/        # Component showcase / documentation pages
-│   │   │   ├── BadgeAvatarView.vue
-│   │   │   ├── ButtonView.vue
-│   │   │   ├── CardView.vue
-│   │   │   ├── ChartView.vue
-│   │   │   ├── ColorsView.vue
-│   │   │   ├── FeedbackView.vue
-│   │   │   ├── FormatterView.vue
-│   │   │   ├── FormView.vue
-│   │   │   ├── IconsView.vue
-│   │   │   ├── ModalView.vue
-│   │   │   ├── NavigationView.vue
-│   │   │   ├── OverlayView.vue
-│   │   │   ├── TableView.vue
-│   │   │   ├── ToastView.vue
-│   │   │   └── TypographyView.vue
-│   │   ├── dashboard/
-│   │   │   ├── IndexView.vue          # Main admin dashboard with KPI cards + charts + table
-│   │   │   ├── EcommerceView.vue      # E-Commerce sales, revenue timeline & fulfillment pipeline
-│   │   │   └── AnalyticsView.vue      # Audience acquisition, device mix & geographic traffic
-│   │   ├── errors/
-│   │   │   ├── NotFoundView.vue
-│   │   │   ├── ServerErrorView.vue
-│   │   │   ├── UnauthorizedView.vue
-│   │   │   ├── MaintenanceView.vue    # Scheduled maintenance page with live countdown & subscription
-│   │   │   └── ComingSoonView.vue     # Product launch countdown with VIP waitlist capture
-│   │   ├── landing/
-│   │   │   └── IndexView.vue  # Marketing / product landing showcase page
-│   │   ├── notifications/
-│   │   │   └── IndexView.vue  # Notification center with filter, search & actions
-│   │   ├── profile/
-│   │   │   └── IndexView.vue  # User profile overview, stats & activity
-│   │   ├── roles/
-│   │   │   └── IndexView.vue  # Role & Permission matrix management
-│   │   ├── settings/
-│   │   │   └── IndexView.vue  # Profile, Security, Notifications, Appearance tabs
-│   │   └── users/
-│   │       └── IndexView.vue  # User management with CRUD dialogs
-│   ├── App.vue
-│   ├── main.ts
-│   └── style.css              # Global styles + Tailwind v4 + CSS variables (oklch)
-├── .env.example
-├── components.json
-├── package.json
-└── vite.config.ts
+nala/                                    ← Root monorepo
+├── packages/
+│   ├── showcase/                        ← Full enterprise demo application (@nala/showcase)
+│   │   ├── public/                      ← Static assets, icons, screenshots
+│   │   ├── src/
+│   │   │   ├── assets/fonts/            ← Local font assets (Inter woff2)
+│   │   │   ├── components/
+│   │   │   │   ├── layout/              ← AppNavbar, AppSidebar, NotificationDrawer, ThemeCustomizer, etc.
+│   │   │   │   ├── ui/                  ← 44+ UI primitives (reka-ui / shadcn-vue)
+│   │   │   │   ├── AppLogo.vue
+│   │   │   │   ├── CodePreview.vue      # Interactive code preview with One Dark Pro theme
+│   │   │   │   ├── EmptyState.vue       # Reusable empty state placeholder
+│   │   │   │   └── PageHeader.vue       # Standardized page header component
+│   │   │   ├── composables/             # useFormatter.ts, useThemeConfig.ts
+│   │   │   ├── layouts/                 # AdminLayout.vue, AuthLayout.vue
+│   │   │   ├── lib/                     # axios.ts, formatters.ts, loading-bar.ts, utils.ts
+│   │   │   ├── router/                  # Full demo routes & guards
+│   │   │   ├── services/                # Real API service layer + DEV mock fallbacks
+│   │   │   ├── stores/                  # Pinia stores (auth, notification, activity, billing, role)
+│   │   │   └── views/                   # 20+ demo views (Dashboard, Ecommerce, Analytics, RBAC, etc.)
+│   │   ├── components.json              # shadcn-vue configuration
+│   │   ├── vite.config.ts               # Vite bundler & auto-import configuration
+│   │   └── package.json                 # Showcase dependencies
+│   │
+│   └── create-nala/                     ← Official scaffolding CLI tool (create-nala on npm)
+│       ├── src/
+│       │   ├── index.ts                 # Interactive CLI wizard (@clack/prompts + kolorist)
+│       │   └── utils.ts                 # Template transformation, variable replacement & copying
+│       ├── template/                    # Clean starter template for new user projects
+│       │   ├── src/
+│       │   │   ├── components/ui/       # 34+ core UI primitives (zero showcase bloat)
+│       │   │   ├── layouts/             # Clean AdminLayout & AuthLayout
+│       │   │   ├── router/              # Minimal router (Dashboard, Blank, Auth, Errors)
+│       │   │   ├── services/            # auth.service.ts, user.service.ts
+│       │   │   ├── stores/              # auth.ts store
+│       │   │   └── views/               # Minimal Dashboard, BlankView, Auth, Error views
+│       │   ├── _gitignore               # Clean gitignore template
+│       │   └── package.json             # Minimal starter dependencies
+│       ├── tsup.config.ts               # CLI TypeScript bundler configuration
+│       └── package.json                 # CLI package configuration (bin: ./dist/index.js)
+│
+├── pnpm-workspace.yaml                  # pnpm workspace definition
+├── package.json                         # Root scripts (dev, build, preview, test, build:cli, sync:ui)
+├── DEVELOPMENT.md                       # Comprehensive contributor and developer guide
+├── ROADMAP.md                           # Project milestones & version roadmap
+└── LICENSE                              # MIT License
 ```
+
+For a detailed guide on contributing and maintaining packages, see [DEVELOPMENT.md](./DEVELOPMENT.md).
 
 ---
 

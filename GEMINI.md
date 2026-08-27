@@ -16,7 +16,7 @@ This file defines the strict, high-priority guardrails and behavioral constraint
    - **Sizing Scale:** NEVER write arbitrary bracket sizing like `max-w-[170px]`, `w-[300px]`, or `p-[1px]`. ALWAYS use Tailwind v4 scale (`max-w-44`, `max-w-28`, `w-75`, `max-h-75`, `p-px`).
    - **Shadows:** Use `shadow-2xs`, `shadow-xs`, `shadow-sm`, `shadow-md`, `shadow-lg`.
 7. **Package Installation Confirmation:** NEVER install new npm packages autonomously. Always ask the user directly in chat for approval before running `pnpm add`.
-8. **Single SPA Architecture:** This repository is a pure Single Page Application (non-monorepo). Do not create `pnpm-workspace.yaml`. All dependency configurations are managed in `package.json`.
+8. **Workspace Monorepo Architecture:** This repository is a `pnpm` monorepo defined in `pnpm-workspace.yaml`. Main application packages reside under `packages/showcase/` (full demo app) and `packages/create-nala/` (scaffolding CLI & clean template). Root scripts delegate to workspace filters.
 9. **Dialog / Modal Accessibility Standard:** Every `DialogContent` MUST include `DialogTitle` and `DialogDescription` (use `sr-only` if visually hidden) to comply with Reka UI ARIA standards.
 
 ---

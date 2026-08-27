@@ -1,17 +1,53 @@
 ---
 name: nala-project
 description: >
-  Skill for the Nala project - an Enterprise Admin Dashboard Template built with Vue 3,
+  Skill for the Nala project - an Enterprise Admin Dashboard Template & Scaffolding Tool Monorepo built with Vue 3,
   Vite, TypeScript, Tailwind CSS v4, reka-ui (shadcn-vue), Pinia, and a Real API Service Layer.
   Activates when the user requests adding a page, component, store, API service, UI feature,
-  scaffolding a new feature, or refactoring within the Nala project.
+  scaffolding a new feature, or refactoring within the Nala project monorepo.
 ---
 
 # Nala Project Skill
 
-You are an expert developer for the **Nala** project — a modern, ready-to-use Enterprise Admin Dashboard Template built with the Vue 3 + Vite + TypeScript + Tailwind CSS v4 stack.
+You are an expert developer for the **Nala** project — a modern, production-ready Enterprise Admin Dashboard Template and Scaffolding Tool (`pnpm create nala`) built with the Vue 3 + Vite + TypeScript + Tailwind CSS v4 stack.
 
-Follow all the guidelines below strictly whenever writing, modifying, or building a new feature in this project.
+Follow all guidelines below strictly whenever writing, modifying, or scaffolding features in this repository.
+
+---
+
+## 🏗️ Workspace Monorepo Architecture
+
+This repository is structured as a **pnpm Workspace Monorepo**:
+
+```
+nala/                                    ← Root monorepo
+├── packages/
+│   ├── showcase/                        ← @nala/showcase (Full Enterprise Demo App)
+│   │   ├── src/
+│   │   │   ├── components/              ← 44+ UI Primitives, Layout, CodePreview
+│   │   │   ├── views/                   ← Full showcase suite (Ecommerce, Analytics, RBAC, Billing, etc.)
+│   │   │   ├── stores/                  ← auth, notification, activity, billing, role stores
+│   │   │   └── services/                ← Real API adapters + DEV mock fallbacks
+│   │   └── package.json                 ← name: "@nala/showcase"
+│   │
+│   └── create-nala/                     ← create-nala (Official Scaffolding CLI for npm)
+│       ├── src/                         ← CLI source code (@clack/prompts + kolorist)
+│       ├── template/                    ← Minimal, clean starter template for users
+│       │   └── src/
+│       │       ├── components/ui/       ← 34+ core UI primitives (no showcase extras)
+│       │       ├── layouts/             ← Clean AdminLayout & AuthLayout (no ThemeCustomizer)
+│       │       ├── stores/              ← auth.ts ONLY
+│       │       ├── services/            ← auth.service.ts + user.service.ts ONLY
+│       │       └── views/               ← dashboard, _starter/BlankView, auth/*, errors/*
+│       ├── dist/                        ← Compiled CLI executable
+│       └── package.json                 ← name: "create-nala"
+│
+├── pnpm-workspace.yaml                  ← Monorepo workspace configuration
+├── package.json                         ← Root workspace delegation scripts
+├── DEVELOPMENT.md                       ← Contributor & maintenance guide
+├── ROADMAP.md                           ← Milestone & feature tracker
+└── GEMINI.md / CLAUDE.md               ← AI Guardrails
+```
 
 ---
 
@@ -20,17 +56,18 @@ Follow all the guidelines below strictly whenever writing, modifying, or buildin
 | Layer | Technology | Notes |
 |---|---|---|
 | **Framework** | Vue 3 (Composition API) | Always use `<script setup lang="ts">` |
-| **Build Tool** | Vite 8 (`@vitejs/plugin-vue`) | Super fast HMR & build |
-| **Package Manager** | `pnpm` | pnpm v10 standard (`package.json` config) |
+| **Build Tool** | Vite 8 (`@vitejs/plugin-vue`) | Super fast HMR & production bundler |
+| **Monorepo / Package Manager** | `pnpm` v10+ (Workspaces) | `pnpm-workspace.yaml` packages: `packages/*` |
 | **Auto-Imports** | `unplugin-auto-import` & `unplugin-vue-components` | Auto-imports Vue, Router, Pinia, VueUse, & all UI components |
-| **Styling** | Tailwind CSS v4 (`@tailwindcss/vite`) + `tw-animate-css` | OKLCH color tokens in `src/style.css` |
-| **UI Primitives** | `reka-ui` + shadcn-vue (New York style) | 36+ primitive components in `src/components/ui/` |
+| **Styling** | Tailwind CSS v4 (`@tailwindcss/vite`) + `tw-animate-css` | Modern OKLCH color tokens in `src/style.css` |
+| **UI Primitives** | `reka-ui` + shadcn-vue (New York style) | 44+ primitive components in `src/components/ui/` |
 | **Data Table** | `@tanstack/vue-table` | Headless table logic with sorting & pagination |
 | **Form & Validation** | `vee-validate` + `@vee-validate/zod` + `zod` | Strictly-typed validation schemas |
 | **Icons** | `@lucide/vue` | Must be imported explicitly (`import { Plus } from '@lucide/vue'`) |
 | **State Management** | Pinia | Setup Stores pattern (`defineStore('name', () => { ... })`) |
 | **Routing** | Vue Router v5 | HTML5 history mode with route guards |
 | **API Client** | Axios + Enterprise Interceptors | Silent Token Refresh, Global Loading Bar, Auto Error Toast |
+| **CLI Scaffolder** | `@clack/prompts` + `kolorist` + `tsup` | Powers `pnpm create nala my-app` |
 | **Notifications** | `vue-sonner` | Toast notifications via `toast.success()`, `toast.error()` |
 | **Language & Types** | TypeScript 6 + `vue-tsc` | Strict static typing, zero `any` |
 
@@ -38,34 +75,26 @@ Follow all the guidelines below strictly whenever writing, modifying, or buildin
 
 ## 🛑 Strict Rules (MUST FOLLOW)
 
-1. **NEVER** run `pnpm build` or `npm run build` after finishing code changes — only run the dev server if explicitly requested.
+1. **NEVER** run `pnpm build` or `npm run build` after finishing code changes — only run the dev server or build checks if explicitly requested by the user.
 2. **DO NOT** use the Options API — always use `<script setup lang="ts">`.
-3. **DO NOT** use the `any` type — always define an explicit type/interface.
-4. **New Package Installation Confirmation:** DO NOT install new packages without explicit confirmation from the user. If a new external library is required, the Agent **must ask directly in chat** for approval before running any `pnpm add` command.
+3. **DO NOT** use the `any` type — always define an explicit TypeScript interface or type.
+4. **New Package Installation Confirmation:** DO NOT install new npm packages without explicit confirmation in chat. Always ask the user directly before running `pnpm add`.
 5. **DO NOT** create separate CSS files per component — use Tailwind utility classes.
 6. **DO NOT** use `style scoped` if it can be solved with Tailwind.
 7. **DO NOT** remove comments or docstrings unrelated to the change being made.
 8. **Output & Code Comment Language (English Standard):**
-   - All UI text, form labels, placeholders, validation/error messages, page titles, status badges, and toast notifications **MUST be written in English**.
+   - All user-facing UI text, form labels, placeholders, validation/error messages, page titles, status badges, and toast notifications **MUST be written in English**.
    - All code comments (JSDoc, inline code comments, TODO notes) inside `.vue` and `.ts` source files **MUST be written in English**.
-   - (Internal agent documentation such as `SKILL.md` may be written in any language for the team's convenience.)
 9. **NEVER** run `git add`, `git commit`, or `git push` without explicit instruction from the user.
 10. **Tailwind CSS v4 Strict Syntax & Sizing Scale Compliance:**
     - **Gradients:** ALWAYS use `bg-linear-to-r`, `bg-linear-to-b`, `bg-linear-to-tr`, etc. (NEVER write legacy v3 `bg-gradient-to-*`).
-    - **Sizing Scale:** NEVER write arbitrary pixel brackets like `max-w-[170px]`, `max-w-[110px]`, `w-[300px]`, or `p-[1px]`. ALWAYS use Tailwind v4 scale (`max-w-44`, `max-w-28`, `w-75`, `max-h-75`, `p-px`).
+    - **Sizing Scale:** NEVER write arbitrary pixel brackets like `max-w-[170px]`, `w-[300px]`, or `p-[1px]`. ALWAYS use Tailwind v4 scale (`max-w-44`, `max-w-28`, `w-75`, `max-h-75`, `p-px`).
     - **Shadows:** Use `shadow-2xs`, `shadow-xs`, `shadow-sm`, `shadow-md`, `shadow-lg`.
-11. **Single SPA Repository (Non-Monorepo):** This project is a pure Single Page Application. Do not create a `pnpm-workspace.yaml`. All pnpm configuration (e.g. `ignoredBuiltDependencies`) is managed in `package.json`.
-12. **Testing Scope & Execution:** This project is a Vite-based UI template. Creating and running unit tests (`vitest`, `pnpm test`, `pnpm test:run`) or E2E tests is strictly executed ONLY upon explicit instruction from the user. NEVER run unit tests autonomously after writing or modifying code.
-
----
-
-## 🏗️ Project Architecture: Core App vs Showcase Demo
-
-When a developer clones the Nala template to build a real application (e.g. CRM, SaaS, E-Commerce, ERP):
-- **Core Production Shell (PERMANENT):**
-  `src/components/ui/` (36+ components), `src/components/PageHeader.vue`, `src/components/CodePreview.vue`, `src/layouts/` (AdminLayout & AuthLayout), `src/lib/` (Axios, utils), `src/stores/`, `src/services/`, `src/views/auth/`, `src/views/settings/`, `src/views/users/`, `src/views/errors/`, and `src/views/_starter/BlankView.vue`.
-- **Showcase Demo Area (OPTIONAL / SAFE TO DELETE):**
-  `src/views/components/*View.vue` (demo pages for buttons, forms, tables, etc.). If this folder is deleted by the developer to build a clean new UI, **all 36+ components in `src/components/ui/` remain fully available** and ready to use at any time.
+11. **Workspace Monorepo Architecture:**
+    - Main showcase app lives in `packages/showcase/`.
+    - CLI tool & clean starter template live in `packages/create-nala/`.
+    - Root `package.json` delegates commands via `pnpm --filter`.
+12. **Testing Scope & Execution:** Unit tests (`vitest`, `pnpm test`, `pnpm test:run`) are executed ONLY upon explicit instruction from the user.
 
 ---
 
@@ -79,7 +108,7 @@ To avoid import hallucination:
 | **Vue Router** (`useRoute`, `useRouter`) | ✅ **AUTOMATIC** | Use directly: `const router = useRouter()` |
 | **VueUse** (`useColorMode`, `useLocalStorage`, `useDebounceFn`, etc.) | ✅ **AUTOMATIC** | Use directly: `const mode = useColorMode()` |
 | **Pinia** (`defineStore`, `storeToRefs`) | ✅ **AUTOMATIC** | Use directly: `defineStore(...)` |
-| **All UI Components** (`Button`, `Card`, `Dialog`, `Input`, `InputGroup`, `PageHeader`, `Select`, `Table`, `Tabs`, `CodePreview`, etc.) | ✅ **AUTOMATIC** | Use directly in template: `<PageHeader>`, `<Card>`, `<InputGroup>`, etc. |
+| **All UI Components** (`Button`, `Card`, `Dialog`, `Input`, `InputGroup`, `PageHeader`, `Select`, `Table`, `Tabs`, etc.) | ✅ **AUTOMATIC** | Use directly in template: `<PageHeader>`, `<Card>`, `<InputGroup>`, etc. |
 | **Lucide Icons** (`Plus`, `Search`, `Trash2`, `Edit`, etc.) | ⚠️ **MANUAL IMPORT REQUIRED** | `import { Plus, Search } from '@lucide/vue'` |
 | **Toast Notifications** (`toast`) | ⚠️ **MANUAL IMPORT REQUIRED** | `import { toast } from '@/components/ui/sonner'` |
 | **HTTP API Client** (`apiClient`) | ⚠️ **MANUAL IMPORT REQUIRED** | `import { apiClient } from '@/lib/axios'` |
@@ -90,16 +119,16 @@ To avoid import hallucination:
 
 ## 📦 Full UI Primitives Component Catalog (`src/components/ui/`)
 
-All components below are already registered in the template and can be used directly in Vue templates without manual import:
+All components below are registered in the template and can be used directly in Vue templates without manual import:
 
 | Component Directory | Available Components & Sub-Components |
 |---|---|
 | `PageHeader.vue` | `PageHeader` (standardized top page header with `title`, `description`, `badge`, `statusDot`, and `#actions` slot) |
-| `CodePreview.vue` | `CodePreview` (interactive documentation component with One Dark Pro syntax highlighting & clipboard copy) |
+| `CodePreview.vue` | `CodePreview` (interactive showcase component with syntax highlighting & clipboard copy) |
 | `accordion/` | `Accordion`, `AccordionItem`, `AccordionHeader`, `AccordionTrigger`, `AccordionContent` |
 | `alert/` | `Alert` (variant: `default`, `destructive`, `info`, `success`, `warning`), `AlertTitle`, `AlertDescription` |
 | `alert-dialog/` | `AlertDialog`, `AlertDialogTrigger`, `AlertDialogContent`, `AlertDialogHeader`, `AlertDialogTitle`, `AlertDialogDescription`, `AlertDialogFooter`, `AlertDialogAction`, `AlertDialogCancel` |
-| `avatar/` | `Avatar` (prop: `status: 'online'\|'busy'\|'away'\|'offline'` — renders built-in presence pip), `AvatarImage`, `AvatarFallback`, `AvatarGroup` (props: `max`, `overlap: 2\|3\|4`) |
+| `avatar/` | `Avatar` (prop: `status: 'online'\|'busy'\|'away'\|'offline'`), `AvatarImage`, `AvatarFallback`, `AvatarGroup` (props: `max`, `overlap: 2\|3\|4`) |
 | `badge/` | `Badge` (variant: `default`, `secondary`, `destructive`, `outline`, `success`, `info`, `warning`; shape: `default`, `pill`; props: `dot`, `pulse`) |
 | `breadcrumb/` | `Breadcrumb`, `BreadcrumbList`, `BreadcrumbItem`, `BreadcrumbLink`, `BreadcrumbPage`, `BreadcrumbSeparator`, `BreadcrumbEllipsis` |
 | `button/` | `Button` (variant: `default`, `secondary`, `destructive`, `outline`, `ghost`, `link`; size: `xs`, `sm`, `default`, `lg`, `icon-xs`, `icon-sm`, `icon`, `icon-lg`) |
@@ -128,7 +157,7 @@ All components below are already registered in the template and can be used dire
 | `select/` | `Select`, `SelectTrigger`, `SelectValue`, `SelectContent`, `SelectItem`, `SelectGroup`, `SelectLabel`, `SelectSeparator` |
 | `separator/` | `Separator` (orientation: horizontal, vertical) |
 | `sheet/` | `Sheet`, `SheetTrigger`, `SheetContent`, `SheetHeader`, `SheetTitle`, `SheetDescription`, `SheetFooter`, `SheetClose` |
-| `sidebar/` | `SidebarProvider`, `Sidebar`, `SidebarContent`, `SidebarGroup`, `SidebarGroupLabel`, `SidebarMenu`, `SidebarMenuItem`, `SidebarMenuButton`, `SidebarTrigger`, `SidebarInset`, `SidebarHeader`, `SidebarFooter` |
+| `sidebar/` | `SidebarProvider`, `Sidebar`, `SidebarContent`, `SidebarGroup`, `SidebarGroupLabel`, `SidebarMenu`, `SidebarMenuItem`, `SidebarMenuButton`, `SidebarTrigger`, `SidebarInset`, `SidebarHeader`, `SidebarFooter`, `SidebarControl` |
 | `skeleton/` | `Skeleton` |
 | `slider/` | `Slider` |
 | `sonner/` | `Toaster`, `toast` (from `vue-sonner`) |
@@ -148,7 +177,7 @@ All components below are already registered in the template and can be used dire
 
 Use this 5-part pattern when asked to build a new module/feature (e.g. "Products", "Invoices", "Customers"):
 
-### 1. API Service with Safe DEV Fallback (`src/services/product.service.ts`)
+### 1. API Service with Safe DEV Fallback (`packages/showcase/src/services/product.service.ts`)
 > **Enterprise Rule:** Mock fallback may ONLY be active when `import.meta.env.DEV`. In production mode, throw the real error (`throw error`) so the app never displays fake data when the backend is offline.
 
 ```ts
@@ -164,7 +193,6 @@ export interface ProductItem {
   status: 'active' | 'draft' | 'archived'
 }
 
-// Explicit payload interface is preferred over Omit<> for AI readability & API contract clarity
 export interface CreateProductPayload {
   name: string
   sku: string
@@ -172,7 +200,6 @@ export interface CreateProductPayload {
   stock: number
 }
 
-// In-memory mock store for local development only (resets on full page reload / Vite HMR)
 const mockProducts: ProductItem[] = [
   { id: '1', name: 'MacBook Pro 14"', sku: 'MBP-14', price: 1999, stock: 12, status: 'active' },
   { id: '2', name: 'Dell XPS 15', sku: 'XPS-15', price: 1499, stock: 5, status: 'active' },
@@ -221,7 +248,7 @@ export const productService = {
 }
 ```
 
-### 2. Pinia Store (`src/stores/product.ts`)
+### 2. Pinia Store (`packages/showcase/src/stores/product.ts`)
 ```ts
 import { defineStore } from 'pinia'
 import { productService, type ProductItem, type CreateProductPayload } from '@/services/product.service'
@@ -287,7 +314,6 @@ const emit = defineEmits<{
 
 const productStore = useProductStore()
 
-// Strict validation schema using Zod
 const productSchema = toTypedSchema(
   z.object({
     name: z.string().min(3, 'Product name must be at least 3 characters'),
@@ -405,7 +431,7 @@ const filteredProducts = computed(() => {
 </script>
 
 <template>
-  <div class="space-y-6 max-w-[1920px] mx-auto pb-10">
+  <div class="space-y-6 w-full mx-auto pb-10">
     <!-- Header using Reusable PageHeader -->
     <PageHeader
       title="Products"
@@ -428,7 +454,7 @@ const filteredProducts = computed(() => {
         </div>
         <div class="w-full sm:w-64">
           <InputGroup>
-            <InputIcon>
+            <InputIcon side="left">
               <Search class="h-3.5 w-3.5" />
             </InputIcon>
             <Input v-model="searchQuery" placeholder="Search product or SKU..." class="pl-8 h-8 text-xs" />
@@ -495,42 +521,12 @@ const filteredProducts = computed(() => {
 </template>
 ```
 
-### 5. Register in Router & Sidebar Navigation
-> **Architecture Note:** `AdminLayout.vue` is the *Single Source of Truth* for all sidebar navigation and Command Palette search items (`searchItems`). Register each new feature manually so entries stay easy to trace (*searchable*):
-
-- **`src/router/index.ts`:**
-  ```ts
-  {
-    path: 'products',
-    name: 'products',
-    component: () => import('@/views/products/IndexView.vue'),
-  }
-  ```
-- **`src/layouts/AdminLayout.vue` (`mainNav`):**
-  ```ts
-  import { Package } from '@lucide/vue'
-
-  const mainNav = [
-    { name: 'Dashboard', routeName: 'dashboard', href: '/', icon: LayoutDashboard },
-    { name: 'Products', routeName: 'products', href: '/products', icon: Package },
-    { name: 'Users', routeName: 'users', href: '/users', icon: Users },
-  ]
-  ```
-- **`src/layouts/AdminLayout.vue` (`searchItems` & `pageTitle`):**
-  ```ts
-  // searchItems (Command Palette Ctrl+K)
-  { title: 'Products', href: '/products', icon: Package, category: 'Main' },
-
-  // pageTitle
-  if (route.name === 'products') return 'Products'
-  ```
-
 ---
 
 ## 🎨 UI/UX & Layout Best Practices (Global Guidelines)
 
 ### 1. Standard Page Header (`<PageHeader>`)
-Instead of duplicating the ~12-line header layout in every view, always use the `<PageHeader>` component:
+Always use the `<PageHeader>` component instead of manual header layouts:
 ```vue
 <PageHeader
   title="Page Title"
@@ -545,14 +541,13 @@ Instead of duplicating the ~12-line header layout in every view, always use the 
 ```
 
 ### 2. Edge-to-Edge Card Layouts (`<Card flush>` & `<CardHeader section>`)
-The base `Card.vue` component has built-in `py-6` and `gap-6` utilities. When building a card (form, stat widget, banner dialog, table wrapper) that has a header/footer with a distinct background (`bg-muted/10`, separator lines `border-t`/`border-b`):
 - **Card Container:** Use `<Card flush>` (applies `overflow-hidden py-0 gap-0` automatically).
 - **CardHeader:** Use `<CardHeader section>` (applies `p-6 border-b border-border bg-muted/10` automatically).
 - **CardContent:** Provide explicit internal padding (e.g. `p-6`, or `p-0` for Tables).
-- **CardFooter:** Provide internal padding and a separator border (`border-t border-border bg-muted/20 px-6 py-4 flex items-center justify-between`).
+- **CardFooter:** Provide internal padding and separator border (`border-t border-border bg-muted/20 px-6 py-4 flex items-center justify-between`).
 
 ### 3. Input Affixes & Addons (`<InputGroup>`, `<InputIcon>`, `<InputAddon>`)
-Never write manual absolute positioning (`absolute left-3 top-1/2 -translate-y-1/2`) for input icons or prefix/suffix text:
+Never write manual absolute positioning for input icons:
 ```vue
 <!-- Leading Icon Input -->
 <InputGroup>
@@ -568,228 +563,31 @@ Never write manual absolute positioning (`absolute left-3 top-1/2 -translate-y-1
 </InputGroup>
 ```
 
-### 4. Mobile Page & Form Layout Standard (Keyboard-Safe & Scrollable)
-When building auth pages, wizards, onboarding flows, or fullscreen dialogs:
-- **NEVER** use static vertical centering (`items-center justify-center min-h-screen`) on mobile screens, since input fields will be covered by the virtual keyboard while typing.
-- **ALWAYS USE** the dynamic viewport height pattern:
-  `min-h-dvh flex flex-col items-center justify-start pt-6 sm:pt-8 pb-12 px-4 sm:justify-center sm:py-8 sm:px-6 overflow-y-auto`
-- **Mobile (`< sm`):** Form sits naturally near the top (`justify-start pt-6 pb-12`).
-- **Desktop (`≥ sm`):** Card automatically re-centers on screen for a polished look (`sm:justify-center sm:py-8`).
+### 4. Dialog / Modal Accessibility Standard
+- **IMPORTANT:** Every `DialogContent` MUST have a `DialogTitle` and `DialogDescription` (use `sr-only` class if visually hidden) to meet Reka UI ARIA standards.
+- Do not add native `autoFocus` attributes to inputs inside Dialogs.
 
-### 5. Precise Horizontal Alignment Between Navbar and Sidebar
-When building a top navbar/header that sits above a collapsible sidebar:
-- **Sidebar Icon Column Width:** Collapsed width is `3.5rem` = 56px (`w-14`), with the icon's center point at $x = 28\text{px}$.
-- **Navbar Left Element Container:** The logo or collapse trigger in the header MUST be wrapped in a `w-14 h-14 flex items-center justify-center` container flush against the leftmost edge ($x = 0$), with right padding `pr-4 sm:pr-6` on the header (no left padding `pl-*`).
-
-### 6. Dialog / Modal Accessibility Standard
-- **IMPORTANT:** Every `DialogContent` MUST have a `DialogTitle` and `DialogDescription` (use the `sr-only` class if you want them visually hidden) to meet Reka UI's ARIA standards and prevent runtime warnings.
-- **Avoid Native `autoFocus` in Dialogs:** Do not add the native HTML `autoFocus` attribute to `<input>` elements inside a Dialog/Modal, since Reka UI already manages keyboard focus transitions automatically.
-
-### 7. Badge Semantic Variants, Shape & Status Dot
-
-Never write raw inline `<span>` pills for semantic state badges. Use `<Badge>` with the CVA variant + shape props:
-
-```vue
-<!-- Semantic color tint variants (pill shape recommended) -->
-<Badge variant="success" shape="pill">Active</Badge>
-<Badge variant="info"    shape="pill">Syncing</Badge>
-<Badge variant="warning" shape="pill">Degraded</Badge>
-
-<!-- Built-in status dot (dot prop inherits bg-current from variant) -->
-<Badge variant="success" shape="pill" dot pulse>Operational</Badge>
-<Badge variant="warning" shape="pill" dot>High Latency</Badge>
-<Badge variant="destructive" shape="pill" dot>Outage</Badge>
-
-<!-- Icon badge (standard outline with Lucide icon) -->
-<Badge variant="outline" class="gap-1.5 py-1">
-  <ShieldCheck class="h-3.5 w-3.5 text-primary" />
-  2FA Protected
-</Badge>
-```
-
-### 8. Avatar Presence & AvatarGroup
-
-`<Avatar>` is strictly a circular component (`rounded-full` is built into its outer wrapper and inner `AvatarRoot`). Any utility classes like `border`, `border-2`, `ring`, or `shadow` passed to `<Avatar>` will strictly render as circles.
-
-Never write manual `div.relative` + `span.absolute` for presence indicators, and never write manual `div.-space-x-3` for avatar stacks:
-
-```vue
-<!-- Presence pip via status prop — relative wrapper & rounded-full are built-in -->
-<Avatar class="h-10 w-10 border" status="online">
-  <AvatarFallback>OM</AvatarFallback>
-</Avatar>
-<!-- status values: 'online' (emerald) | 'busy' (red) | 'away' (amber) | 'offline' (muted) -->
-
-<!-- Stacked avatar group with automatic overflow chip (+N) -->
-<AvatarGroup :max="4" :overlap="3">
-  <Avatar class="h-10 w-10 border-2 border-background">
-    <AvatarFallback class="bg-emerald-500/10 text-emerald-600 text-xs font-semibold">OM</AvatarFallback>
-  </Avatar>
-  <Avatar class="h-10 w-10 border-2 border-background">
-    <AvatarFallback class="bg-blue-500/10 text-blue-600 text-xs font-semibold">JL</AvatarFallback>
-  </Avatar>
-  <!-- Additional avatars beyond :max will render as "+N" overflow chip -->
-</AvatarGroup>
-```
-
-### 9. Dynamic Theme & Layout Customization Architecture
-
-Nala ships with a runtime Theme & Layout Configurator powered by `useThemeConfig()` composable and `ThemeCustomizer.vue`.
-
-#### How it Works:
-- **Dynamic Palette:** Updating `themeConfig.primaryColor` injects root CSS variables (`--primary`, `--ring`, `--primary-foreground`) for both Light and Dark mode using exact `oklch` formulas.
-- **Corner Radius Scale:** Updates `--radius` (`0rem` to `1rem`), which automatically cascades to `--radius-xs`, `--radius-sm`, `--radius-md`, `--radius-lg`, and `--radius-xl`.
-- **Layout Width:** Supports `fluid` (100% full width) and `boxed` (`max-w-7xl mx-auto`).
-- **Persistence:** Automatically synced to `localStorage` under `nala-theme-config`.
-
-#### Developer Guide: Hardcoding or Disabling the Customizer in Production
-When building a client or production app where the end-user should NOT see the customizer drawer:
-1. **To hide the Customizer UI completely:**
-   Set `VITE_SHOW_THEME_CUSTOMIZER=false` in `.env`. Both the floating button and the navbar paintbrush icon will disappear.
-2. **To hardcode a specific default brand color & radius in TypeScript:**
-   Modify `DEFAULT_CONFIG` in `src/composables/useThemeConfig.ts`:
-   ```ts
-   const DEFAULT_CONFIG: ThemeConfig = {
-     primaryColor: 'emerald', // 'emerald' | 'indigo' | 'violet' | 'rose' | 'amber' | 'cyan' | 'zinc'
-     radius: '0.375',         // '0' | '0.25' | '0.375' | '0.5' | '0.75' | '1.0'
-     contentWidth: 'fluid',   // 'fluid' | 'boxed'
-   }
-   ```
-3. **To hardcode directly in pure CSS (Zero JS overhead):**
-   Update `--primary`, `--ring`, and `--radius` in `src/style.css` under `:root` and `.dark`, then remove `<ThemeCustomizer />` from `AdminLayout.vue`.
-
-### 10. Tailwind CSS v4 Syntax Reference & Anti-Patterns (CRITICAL)
-
-Agents frequently make mistakes when writing CSS classes by using legacy Tailwind v3 syntax. Always consult this reference table:
+### 5. Tailwind CSS v4 Syntax Reference & Anti-Patterns (CRITICAL)
 
 | Category | ❌ NEVER USE (v3 / Anti-Pattern) | ✅ ALWAYS USE (Tailwind v4) | Notes |
 |---|---|---|---|
-| **Linear Gradients** | `bg-gradient-to-r`<br>`bg-gradient-to-b`<br>`bg-gradient-to-tr` | `bg-linear-to-r`<br>`bg-linear-to-b`<br>`bg-linear-to-tr` | In v4, `bg-gradient-*` is renamed to `bg-linear-*` |
-| **Arbitrary Max Width** | `max-w-[170px]`<br>`max-w-[110px]`<br>`max-w-[300px]` | `max-w-44` / `max-w-42.5`<br>`max-w-28` / `max-w-27.5`<br>`max-w-75` | Use standard numerical scale; v4 supports `.5` increments |
-| **Arbitrary Width/Height** | `w-[300px]`<br>`h-[400px]`<br>`max-h-[300px]` | `w-75`<br>`h-100`<br>`max-h-75` | Multiply rems by 4 (e.g. 300px = 18.75rem = `75`) |
+| **Linear Gradients** | `bg-gradient-to-r`<br>`bg-gradient-to-b` | `bg-linear-to-r`<br>`bg-linear-to-b` | In v4, `bg-gradient-*` is renamed to `bg-linear-*` |
+| **Arbitrary Max Width** | `max-w-[170px]`<br>`max-w-[300px]` | `max-w-44`<br>`max-w-75` | Use standard scale |
+| **Arbitrary Width/Height** | `w-[300px]`<br>`h-[400px]` | `w-75`<br>`h-100` | Multiply rems by 4 |
 | **1-pixel Padding/Border** | `p-[1px]`<br>`m-[1px]` | `p-px`<br>`m-px` | Built-in `px` scale (`1px`) |
 | **Shadow Scale** | `shadow-[0_1px_2px_...]` | `shadow-2xs`<br>`shadow-xs`<br>`shadow-sm`<br>`shadow-md` | Standard built-in shadows |
 | **Viewport Heights** | `min-h-screen`<br>`h-screen` | `min-h-dvh`<br>`h-dvh` / `h-svh` | Prevents mobile address-bar viewport overflow bugs |
-| **Color Opacity** | `bg-primary/0.5` | `bg-primary/50`<br>`border-border/40`<br>`text-muted-foreground/70` | Use integer percentage (1-100) after `/` |
+| **Color Opacity** | `bg-primary/0.5` | `bg-primary/50`<br>`border-border/40` | Use integer percentage (1-100) after `/` |
 
 ---
 
-## 🛠️ Dev Commands
+## 🛠️ Workspace Dev Commands
 
-```bash
-pnpm dev      # Vite dev server + HMR (http://localhost:5173)
-pnpm preview  # Preview production build locally
-# DO NOT run pnpm build (unless explicitly requested by the user)
-```
-
----
-
-### 11. Standardized Metric & KPI Stats Cards Blueprint (CRITICAL)
-
-All KPI / metric summary cards in Nala MUST follow the exact structural blueprint below.
-
-#### 📐 Structural Blueprint:
-```vue
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-  <Card
-    v-for="stat in stats"
-    :key="stat.title"
-    flush
-    class="highlight-card shadow-xs border-border/80 bg-card hover:border-border transition-all duration-200"
-  >
-    <CardContent class="p-5 space-y-2">
-      <!-- 1. Top Row: Title + Indicator Icon -->
-      <div class="flex items-center justify-between">
-        <span class="text-xs font-medium text-muted-foreground">{{ stat.title }}</span>
-        <component :is="stat.icon" class="h-4 w-4" :class="stat.color ?? 'text-primary'" />
-      </div>
-
-      <!-- 2. Value: Bold, crisp, tightly balanced -->
-      <div class="text-2xl font-bold tracking-tight text-foreground">{{ stat.value }}</div>
-
-      <!-- 3. Trend & Context: Arrow indicator + percentage + comparison label -->
-      <p class="text-xs text-muted-foreground flex items-center gap-1">
-        <span
-          class="font-semibold inline-flex items-center gap-0.5"
-          :class="stat.positive ? 'text-emerald-500' : 'text-rose-500'"
-        >
-          <component :is="stat.positive ? ArrowUpRight : ArrowDownRight" class="h-3.5 w-3.5" />
-          {{ stat.change }}
-        </span>
-        <span>{{ stat.changeLabel }}</span>
-      </p>
-    </CardContent>
-  </Card>
-</div>
-```
-
-#### 🛑 KPI Card Anti-Patterns (DO NOT DO):
-- ❌ **DO NOT use `<Card>` without `flush`:** Without `flush`, `Card.vue` adds default `py-6 gap-6`, stacking 44px of empty vertical space above and below the card content. ALWAYS pass `flush` on metric cards.
-- ❌ **DO NOT draw manual raw SVG sparklines inside KPI cards:** Cluttered, inconsistent, and causes ugly text wrapping. Keep KPI cards typography-focused and clean.
-- ❌ **DO NOT put horizontal dividing lines (`border-t`):** Dividing lines cut the card in half and break visual coherence.
-- ❌ **DO NOT use colored square icon containers in the header:** Use clean, subtle Lucide icons directly with `text-primary`, `text-emerald-500`, etc.
-
-#### 📊 KPI Metric Trend Indicator Semantics:
-When building KPI stat cards with a `positive: boolean` flag and delta values (e.g., `+12.5%`, `-4.1%`), the `positive` field means **"this change is good for the business"**:
-
-| Metric Type | Decrease (`-`) | Increase (`+`) | `positive` when delta is... |
-|---|---|---|---|
-| Revenue, Users, Signups, Conversion Rate | ❌ Bad | ✅ Good | `positive: true` when delta starts with `+` |
-| **Bounce Rate, Churn Rate, Error Rate, Latency** | ✅ Good | ❌ Bad | `positive: false` when delta starts with `-` |
-
-**Color Semantic Rules:**
-- `positive: true` → `text-emerald-500`, `ArrowUpRight` icon
-- `positive: false` → `text-rose-500`, `ArrowDownRight` icon
-
-**Example Data:**
-```ts
-// ✅ Revenue going up = positive: true
-{ title: 'Gross Revenue', value: '$128,430.00', change: '+18.4%', changeLabel: 'from last month', positive: true, icon: DollarSign, color: 'text-emerald-500' }
-
-// ✅ Bounce Rate going DOWN = positive: false (it uses negative/rose color)
-{ title: 'Bounce Rate', value: '36.4%', change: '-2.1%', changeLabel: 'vs yesterday', positive: false, icon: Activity, color: 'text-violet-500' }
-```
-
----
-
-### 12. Standardized Chart Primitives (`@unovis/vue` / `@/components/ui/chart`)
-
-**CRITICAL RULE:** DO NOT write manual raw `<svg>` spline bezier math for full charts. Always use the standardized chart components in `@/components/ui/chart`:
-
-- `<AreaChart :data="data" index="date" :categories="['series1', 'series2']" />`
-- `<LineChart :data="data" index="date" :categories="['series1']" />`
-- `<BarChart :data="data" index="month" :categories="['sales']" type="grouped|stacked" />`
-- `<DonutChart :data="data" index="name" category="value" />`
-
-#### Example Usage:
-```vue
-<script setup lang="ts">
-import { AreaChart } from '@/components/ui/chart'
-
-const chartData = [
-  { month: 'Jan', revenue: 4200, profit: 1200 },
-  { month: 'Feb', revenue: 5800, profit: 1900 },
-]
-</script>
-
-<template>
-  <div class="h-64 w-full">
-    <AreaChart
-      :data="chartData"
-      index="month"
-      :categories="['revenue', 'profit']"
-      :colors="['var(--primary)', '#3b82f6']"
-      showTooltip
-      showLegend
-    />
-  </div>
-</template>
-```
-
-#### Why this matters:
-1. **Powered by `@unovis/vue` + `@unovis/ts`** (official shadcn-vue standard).
-2. **Native CSS Variable & OKLCH Theme Integration** (`var(--primary)`).
-3. **Zero spline loopback bugs**, zero viewBox distortion, responsive resize by default.
-4. **Clean Single-Card Tooltips**: Tooltips automatically use `[data-unovis-tooltip]` and `--vis-tooltip-*` variables to render unified popovers without double-card borders in Light and Dark mode.
-5. **Clean Minimalist Design**: Grid lines are disabled by default (`showGridLine: false`) across Area, Line, and Bar charts for a clutter-free interface.
-
+| Command | Action |
+|---|---|
+| `pnpm dev` | Start showcase dev server (`@nala/showcase`) |
+| `pnpm build:cli` | Compile CLI tool (`create-nala`) to `dist/index.js` |
+| `pnpm sync:ui` | Copy UI primitives from `showcase` to `create-nala/template` |
+| `pnpm test` | Run unit tests in watch mode (showcase) |
+| `pnpm test:run` | Run unit tests once in CI mode |
+| `pnpm preview` | Preview production build of showcase |
