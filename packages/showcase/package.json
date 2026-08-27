@@ -1,6 +1,6 @@
 {
   "name": "@nala/showcase",
-  "version": "3.0.0",
+  "version": "3.0.2",
   "private": true,
   "description": "Full showcase admin dashboard for Nala featuring 34+ UI primitives, mock services, and comprehensive demo views.",
   "author": "candrasp",

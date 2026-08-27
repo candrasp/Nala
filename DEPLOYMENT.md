@@ -1,6 +1,8 @@
 # Deployment Guide — Nala Admin Dashboard
 
-This document provides step-by-step instructions for building and deploying the **Nala** admin dashboard template to various hosting providers, cloud platforms, and self-hosted environments.
+This document provides step-by-step instructions for building and deploying the **Nala** admin dashboard to various hosting providers, cloud platforms, and self-hosted environments.
+
+> **Monorepo Note:** This repository is a **pnpm workspace monorepo**. The deployable application lives in `packages/showcase/`. All build commands in this guide target that package via root workspace scripts. If you scaffolded a new project using `pnpm create nala`, this guide applies to your project root directly (no `packages/showcase/` prefix needed).
 
 ---
 
@@ -10,7 +12,7 @@ This document provides step-by-step instructions for building and deploying the 
 - [2. Cloud Hosting Providers](#2-cloud-hosting-providers)
   - [Vercel](#vercel)
   - [Netlify](#netlify)
-  - [Cloudflare Pages](#cloudflare-pages)
+  - [Cloudflare Workers (Recommended)](#cloudflare-workers-recommended)
   - [GitHub Pages](#github-pages)
 - [3. Docker & Container Deployment](#3-docker--container-deployment)
 - [4. Traditional VPS (Nginx / Apache)](#4-traditional-vps-nginx--apache)
@@ -26,18 +28,25 @@ Nala is built as a **Single Page Application (SPA)** using Vite.
 
 ### Build Command
 
+**From the monorepo root** (recommended):
 ```bash
-# Install dependencies
+# Install all workspace dependencies
 pnpm install
 
-# Run type-checking & generate production bundle
+# Type-check & generate production bundle for packages/showcase
 pnpm build
 ```
 
-The compiled static assets will be output to the **`dist/`** directory:
+**Or directly from the showcase package:**
+```bash
+cd packages/showcase
+pnpm build
+```
+
+The compiled static assets will be output to **`packages/showcase/dist/`**:
 
 ```
-dist/
+packages/showcase/dist/
 ├── assets/
 │   ├── index-[hash].js
 │   ├── index-[hash].css
@@ -46,6 +55,8 @@ dist/
 ├── screenshot.png
 └── index.html
 ```
+
+> **Scaffolded projects** (via `pnpm create nala`): Your `dist/` will be at the project root — no `packages/showcase/` prefix.
 
 ### Previewing the Production Build Locally
 
@@ -126,37 +137,36 @@ Or configure via `netlify.toml` in the project root:
 
 ---
 
-### Cloudflare Pages
+### Cloudflare Workers (Recommended)
 
-There are two official ways to deploy Nala to Cloudflare Pages:
+> **Note:** The Nala monorepo showcase is deployed as a **Cloudflare Workers Static Assets** project (not Cloudflare Pages). This provides better SPA routing support with edge-level fallback.
 
-#### Option A: Direct Git Integration (Zero Configuration — Recommended)
+For a complete, verified step-by-step guide including `wrangler.toml` configuration, API token setup, and a full troubleshooting matrix, see:
 
-1. Go to the [Cloudflare Dashboard](https://dash.cloudflare.com/) > **Compute (Workers) > Pages > Create a project > Connect to Git**.
-2. Select your repository `candrasp/Nala`.
-3. Configure build settings:
-   - **Framework preset:** `Vue` or `Vite`
-   - **Build command:** `pnpm build`
-   - **Build output directory:** `dist`
-   - **Root directory:** `/`
-4. Add environment variables under **Settings > Environment variables** (e.g. `VITE_DEFAULT_LOCALE`, `VITE_DEFAULT_CURRENCY`, `VITE_DEFAULT_TIME_FORMAT=24h`).
-5. SPA redirect rule is automatically handled by `public/_redirects` (`/*  /index.html  200`).
-6. Click **Save and Deploy**. Every `git push origin main` will automatically build and deploy your demo.
+📄 **[CLOUDFLARE.md](./CLOUDFLARE.md)** — Cloudflare Workers Deployment Guide
 
-#### Option B: Automated CD via GitHub Actions (`.github/workflows/deploy.yml`)
+**Quick summary:**
 
-Nala includes a production-ready CI/CD pipeline at `.github/workflows/deploy.yml`:
+| Setting | Value |
+|---|---|
+| Root directory | `packages/showcase` |
+| Build command | `pnpm build` |
+| Deploy command | `npx wrangler deploy` |
+| Output directory | `dist` |
 
-1. In your GitHub repository, go to **Settings > Secrets and variables > Actions**.
-2. Add the following repository secrets:
-   - `CLOUDFLARE_API_TOKEN`: Cloudflare API Token with `Cloudflare Pages:Edit` permissions.
-   - `CLOUDFLARE_ACCOUNT_ID`: Your Cloudflare Account ID (found in Workers & Pages sidebar overview).
-3. On every push to `main`, GitHub Actions will:
-   - Run unit tests (`pnpm test:run`)
-   - Run TypeScript check & build (`pnpm build`)
-   - Automatically deploy `dist/` directly to Cloudflare Pages project named `nala`.
+The `packages/showcase/wrangler.toml` is pre-configured:
+```toml
+name = "nala"
+compatibility_date = "2025-07-09"
+main = "dist/index.html"
+
+[assets]
+directory = "dist"
+not_found_handling = "single-page-application"
+```
 
 ---
+
 
 ### GitHub Pages
 

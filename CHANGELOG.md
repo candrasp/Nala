@@ -5,6 +5,85 @@ All notable changes to **Nala** — Vue 3 Admin Dashboard Template — are docum
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [Semantic Versioning](https://semver.org/).
 
+## [3.0.2] — 2026-08-27
+
+> ⚠️ **MAJOR ARCHITECTURAL CHANGE** — This release marks the transition of the Nala repository from a single standalone Vue 3 application into a **pnpm Workspace Monorepo** with a dedicated scaffolding CLI. Development workflow, contribution model, and project structure have fundamentally changed.
+
+### Added
+
+#### 🏗️ Monorepo Architecture Migration (Breaking Change)
+- **Repository restructured as a `pnpm` Workspace Monorepo (`pnpm-workspace.yaml`)**:
+  - The repository is no longer a standalone Vue 3 app — it now houses **two separate packages** with independent purposes and independent versioning.
+  - `packages/showcase/` (`@nala/showcase@3.0.0`) — The **full-featured reference demo application**. This is where all new UI components, views, stores, services, and design system features are developed and demonstrated.
+  - `packages/create-nala/` (`create-nala@3.0.x`) — The **scaffolding CLI tool** published to npm. Contains the clean starter template (`template/`) that end users receive when running `pnpm create nala my-app`.
+- **Golden Rule — Independent Evolution:**
+  - `packages/showcase/` and `packages/create-nala/template/` evolve **independently**.
+  - Changes to showcase (new charts, advanced views, billing, RBAC, etc.) do **NOT** automatically propagate to the template.
+  - Only intentional sync operations (`pnpm sync:ui`) selectively copy stable UI primitives from showcase to template.
+- **Root Workspace Scripts (`package.json`):**
+  - `pnpm dev` — Starts `@nala/showcase` dev server.
+  - `pnpm build` — Builds `@nala/showcase` production bundle.
+  - `pnpm build:cli` — Compiles the `create-nala` CLI via `tsup`.
+  - `pnpm sync:ui` — Copies UI primitives from showcase to CLI template.
+- **New Developer Documentation:**
+  - `DEVELOPMENT.md` — Full contributor guide covering monorepo structure, dev workflow, CLI publishing, and sync strategy.
+  - `ROADMAP.md` — Milestone tracking for upcoming features.
+  - `CLOUDFLARE.md` — Deployment guide for Cloudflare Workers/Pages.
+
+#### 🧰 `create-nala` Scaffolding CLI published to npm
+- **`create-nala@3.0.0` → `3.0.2`** — First-ever npm-published scaffolding CLI for Nala.
+- Developers can now bootstrap a production-ready admin dashboard project in seconds:
+  ```bash
+  pnpm create nala my-admin-app
+  npm create nala@latest my-admin-app
+  bun create nala my-admin-app
+  ```
+- Interactive CLI powered by `@clack/prompts` — supports project name input, directory selection, and package manager selection.
+- Non-interactive mode supported for CI/CD pipelines (`--force` flag).
+- Variable replacement system: `NALA_APP_NAME` / `NALA_APP_SLUG` are auto-substituted into `package.json`, `index.html`, and `README.md`.
+
+#### 🤖 Out-of-the-Box AI Agent Integration in `create-nala` Starter Template
+
+- **Universal `AGENTS.md` Guardrails (`packages/create-nala/template/AGENTS.md`)**:
+  - Added universal AI coding assistant guardrails automatically scaffolded into every new project.
+  - Compatible with all major AI editors: Antigravity (Gemini), Cursor, Claude Code, GitHub Copilot, Roo Code, and Windsurf.
+  - Covers strict Tailwind v4 compliance rules (gradient syntax, sizing scale, shadows), Composition API enforcement, TypeScript strict mode, ARIA accessibility, and global auto-import matrix.
+- **Enriched Starter Skill Blueprint (`packages/create-nala/template/.agents/skills/nala-project/SKILL.md`)**:
+  - Deep end-to-end CRUD feature blueprint (API Service → Pinia Store → Modal Form → Table View).
+  - Standard KPI Stats Card design blueprint to prevent AI hallucinations on layout and color choices.
+  - Input Groups with icons/addons pattern (preventing manual `absolute` positioning antipatterns).
+  - Full Table pattern covering Skeleton Loading, Data Rows, and Empty State — all three states included.
+  - Complete `<ProductFormDialog>` example using `vee-validate` + `@vee-validate/zod` + `<DialogTitle>/<DialogDescription>` ARIA compliance.
+
+#### 📄 Complete Starter Template Documentation
+- **`packages/create-nala/template/README.md`**:
+  - Professional starter README dynamically generated with the scaffolded project name (`NALA_APP_NAME` replacement).
+  - Covers Quick Start, Available Scripts, Project Structure, Backend API Connection guide, Theme & Branding customization, and AI-Assisted Development section.
+- **`packages/create-nala/template/LICENSE`**: MIT License included in all scaffolded projects for open-source and commercial use clarity.
+
+#### ☁️ Cloudflare Workers Deployment Guide
+- **`CLOUDFLARE.md`** — New deployment reference document covering:
+  - Verified `wrangler.toml` configuration for Cloudflare Workers Static Assets with SPA routing fallback (`not_found_handling = "single-page-application"`).
+  - Dashboard settings table: Root directory, Build command, Deploy command, Version command.
+  - API Token permission requirements.
+  - Complete troubleshooting matrix for all known Cloudflare monorepo deployment errors.
+- **`packages/showcase/wrangler.toml`**:
+  - Configured for Cloudflare Workers Static Assets deployment.
+  - Enables automatic SPA route fallback at the Cloudflare edge (prevents 404 on Vue Router deep links).
+
+### Fixed
+
+#### 🚀 Cloudflare Deployment Pipeline Resolution
+- Fixed `wrangler pages deploy` failure: project `nala` is registered as a **Cloudflare Workers** project, not Pages — corrected deploy command to `npx wrangler deploy`.
+- Removed invalid `[assets]` block from Pages-mode `wrangler.toml` (Pages validator rejects Workers-only config keys).
+- Resolved `Authentication error [code: 10000]` by ensuring API token has `Workers Scripts: Edit` and `Cloudflare Pages: Edit` permissions.
+
+### Released
+
+- **`create-nala@3.0.2`** published to npm — includes `AGENTS.md`, enriched `SKILL.md`, `README.md`, and `LICENSE` in all scaffolded projects.
+
+---
+
 ## [1.8.0] — 2026-08-26
 
 ### Added

@@ -132,13 +132,45 @@ pnpm --filter create-nala build
 **Cara cepat sync seluruh folder UI primitives:**
 
 ```bash
-# Windows (PowerShell)
+# Windows (PowerShell) — dari root repo
 pnpm sync:ui
-
-# (Script ini tersedia di root package.json)
 ```
 
+> Script ini menggunakan `robocopy` (Windows) atau `cp -r` untuk menyalin folder `packages/showcase/src/components/ui/` ke `packages/create-nala/template/src/components/ui/` secara menyeluruh.
+
+#### ✅ Apa yang disalin oleh `sync:ui`:
+
+| Yang Disalin | Lokasi Sumber | Tujuan |
+|---|---|---|
+| Seluruh folder `components/ui/` | `packages/showcase/src/components/ui/` | `packages/create-nala/template/src/components/ui/` |
+
+#### ❌ Apa yang TIDAK disalin (harus manual):
+
+| Yang TIDAK Disalin | Alasan |
+|---|---|
+| `components/layout/` (AppNavbar, AppSidebar, dll.) | Template punya versi "cleaned" yang berbeda (tanpa ThemeCustomizer, tanpa NotificationDrawer) |
+| `stores/` | Template hanya punya `auth.ts` — showcase punya billing, notification, role, dll. |
+| `services/` | Template hanya punya `auth.service.ts` + `user.service.ts` |
+| `views/` | Template punya minimal views, showcase punya 20+ views |
+| `composables/` | Harus diport manual untuk memastikan tidak ada showcase-specific dependency |
+
+#### ⚠️ Conflict Resolution saat Sync
+
+Jika kamu **menambahkan prop baru** ke sebuah komponen di showcase (misal: `Button.vue` dapat prop `loading`), setelah `sync:ui` komponen template langsung terupdate. **Verifikasi setelah sync:**
+
+```bash
+# Jalankan dev server template untuk memastikan tidak ada error
+node packages/create-nala/dist/index.js verify-test --force
+cd verify-test && pnpm install && pnpm dev
+```
+
+Jika ada error TypeScript atau dependency yang hilang di template setelah sync:
+1. Cek apakah komponen baru bergantung pada package yang ada di `showcase/package.json` tapi tidak di `template/package.json`.
+2. Tambahkan dependency yang dibutuhkan ke `packages/create-nala/template/package.json` secara manual.
+3. Hapus output verifikasi: `rm -rf verify-test`
+
 ---
+
 
 ### 🟡 Update Layout Utama (AdminLayout, AppNavbar, AppSidebar)
 
