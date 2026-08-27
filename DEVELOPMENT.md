@@ -241,39 +241,104 @@ pnpm build:cli
 
 ## 🚀 Publishing `create-nala` ke npm
 
-### Persiapan
+> **Publish sekarang dilakukan otomatis oleh GitHub Actions** menggunakan **OIDC Trusted Publisher** — tidak perlu `npm login` atau menyimpan token apapun. Cukup push sebuah Git tag.
 
-1. Pastikan `packages/create-nala/template/` sudah up to date dan bersih dari showcase remnants.
-2. Naikkan versi di [`packages/create-nala/package.json`](./packages/create-nala/package.json):
-   ```json
-   {
-     "version": "1.0.1"
-   }
-   ```
-3. Build CLI:
+---
+
+### 📋 Checklist Sebelum Publish
+
+1. **Pastikan template bersih** — tidak ada showcase remnants di `packages/create-nala/template/`.
+2. **Bump versi** di tiga file agar sinkron:
+
    ```bash
+   # packages/create-nala/package.json  ← versi CLI yang dipublish ke npm
+   # packages/showcase/package.json     ← versi referensi
+   # package.json (root)                ← versi monorepo
+   ```
+
+   Ganti `"version"` di ketiga file secara manual, misal dari `3.0.2` → `3.0.3`.
+
+3. **Build & smoke test CLI secara lokal:**
+
+   ```bash
+   # Build CLI
    pnpm build:cli
-   ```
-4. Verifikasi output:
-   ```bash
+
+   # Smoke test — scaffold project baru
    node packages/create-nala/dist/index.js my-test-project --force
-   ```
-5. Bersihkan test output:
-   ```bash
-   powershell -Command "Remove-Item -Recurse -Force my-test-project"
+
+   # Verifikasi hasilnya
+   ls my-test-project
+
+   # Hapus output test
+   Remove-Item -Recurse -Force my-test-project   # Windows PowerShell
+   # rm -rf my-test-project                      # Linux/macOS
    ```
 
-### Publish
+4. **Commit semua perubahan:**
+
+   ```bash
+   git add .
+   git commit -m "chore: bump version to 3.0.3"
+   git push origin main
+   ```
+
+---
+
+### 🏷️ Publish via Git Tag (Auto CI/CD)
+
+Setelah commit di `main`, buat dan push Git tag dengan format `v<versi>`:
 
 ```bash
-# Login ke npm (jika belum)
-npm login
+git tag v3.0.3
+git push origin v3.0.3
+```
 
-# Publish package create-nala
-pnpm --filter create-nala publish --access public
+GitHub Actions akan otomatis menjalankan 3 jobs secara berurutan:
+
+```
+validate-showcase  →  validate-cli (smoke test)  →  publish-cli (npm OIDC)
+```
+
+Pantau progress di: **https://github.com/candrasp/Nala/actions**
+
+Setelah berhasil, versi baru akan live di:
+**https://www.npmjs.com/package/create-nala**
+
+---
+
+### 🗑️ Menghapus / Menonaktifkan Versi di npm
+
+#### Unpublish (dalam 72 jam pertama setelah publish)
+
+```bash
+npm unpublish create-nala@3.0.0
+npm unpublish create-nala@3.0.1
+```
+
+> ⚠️ `npm unpublish` hanya bisa dilakukan dalam **72 jam** setelah versi dipublish.
+
+#### Deprecate (lebih dari 72 jam / versi lama)
+
+Jika sudah lebih dari 72 jam, gunakan `deprecate` — versi tetap ada tapi pengguna akan menerima warning saat install:
+
+```bash
+npm deprecate create-nala@3.0.0 "This version is deprecated. Please use the latest version."
+npm deprecate create-nala@3.0.1 "This version is deprecated. Please use the latest version."
+```
+
+#### Hapus Git tag yang salah
+
+```bash
+# Hapus tag lokal
+git tag -d v3.0.0
+
+# Hapus tag di remote GitHub
+git push origin --delete v3.0.0
 ```
 
 ---
+
 
 ## 🧪 Testing
 
