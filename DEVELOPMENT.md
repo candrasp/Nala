@@ -313,10 +313,20 @@ Setelah berhasil, versi baru akan live di:
 
 ```bash
 npm unpublish create-nala@3.0.0
-npm unpublish create-nala@3.0.1
 ```
 
 > ⚠️ `npm unpublish` hanya bisa dilakukan dalam **72 jam** setelah versi dipublish.
+
+> 🚨 **PERINGATAN — 24-Hour Cooldown:** Jika kamu meng-unpublish versi-versi dari sebuah paket dan registry menganggap paket tersebut "kosong" atau dalam state tidak stabil, npm akan memblokir publish ulang ke nama paket yang sama selama **24 jam**. Hindari unpublish untuk keperluan testing — cukup bump ke versi baru berikutnya.
+>
+> Jika sudah terlanjur kena cooldown, tunggu 24 jam lalu re-trigger CI/CD:
+> ```bash
+> git tag -d v3.0.3
+> git push origin --delete v3.0.3
+> git tag v3.0.3
+> git push origin v3.0.3
+> ```
+
 
 #### Deprecate (lebih dari 72 jam / versi lama)
 
