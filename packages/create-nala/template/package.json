@@ -1,6 +1,6 @@
 {
   "name": "NALA_APP_SLUG",
-  "version": "0.1.0",
+  "version": "3.0.3",
   "description": "Production-ready admin dashboard built with Vue 3, Vite, TypeScript, and Tailwind CSS v4.",
   "private": true,
   "type": "module",
