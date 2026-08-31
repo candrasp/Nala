@@ -5,6 +5,42 @@ All notable changes to **Nala** — Vue 3 Admin Dashboard Template — are docum
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [Semantic Versioning](https://semver.org/).
 
+## [3.0.4] — 2026-08-31
+
+### Added & Improved
+
+#### 🧭 Streamlined Sidebar Modes & Minimalist Scrollbar
+- **Streamlined Sidebar Control Modes (`src/components/ui/sidebar/`)**:
+  - Simplified sidebar interaction modes down to two intuitive options: **`expanded`** (standard pinned sidebar) and **`hover`** (expand-on-hover icon mode).
+  - Removed the redundant static collapsed mode in favor of the smoother and more responsive `hover` behavior.
+  - Updated cookie persistence (`sidebar_mode`) and keyboard shortcut / toggle behavior (`toggleSidebar()`) to alternate cleanly between `expanded` and `hover`.
+  - Updated both `packages/showcase/` and `packages/create-nala/template/` implementations in full parity.
+- **Minimalist Sidebar Scrollbar Polish (`SidebarContent.vue`)**:
+  - Added `group-data-[collapsible=icon]:scrollbar-none group-data-[collapsible=icon]:[&::-webkit-scrollbar]:hidden` to eliminate unsightly scrollbar tracks when the sidebar is in collapsed icon mode while maintaining full vertical scroll accessibility.
+
+#### 🤖 AI Guardrails Standard Enhancement
+- **Synchronized Version Bump Protocol (`GEMINI.md` & `CLAUDE.md`)**:
+  - Enforced strict Rule 10 requiring all 4 monorepo `package.json` manifests (`package.json`, `@nala/showcase`, `create-nala`, and `create-nala/template`) to be updated atomically whenever a version bump is performed.
+
+---
+
+## [3.0.3] — 2026-08-27
+
+### Added & Improved
+
+#### 🚀 Automated CI/CD npm Publishing via OIDC Trusted Publisher
+- **Zero-Secret OIDC Trusted Publisher Workflow (`.github/workflows/deploy.yml`)**:
+  - Upgraded npm publishing job for `create-nala` to use **OIDC (OpenID Connect) Trusted Publisher** (`id-token: write` permission).
+  - Eliminated dependency on long-lived `NPM_TOKEN` secrets for more secure and resilient automated deployments.
+  - Publishing is now triggered automatically upon pushing a Git release tag (`v*.*.*`).
+
+#### 📚 Documentation & Contributor Workflows
+- **Publishing & Unpublish Guardrails (`DEVELOPMENT.md`)**:
+  - Added comprehensive tag-based release checklist and automated CI/CD workflow explanation.
+  - Documented npm 24-hour unpublish cooldown behavior and recovery procedures.
+
+---
+
 ## [3.0.2] — 2026-08-27
 
 > ⚠️ **MAJOR ARCHITECTURAL CHANGE** — This release marks the transition of the Nala repository from a single standalone Vue 3 application into a **pnpm Workspace Monorepo** with a dedicated scaffolding CLI. Development workflow, contribution model, and project structure have fundamentally changed.
