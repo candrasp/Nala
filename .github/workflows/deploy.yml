@@ -96,6 +96,9 @@ jobs:
           cache: 'pnpm'
           registry-url: 'https://registry.npmjs.org'
 
+      - name: Ensure latest npm CLI for OIDC
+        run: npm install -g npm@latest
+
       - name: Install workspace dependencies
         run: pnpm install --frozen-lockfile
 
@@ -103,8 +106,7 @@ jobs:
         run: pnpm --filter create-nala build
 
       - name: Publish to npm (OIDC)
-        run: pnpm --filter create-nala publish --access public --no-git-checks --provenance
-        env:
-          NODE_AUTH_TOKEN: ''
+        run: npm publish --access public --provenance
+        working-directory: packages/create-nala
 
 
