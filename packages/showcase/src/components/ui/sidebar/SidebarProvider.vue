@@ -30,10 +30,10 @@ const open = useVModel(props, "open", emits, {
 const getSavedMode = (): SidebarControlMode => {
   if (typeof document === 'undefined') return 'expanded'
   const match = document.cookie.match(/sidebar_mode=([^;]+)/)
-  if (match && ['expanded', 'collapsed', 'hover'].includes(match[1])) {
+  if (match && ['expanded', 'hover'].includes(match[1])) {
     return match[1] as SidebarControlMode
   }
-  return open.value ? 'expanded' : 'collapsed'
+  return open.value ? 'expanded' : 'hover'
 }
 
 const sidebarMode = ref<SidebarControlMode>(getSavedMode())
@@ -45,8 +45,6 @@ function setSidebarMode(mode: SidebarControlMode) {
   document.cookie = `sidebar_mode=${mode}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
   if (mode === "expanded") {
     setOpen(true)
-  } else if (mode === "collapsed") {
-    setOpen(false)
   } else if (mode === "hover") {
     setOpen(false)
   }
@@ -79,10 +77,8 @@ function toggleSidebar() {
   if (isMobile.value) {
     setOpenMobile(!openMobile.value)
   } else {
-    const nextState = !open.value
-    setOpen(nextState)
-    sidebarMode.value = nextState ? 'expanded' : 'collapsed'
-    document.cookie = `sidebar_mode=${sidebarMode.value}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+    const nextMode = sidebarMode.value === 'expanded' ? 'hover' : 'expanded'
+    setSidebarMode(nextMode)
   }
 }
 

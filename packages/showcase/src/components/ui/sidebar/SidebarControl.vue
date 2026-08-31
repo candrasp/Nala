@@ -41,9 +41,6 @@ const onOpenChange = (open: boolean) => {
         <DropdownMenuRadioItem value="expanded" class="cursor-pointer">
           Expanded
         </DropdownMenuRadioItem>
-        <DropdownMenuRadioItem value="collapsed" class="cursor-pointer">
-          Collapsed
-        </DropdownMenuRadioItem>
         <DropdownMenuRadioItem value="hover" class="cursor-pointer">
           Expand on hover
         </DropdownMenuRadioItem>

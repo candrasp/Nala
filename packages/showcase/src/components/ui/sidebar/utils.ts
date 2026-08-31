@@ -8,7 +8,7 @@ export const SIDEBAR_WIDTH_MOBILE = "18rem"
 export const SIDEBAR_WIDTH_ICON = "3.5rem"
 export const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
-export type SidebarControlMode = "expanded" | "collapsed" | "hover"
+export type SidebarControlMode = "expanded" | "hover"
 
 export const [useSidebar, provideSidebarContext] = createContext<{
   state: ComputedRef<"expanded" | "collapsed">

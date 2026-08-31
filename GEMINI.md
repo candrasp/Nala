@@ -18,6 +18,12 @@ This file defines the strict, high-priority guardrails and behavioral constraint
 7. **Package Installation Confirmation:** NEVER install new npm packages autonomously. Always ask the user directly in chat for approval before running `pnpm add`.
 8. **Workspace Monorepo Architecture:** This repository is a `pnpm` monorepo defined in `pnpm-workspace.yaml`. Main application packages reside under `packages/showcase/` (full demo app) and `packages/create-nala/` (scaffolding CLI & clean template). Root scripts delegate to workspace filters.
 9. **Dialog / Modal Accessibility Standard:** Every `DialogContent` MUST include `DialogTitle` and `DialogDescription` (use `sr-only` if visually hidden) to comply with Reka UI ARIA standards.
+10. **Synchronized Version Bump Protocol:** Whenever requested to bump or update the project version, the AI agent MUST atomically update the version across all relevant `package.json` files simultaneously:
+    - `package.json` (Root monorepo)
+    - `packages/showcase/package.json` (`@nala/showcase`)
+    - `packages/create-nala/package.json` (`create-nala` CLI)
+    - `packages/create-nala/template/package.json` (User starter template)
+    Never update only one package.json and omit the others.
 
 ---
 
@@ -25,3 +31,4 @@ This file defines the strict, high-priority guardrails and behavioral constraint
 
 For the exhaustive 34+ UI Primitive Component Catalog, Auto-Import Matrix, Axios Service Layer, Safe DEV Mock Fallback, Pinia Store patterns, and end-to-end CRUD scaffolding blueprints, refer to the **`nala-project` skill** located at:
 👉 [`.agents/skills/nala-project/SKILL.md`](.agents/skills/nala-project/SKILL.md)
+
