@@ -97,6 +97,33 @@ const router = createRouter({
           redirect: (to) => `/billing/invoice/${to.params.id}`,
         },
         {
+          path: 'apps/kanban',
+          name: 'apps-kanban',
+          component: () => import('@/views/apps/KanbanView.vue'),
+        },
+        {
+          path: 'kanban',
+          redirect: '/apps/kanban',
+        },
+        {
+          path: 'apps/file-manager',
+          name: 'apps-file-manager',
+          component: () => import('@/views/apps/FileManagerView.vue'),
+        },
+        {
+          path: 'file-manager',
+          redirect: '/apps/file-manager',
+        },
+        {
+          path: 'apps/chat',
+          name: 'apps-chat',
+          component: () => import('@/views/apps/ChatView.vue'),
+        },
+        {
+          path: 'chat',
+          redirect: '/apps/chat',
+        },
+        {
           path: 'components/buttons',
           name: 'components-buttons',
           component: () => import('@/views/components/ButtonView.vue'),

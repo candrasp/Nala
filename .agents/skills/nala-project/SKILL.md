@@ -2,7 +2,7 @@
 name: nala-project
 description: >
   Skill for the Nala project - an Enterprise Admin Dashboard Template & Scaffolding Tool Monorepo built with Vue 3,
-  Vite, TypeScript, Tailwind CSS v4, reka-ui (shadcn-vue), Pinia, and a Real API Service Layer.
+  Vite, TypeScript, Tailwind CSS v4, reka-ui (shadcn-vue), Unovis charts, Pinia, and a Real API Service Layer.
   Activates when the user requests adding a page, component, store, API service, UI feature,
   scaffolding a new feature, or refactoring within the Nala project monorepo.
 ---
@@ -60,8 +60,9 @@ nala/                                    ← Root monorepo
 | **Monorepo / Package Manager** | `pnpm` v10+ (Workspaces) | `pnpm-workspace.yaml` packages: `packages/*` |
 | **Auto-Imports** | `unplugin-auto-import` & `unplugin-vue-components` | Auto-imports Vue, Router, Pinia, VueUse, & all UI components |
 | **Styling** | Tailwind CSS v4 (`@tailwindcss/vite`) + `tw-animate-css` | Modern OKLCH color tokens in `src/style.css` |
-| **UI Primitives** | `reka-ui` + shadcn-vue (New York style) | 44+ primitive components in `src/components/ui/` |
+| **UI Primitives** | `reka-ui` + shadcn-vue (New York style) | 45+ primitive components in `src/components/ui/` |
 | **Data Table** | `@tanstack/vue-table` | Headless table logic with sorting & pagination |
+| **Charts** | `@unovis/ts` + `@unovis/vue` | SVG chart primitives used by `AreaChart`, `BarChart`, `LineChart`, `DonutChart` |
 | **Form & Validation** | `vee-validate` + `@vee-validate/zod` + `zod` | Strictly-typed validation schemas |
 | **Icons** | `@lucide/vue` | Must be imported explicitly (`import { Plus } from '@lucide/vue'`) |
 | **State Management** | Pinia | Setup Stores pattern (`defineStore('name', () => { ... })`) |
@@ -108,7 +109,8 @@ To avoid import hallucination:
 | **Vue Router** (`useRoute`, `useRouter`) | ✅ **AUTOMATIC** | Use directly: `const router = useRouter()` |
 | **VueUse** (`useColorMode`, `useLocalStorage`, `useDebounceFn`, etc.) | ✅ **AUTOMATIC** | Use directly: `const mode = useColorMode()` |
 | **Pinia** (`defineStore`, `storeToRefs`) | ✅ **AUTOMATIC** | Use directly: `defineStore(...)` |
-| **All UI Components** (`Button`, `Card`, `Dialog`, `Input`, `InputGroup`, `PageHeader`, `Select`, `Table`, `Tabs`, etc.) | ✅ **AUTOMATIC** | Use directly in template: `<PageHeader>`, `<Card>`, `<InputGroup>`, etc. |
+| **All UI Components** (`Button`, `Card`, `Dialog`, `Input`, `InputGroup`, `PageHeader`, `EmptyState`, `Select`, `Table`, `Tabs`, etc.) | ✅ **AUTOMATIC** | Use directly in template: `<PageHeader>`, `<EmptyState>`, `<Card>`, `<InputGroup>`, etc. |
+| **Custom Composables** (`useFormatter`, `useThemeConfig`) | ✅ **AUTOMATIC** | Use directly: `const fmt = useFormatter()`, `const { layoutMode } = useThemeConfig()` |
 | **Lucide Icons** (`Plus`, `Search`, `Trash2`, `Edit`, etc.) | ⚠️ **MANUAL IMPORT REQUIRED** | `import { Plus, Search } from '@lucide/vue'` |
 | **Toast Notifications** (`toast`) | ⚠️ **MANUAL IMPORT REQUIRED** | `import { toast } from '@/components/ui/sonner'` |
 | **HTTP API Client** (`apiClient`) | ⚠️ **MANUAL IMPORT REQUIRED** | `import { apiClient } from '@/lib/axios'` |
@@ -119,7 +121,20 @@ To avoid import hallucination:
 
 ## 📦 Full UI Primitives Component Catalog (`src/components/ui/`)
 
-All components below are registered in the template and can be used directly in Vue templates without manual import:
+All components below are registered in the template and can be used directly in Vue templates without manual import.
+
+### Shared Components (`src/components/`)
+
+The following shared components live **outside** `ui/` but are also auto-imported globally:
+
+| Component | Description |
+|---|---|
+| `AppLogo.vue` | Brand logo with `size` prop (`sm`, `md`, `lg`, `xl`) |
+| `PageHeader.vue` | Standard page top header with `title`, `description`, `badge`, `statusDot` props and `#actions` slot |
+| `EmptyState.vue` | Zero-data empty state with icon, title, description, and optional action button |
+| `CodePreview.vue` | Interactive code snippet with syntax highlighting, line numbers, and clipboard copy (showcase only) |
+
+### Reka UI Primitives (`src/components/ui/`)
 
 | Component Directory | Available Components & Sub-Components |
 |---|---|

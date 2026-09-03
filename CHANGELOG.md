@@ -5,6 +5,46 @@ All notable changes to **Nala** — Vue 3 Admin Dashboard Template — are docum
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [Semantic Versioning](https://semver.org/).
 
+## [3.1.0] — 2026-09-03
+
+### Added & Improved
+
+#### 💼 Enterprise App Templates (Mini-Apps Suite)
+- **Kanban / Task Management App (`packages/showcase/src/views/apps/KanbanView.vue` / `/apps/kanban`)**:
+  - Full-featured visual workflow board with 4 customizable columns (*Backlog, In Progress, In Review, Done*).
+  - Native HTML5 Drag-and-Drop task card reordering across columns with optimistic UI updates.
+  - KPI metric cards summary strip (Total Backlog Items, In Progress Development, Urgent Priority, Sprint Completion Rate).
+  - Task cards with priority badges, assignee avatars, subtask progress meter, due date indicators, and tag labels.
+  - Task creation and edit dialog modal (`TaskFormDialog.vue`) powered by `vee-validate` + `zod` schema validation.
+  - Text search query filtering, priority category filtering, assignee filtering, and reset actions.
+  - Dedicated service layer (`kanban.service.ts`) with safe DEV mock fallback database and Pinia store (`stores/kanban.ts`).
+- **File Manager / Media Library (`packages/showcase/src/views/apps/FileManagerView.vue` / `/apps/file-manager`)**:
+  - Grid mode (`FileGrid.vue`) and List/Table mode (`FileList.vue`) for browsing media assets and documents.
+  - Storage capacity progress widget with live type breakdown (Images, Videos, Documents, Archives).
+  - Folder tree navigation with interactive breadcrumb bar and folder item counts.
+  - Quick file details preview drawer (`FilePreviewDrawer.vue`) with image preview, metadata sheet, and direct download/delete actions.
+  - Drag-and-drop file upload dialog (`UploadDropzone.vue`) with simulated multi-file uploads and sample demo generator.
+  - Multi-file selection with bulk delete action and file type filter buttons.
+  - Dedicated service layer (`file-manager.service.ts`) with safe DEV fallback and Pinia store (`stores/file-manager.ts`).
+- **Messenger & Team Chat (`packages/showcase/src/views/apps/ChatView.vue` / `/apps/chat`)**:
+  - Live discussion workspace (`ChatView.vue`) with responsive two-pane split view.
+  - Conversation list sidebar (`ChatSidebar.vue`) featuring online presence status dots (*online, busy, away, offline*), unread badge counts, pin indicators, and search filter.
+  - Active message thread (`ChatMessageThread.vue`) with You vs Peer chat bubbles, image attachment previews, timestamps, and read receipts (`read` / `delivered`).
+  - Animated bouncing-dots typing indicator simulating peer responses with realistic delays.
+  - Quick reply chips bar (*👍 LGTM, 🔍 Checking logs, 📅 Schedule demo*) for rapid prototyping.
+  - Dedicated service layer (`chat.service.ts`) and Pinia store (`stores/chat.ts`).
+
+#### ♿ UX & Accessibility Enhancements
+- **Global Keyboard Shortcuts Helper Modal (`KeyboardShortcutsDialog.vue`)**:
+  - Accessible dialog displaying essential keyboard shortcuts (`Ctrl+K` for Search, `Ctrl+B` for Sidebar toggle, `Ctrl+Shift+L` for Theme mode toggle, `?` for Shortcuts modal, `Esc` to close overlays).
+  - Accessible globally from anywhere in the app via the `?` hotkey (with form-input interception prevention).
+- **Multi-Language Selector Dropdown (`AppNavbar.vue`)**:
+  - Interactive language switcher in the navbar with flag emojis, checkmark indicators, and feedback toast notifications.
+- **Minimalist Toast Notification Redesign (`Sonner.vue`)**:
+  - Redesigned toast notifications with clean border tints per status, removed intrusive close buttons, and enhanced high-contrast text typography for dark mode.
+
+---
+
 ## [3.0.4] — 2026-08-31
 
 ### Added & Improved

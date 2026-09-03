@@ -15,7 +15,9 @@
 - 🎨 **Beautiful UI** — Built with [shadcn-vue](https://www.shadcn-vue.com/) primitives via `reka-ui` (New York style)
 - 🌗 **Dark / Light / Auto Theme** — System preference detection + manual toggle via `@vueuse/core`
 - 🎛️ **Live Theme Configurator** — Runtime palette switcher (7 OKLCH colors), radius presets, and fluid/boxed layout toggle with `localStorage` persistence
+- 💼 **Enterprise Mini-Apps Suite** — Interactive **Kanban Task Board** (`/apps/kanban`) with HTML5 drag-and-drop, **File Manager & Media Library** (`/apps/file-manager`) with grid/list modes & upload dropzone, and **Messenger & Team Chat** (`/apps/chat`) with live simulated typing & status presence
 - 🚀 **Specialized Dashboard Presets** — Main Analytics Console (`/dashboard`), E-Commerce Sales (`/dashboard/ecommerce`), and Traffic & Audience Telemetry (`/dashboard/analytics`)
+- ♿ **UX & Accessibility Standards** — Global Keyboard Shortcuts Helper (`?`), Multi-Language Selector Dropdown, and minimalist high-contrast Sonner toast notifications
 - 📐 **Collapsible Sidebar** — Responsive layout with hover, locked, and icon-collapsed modes
 - 🔍 **Global Search** — Command palette with `Ctrl+K` / `Cmd+K` shortcut
 - 🔔 **Notification Center** — Slide-out drawer with unread badge counter and bulk actions
@@ -24,8 +26,8 @@
 - 📋 **Data Table** — Powered by `@tanstack/vue-table` with sorting, filtering, and pagination
 - ✅ **Form & Validation** — `vee-validate` + `zod` schema validation with rich input primitives (PIN/OTP, date picker, combobox, file upload)
 - 🗂️ **Auth Flow** — Login, Register, Forgot Password, OTP Verify, Reset Password, Confirm Email, Lock Screen
-- 🚫 **Error Pages** — 404 Not Found, 500 Server Error, 403 Access Denied
-- 🧩 **44+ UI Primitives** — Chart, Toggle, ToggleGroup, ContextMenu, ScrollArea, PinInput, and all shadcn-vue primitives ready to use
+- 🚫 **Error Pages** — 404 Not Found, 500 Server Error, 403 Access Denied, Maintenance Mode, Coming Soon
+- 🧩 **45+ UI Primitives** — Chart, Toggle, ToggleGroup, ContextMenu, ScrollArea, PinInput, Sonner, and all shadcn-vue primitives ready to use
 - 🎯 **Component Showcase** — Buttons, Forms, Modals, Cards, Tables, Charts, Overlays, Badges, Toasts, Navigation, Typography, Colors, Icons
 
 ---
@@ -170,6 +172,13 @@ For a detailed guide on contributing and maintaining packages, see [DEVELOPMENT.
 ---
 
 ## 📄 Available Pages
+
+### 💼 Enterprise Mini-Apps
+| Route | Name | Description |
+|---|---|---|
+| `/apps/kanban` | Kanban Board | Interactive workflow board with 4 columns, HTML5 drag-and-drop, Zod task modal, subtask meter & KPI stats |
+| `/apps/file-manager` | File Manager | Media library with Grid/List view modes, folder tree & breadcrumb bar, storage stats, preview drawer & upload dropzone |
+| `/apps/chat` | Messenger & Chat | Live team chat with presence dots, You vs Peer bubble threads, simulated typing responses & quick reply chips |
 
 ### 📊 Overview & Management
 

@@ -11,5 +11,5 @@ useThemeConfig()
 <template>
   <LoadingBar />
   <RouterView />
-  <Toaster position="top-right" rich-colors close-button />
+  <Toaster position="top-right" />
 </template>

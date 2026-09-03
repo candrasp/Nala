@@ -122,6 +122,7 @@ declare module 'vue' {
     InputGroup: typeof import('./components/ui/input/InputGroup.vue')['default']
     InputIcon: typeof import('./components/ui/input/InputIcon.vue')['default']
     Kbd: typeof import('./components/ui/kbd/Kbd.vue')['default']
+    KeyboardShortcutsDialog: typeof import('./components/layout/KeyboardShortcutsDialog.vue')['default']
     Label: typeof import('./components/ui/label/Label.vue')['default']
     LineChart: typeof import('./components/ui/chart/LineChart.vue')['default']
     LoadingBar: typeof import('./components/ui/loading-bar/LoadingBar.vue')['default']

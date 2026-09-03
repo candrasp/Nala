@@ -42,6 +42,9 @@ import {
   Receipt,
   ShoppingBag,
   TrendingUp,
+  Kanban,
+  FolderOpen,
+  MessageSquare,
 } from '@lucide/vue'
 import {
   Dialog,
@@ -73,6 +76,9 @@ const searchItems: SearchItem[] = [
   { title: 'Dashboard Overview', href: '/', icon: LayoutDashboard, category: 'Overview' },
   { title: 'E-Commerce & Sales Dashboard', href: '/dashboard/ecommerce', icon: ShoppingBag, category: 'Overview' },
   { title: 'Analytics & Traffic Dashboard', href: '/dashboard/analytics', icon: TrendingUp, category: 'Overview' },
+  { title: 'Kanban Task Board', href: '/apps/kanban', icon: Kanban, category: 'Apps' },
+  { title: 'File Manager', href: '/apps/file-manager', icon: FolderOpen, category: 'Apps' },
+  { title: 'Chat & Messenger', href: '/apps/chat', icon: MessageSquare, category: 'Apps' },
   { title: 'Notifications Center', href: '/notifications', icon: Bell, category: 'Overview' },
   { title: 'Activity Log & Audit Trail', href: '/activity', icon: Activity, category: 'Overview' },
   { title: 'Roles & Permissions Matrix', href: '/roles', icon: ShieldCheck, category: 'Overview' },

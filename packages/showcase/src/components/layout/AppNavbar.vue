@@ -7,6 +7,9 @@ import {
   LogOut,
   Paintbrush,
   Lock,
+  Globe,
+  HelpCircle,
+  Check,
 } from '@lucide/vue'
 import {
   Breadcrumb,
@@ -33,12 +36,36 @@ import AppLogo from '@/components/AppLogo.vue'
 import NotificationDrawer from '@/components/layout/NotificationDrawer.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useThemeConfig } from '@/composables/useThemeConfig'
+import { toast } from '@/components/ui/sonner'
 
 const { toggleCustomizer } = useThemeConfig()
 const showThemeCustomizer = import.meta.env.VITE_SHOW_THEME_CUSTOMIZER !== 'false'
 
+interface LanguageOption {
+  code: string
+  name: string
+  flag: string
+  locale: string
+}
+
+const languages: LanguageOption[] = [
+  { code: 'EN', name: 'English (US)', flag: '🇺🇸', locale: 'en-US' },
+  { code: 'ID', name: 'Bahasa Indonesia', flag: '🇮🇩', locale: 'id-ID' },
+  { code: 'ES', name: 'Español', flag: '🇪🇸', locale: 'es-ES' },
+  { code: 'JA', name: '日本語', flag: '🇯🇵', locale: 'ja-JP' },
+  { code: 'DE', name: 'Deutsch', flag: '🇩🇪', locale: 'de-DE' },
+]
+
+const currentLanguage = ref<LanguageOption>(languages[0])
+
+const selectLanguage = (lang: LanguageOption) => {
+  currentLanguage.value = lang
+  toast.success(`Language switched to ${lang.name}`)
+}
+
 const emit = defineEmits<{
   (e: 'open-search'): void
+  (e: 'open-shortcuts'): void
 }>()
 
 const route = useRoute()
@@ -63,6 +90,9 @@ const pageTitle = computed(() => {
   if (route.name === 'activity') return 'Activity Log'
   if (route.name === 'roles') return 'Roles & Permissions'
   if (route.name === 'billing') return 'Billing & Invoicing'
+  if (route.name === 'apps-kanban' || route.name === 'kanban') return 'Kanban Board'
+  if (route.name === 'apps-file-manager' || route.name === 'file-manager') return 'File Manager'
+  if (route.name === 'apps-chat' || route.name === 'chat') return 'Messenger & Team Chat'
   if (route.name === 'components-buttons' || route.name === 'buttons') return 'Buttons'
   if (route.name === 'components-forms') return 'Form & Inputs'
   if (route.name === 'components-modals') return 'Modals & Dialogs'
@@ -138,6 +168,54 @@ const handleLogout = () => {
         <span class="hidden sm:inline pointer-events-none ml-1 text-xs font-normal text-muted-foreground">
           Ctrl K
         </span>
+      </button>
+
+      <!-- Language Selector Mock Dropdown -->
+      <DropdownMenu>
+        <DropdownMenuTrigger as-child>
+          <button
+            type="button"
+            class="flex items-center gap-1.5 rounded-full border border-input bg-muted/30 px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-accent hover:text-foreground cursor-pointer"
+            aria-label="Select Language"
+            title="Select Language"
+          >
+            <span class="text-sm leading-none">{{ currentLanguage.flag }}</span>
+            <span class="font-medium text-[11px] hidden md:inline">{{ currentLanguage.code }}</span>
+            <ChevronDown class="h-3 w-3 text-muted-foreground/70" />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" class="w-48">
+          <DropdownMenuLabel class="text-xs text-muted-foreground font-normal px-2 py-1.5 flex items-center justify-between">
+            <span>Select Language</span>
+            <Globe class="h-3.5 w-3.5 text-muted-foreground" />
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            v-for="lang in languages"
+            :key="lang.code"
+            class="cursor-pointer text-xs flex items-center justify-between py-1.5"
+            @click="selectLanguage(lang)"
+          >
+            <div class="flex items-center gap-2">
+              <span class="text-base leading-none">{{ lang.flag }}</span>
+              <span :class="currentLanguage.code === lang.code ? 'font-semibold text-foreground' : 'text-muted-foreground'">
+                {{ lang.name }}
+              </span>
+            </div>
+            <Check v-if="currentLanguage.code === lang.code" class="h-3.5 w-3.5 text-primary" />
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <!-- Global Keyboard Shortcuts Helper Trigger (?) -->
+      <button
+        type="button"
+        class="flex h-8 w-8 items-center justify-center rounded-full text-muted-foreground hover:bg-accent hover:text-foreground transition-colors cursor-pointer"
+        aria-label="Keyboard Shortcuts (?)"
+        title="Keyboard Shortcuts (?)"
+        @click="emit('open-shortcuts')"
+      >
+        <HelpCircle class="h-4 w-4 text-muted-foreground hover:text-primary transition-colors" />
       </button>
 
       <!-- GitHub Repository Link -->

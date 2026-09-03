@@ -40,7 +40,7 @@ The following modules are auto-imported via `unplugin-auto-import` and `unplugin
 
 ## 📦 UI Primitives Catalog (`src/components/ui/`)
 
-All 34+ primitive components in `src/components/ui/` are globally registered and ready to use:
+All 45 primitive components in `src/components/ui/` are globally registered and ready to use:
 - `Button`, `Badge`, `Avatar`, `Breadcrumb`, `Card`, `Checkbox`, `Dialog`, `DropdownMenu`
 - `Form` (`FormField`, `FormItem`, `FormLabel`, `FormControl`, `FormMessage`)
 - `Input`, `InputGroup`, `InputIcon`, `InputAddon`, `PinInput`, `Textarea`, `Select`, `Switch`

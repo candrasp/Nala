@@ -362,8 +362,8 @@
 - [x] **`<PinInput>` / `<OtpInput>` Standalone Primitive** (`src/components/ui/pin-input/`) — Reusable OTP/PIN segmented input with auto-advance, backspace handling, and paste support
 
 ### UX & Accessibility
-- [ ] **Global Keyboard Shortcuts Helper (`?`)** — Pressing `?` displays an interactive modal showing all global hotkeys (`Ctrl+K`, `Ctrl+B`, `Ctrl+Shift+L`, `Esc`)
-- [ ] **Language Selector Mock Dropdown** — Navbar language switcher with flags (EN, ID, ES, JA) complementing the `useFormatter` Intl module
+- [x] **Global Keyboard Shortcuts Helper (`?`)** — Pressing `?` displays an interactive modal showing all global hotkeys (`Ctrl+K`, `Ctrl+B`, `Ctrl+Shift+L`, `Esc`) (`KeyboardShortcutsDialog.vue`)
+- [x] **Language Selector Mock Dropdown** — Navbar language switcher with flags (EN, ID, ES, JA, DE) complementing the `useFormatter` Intl module (`AppNavbar.vue`)
 
 ---
 
@@ -390,17 +390,19 @@
 > **Target:** Full-featured specialized admin mini-apps and alternate dashboard presets.
 
 ### Enterprise App Templates (Mini Apps)
-- [ ] **Kanban / Task Management App** (`src/views/apps/KanbanView.vue` / `/apps/kanban`)
-  - [ ] Multi-column workflow board (*Backlog, In Progress, In Review, Done*)
-  - [ ] Task cards with priority badges, assignee avatars, due date indicators, and tag labels
-  - [ ] Create & edit task dialog modal
-- [ ] **File Manager / Media Library** (`src/views/apps/FileManagerView.vue` / `/apps/file-manager`)
-  - [ ] Grid and List view modes
-  - [ ] Folder breadcrumb tree, storage capacity progress widget, and file type category filters
-  - [ ] Quick file details preview drawer & drag-and-drop upload zone
-- [ ] **Chat / Messenger View** (`src/views/apps/ChatView.vue` / `/apps/chat`)
-  - [ ] Conversation sidebar with online presence indicators, unread count, and search
-  - [ ] Active message thread with bubble states, timestamps, attachments, and typing indicator
+- [x] **Kanban / Task Management App** (`src/views/apps/KanbanView.vue` / `/apps/kanban`)
+  - [x] Multi-column workflow board (*Backlog, In Progress, In Review, Done*)
+  - [x] Task cards with priority badges, assignee avatars, due date indicators, and tag labels
+  - [x] Create & edit task dialog modal with Zod validation
+  - [x] HTML5 drag-and-drop card movement across columns with optimistic state updates
+- [x] **File Manager / Media Library** (`src/views/apps/FileManagerView.vue` / `/apps/file-manager`)
+  - [x] Grid and List view modes with animated thumbnail previews and hover interactions
+  - [x] Folder breadcrumb tree, storage capacity progress widget, and file type category filters
+  - [x] Quick file details preview drawer & drag-and-drop upload zone
+- [x] **Chat / Messenger View** (`src/views/apps/ChatView.vue` / `/apps/chat`)
+  - [x] Conversation sidebar with online presence indicators, unread count, and search
+  - [x] Active message thread with bubble states, timestamps, attachments, and typing indicator
+  - [x] Simulated peer responses, quick replies suggestions, and audio/video call header triggers
 
 ### Specialized Dashboard Presets
 - [x] **E-Commerce / Sales Dashboard** (`src/views/dashboard/EcommerceView.vue` / `/dashboard/ecommerce`) — Top-selling products table, order fulfillment metrics, revenue breakdown, and conversion rate sparklines

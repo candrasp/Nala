@@ -39,6 +39,9 @@ import {
   Rocket,
   ShoppingBag,
   TrendingUp,
+  Kanban,
+  FolderOpen,
+  MessageSquare,
 } from '@lucide/vue'
 import {
   Sidebar,
@@ -79,6 +82,13 @@ const mainNav: NavItem[] = [
   { name: 'Activity Log', routeName: 'activity', href: '/activity', icon: Activity },
   { name: 'Notifications', routeName: 'notifications', href: '/notifications', icon: Bell },
   { name: 'Billing & Invoices', routeName: 'billing', href: '/billing', icon: CreditCard },
+]
+
+// 2. Apps Group (Enterprise Mini Apps)
+const appsNav: NavItem[] = [
+  { name: 'Kanban Board', routeName: 'apps-kanban', href: '/apps/kanban', icon: Kanban },
+  { name: 'File Manager', routeName: 'apps-file-manager', href: '/apps/file-manager', icon: FolderOpen },
+  { name: 'Chat / Messenger', routeName: 'apps-chat', href: '/apps/chat', icon: MessageSquare },
 ]
 
 // 2. Account & Settings Group
@@ -157,7 +167,28 @@ const pagesNav: NavItem[] = [
         </SidebarMenu>
       </SidebarGroup>
 
-      <!-- 2. Account & Settings Group -->
+      <!-- 2. Apps Group (Enterprise Mini Apps) -->
+      <SidebarGroup class="py-1 px-2">
+        <SidebarGroupLabel class="text-[11px] font-medium tracking-wider uppercase text-muted-foreground/70">
+          Apps
+        </SidebarGroupLabel>
+        <SidebarMenu class="gap-0.5">
+          <SidebarMenuItem v-for="item in appsNav" :key="item.name">
+            <SidebarMenuButton
+              as-child
+              :is-active="route.name === item.routeName || (item.routeName === 'apps-kanban' && route.name === 'kanban')"
+              :tooltip="item.name"
+            >
+              <router-link :to="item.href" @click="closeMobileSidebar">
+                <component :is="item.icon" class="h-4 w-4 shrink-0" />
+                <span>{{ item.name }}</span>
+              </router-link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroup>
+
+      <!-- 3. Account & Settings Group -->
       <SidebarGroup class="py-1 px-2">
         <SidebarGroupLabel class="text-[11px] font-medium tracking-wider uppercase text-muted-foreground/70">
           Management

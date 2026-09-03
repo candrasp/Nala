@@ -1,14 +1,59 @@
 ---
 name: nala-project
 description: >
-  Skill for the Nala Admin Dashboard Project - Single SPA application built with Vue 3,
-  Vite, TypeScript, Tailwind CSS v4, Reka UI (shadcn-vue), Pinia, and Axios.
-  Activates when building views, components, stores, API services, or scaffolding features.
+  Skill for the Nala Admin Dashboard Project - a starter SPA template scaffolded with `pnpm create nala`,
+  built with Vue 3, Vite, TypeScript, Tailwind CSS v4, Reka UI (shadcn-vue), Unovis charts, Pinia, and Axios.
+  Activates when building views, components, stores, API services, or scaffolding new features.
 ---
 
-# Nala Project Skill (Starter Edition)
+# Nala Project Skill (Starter Template Edition)
 
-You are an expert frontend engineer building features for this **Nala Admin Dashboard** application. Follow these instructions strictly to ensure clean architecture, design consistency, and zero UI regressions.
+You are an expert frontend engineer building features for this **Nala Admin Dashboard** application — a clean, minimal starter template scaffolded via `pnpm create nala`. Follow these instructions strictly to ensure clean architecture, design consistency, and zero UI regressions.
+
+> **⚠️ Important Context:** This is the **Starter Template**, NOT the full Nala showcase monorepo.
+> There are no showcase views, no ThemeCustomizer, no `CodePreview` component, and no demo-only stores like `notification`, `activity`, `billing`, or `role`. Reference the Nala showcase (`packages/showcase/`) as inspiration only.
+
+---
+
+## 🏗️ Project Structure
+
+```
+src/
+├── components/
+│   ├── AppLogo.vue              ← Auto-imported brand logo component
+│   ├── EmptyState.vue           ← Auto-imported zero-data empty state component
+│   ├── PageHeader.vue           ← Auto-imported standard page top header
+│   ├── layout/                  ← AdminLayout sub-components (Navbar, Sidebar, etc.)
+│   └── ui/                      ← 45 Reka UI primitives (all auto-imported)
+├── composables/
+│   ├── useFormatter.ts          ← Auto-imported: currency, date, number, relative time formatting
+│   └── useThemeConfig.ts        ← Auto-imported: layout mode, border radius, accent color
+├── layouts/
+│   ├── AdminLayout.vue          ← Main dashboard shell (sidebar + navbar + content slot)
+│   └── AuthLayout.vue           ← Centered auth card layout
+├── lib/
+│   ├── axios.ts                 ← Pre-configured Axios instance with interceptors
+│   ├── formatters.ts            ← Core formatter functions (used by useFormatter)
+│   ├── loading-bar.ts           ← Global loading bar singleton
+│   ├── utils.ts                 ← cn() class merging utility
+│   └── validation.ts            ← Shared zod validation helpers
+├── router/
+│   └── index.ts                 ← Vue Router with auth guard scaffold (commented, ready to enable)
+├── services/
+│   ├── auth.service.ts          ← Auth API methods (login, logout, refresh token)
+│   ├── user.service.ts          ← User CRUD API methods
+│   ├── types.ts                 ← Shared API response types (ApiResponse<T>)
+│   └── index.ts                 ← Service re-exports
+├── stores/
+│   └── auth.ts                  ← Auth Pinia store (isAuthenticated, currentUser, login/logout)
+└── views/
+    ├── _starter/
+    │   └── BlankView.vue        ← Scaffolding starting point for new pages
+    ├── auth/                    ← Full auth suite (Login, Register, Forgot/Reset Password, OTP, etc.)
+    ├── dashboard/
+    │   └── IndexView.vue        ← Minimal dashboard with KPI stat cards (your starting point)
+    └── errors/                  ← 404, 500, 403, Maintenance, Coming Soon pages
+```
 
 ---
 
@@ -19,12 +64,13 @@ You are an expert frontend engineer building features for this **Nala Admin Dash
 | **Framework** | Vue 3 (Composition API) | Always use `<script setup lang="ts">` |
 | **Build Tool** | Vite 8 (`@vitejs/plugin-vue`) | Super-fast HMR & production bundler |
 | **Styling** | Tailwind CSS v4 (`@tailwindcss/vite`) + `tw-animate-css` | OKLCH color tokens in `src/style.css` |
-| **UI Primitives** | `reka-ui` + shadcn-vue (New York style) | 34+ primitive components in `src/components/ui/` |
+| **UI Primitives** | `reka-ui` + shadcn-vue (New York style) | 45 primitive components in `src/components/ui/` |
+| **Charts** | `@unovis/ts` + `@unovis/vue` | SVG chart primitives: `AreaChart`, `BarChart`, `LineChart`, `DonutChart` |
 | **Data Table** | `@tanstack/vue-table` | Headless table logic with sorting & pagination |
 | **Form & Validation** | `vee-validate` + `@vee-validate/zod` + `zod` | Strongly-typed validation schemas |
 | **Icons** | `@lucide/vue` | Must be imported explicitly (`import { Plus } from '@lucide/vue'`) |
 | **State Management** | Pinia | Setup Stores pattern (`defineStore('name', () => { ... })`) |
-| **Routing** | Vue Router v5 | HTML5 history mode with route guards |
+| **Routing** | Vue Router v5 | HTML5 history mode — auth guard scaffold in `src/router/index.ts` (commented) |
 | **API Client** | Axios + Enterprise Interceptors | Silent Token Refresh, Global Loading Bar, Auto Error Toast |
 | **Notifications** | `vue-sonner` | Toast notifications via `toast.success()`, `toast.error()` |
 | **Language & Types** | TypeScript 6 + `vue-tsc` | Strict static typing, zero `any` |
@@ -35,32 +81,47 @@ You are an expert frontend engineer building features for this **Nala Admin Dash
 
 1. **Composition API Only:** Never use Options API — always use `<script setup lang="ts">`.
 2. **Strict TypeScript:** No `any` type — define explicit TypeScript interfaces for all props, emits, and API payloads.
-3. **English Standard:** All user-facing UI text, form labels, placeholders, error messages, toast notifications, and in-code comments must be in **English**.
-4. **Tailwind CSS v4 Strict Compliance:**
-   - **Gradients:** ALWAYS use `bg-linear-to-r`, `bg-linear-to-b`, `bg-linear-to-tr` (NEVER use legacy v3 `bg-gradient-to-*`).
-   - **Sizing Scale:** NEVER write arbitrary bracket sizing like `max-w-[170px]`, `w-[300px]`, or `p-[1px]`. ALWAYS use Tailwind v4 scale (`max-w-44`, `max-w-28`, `w-75`, `max-h-75`, `p-px`).
-   - **Shadows:** Use `shadow-2xs`, `shadow-xs`, `shadow-sm`, `shadow-md`, `shadow-lg`.
-5. **No Scoped CSS:** Use Tailwind utility classes. Do not write `<style scoped>`.
-6. **Dialog Accessibility:** Every `DialogContent` MUST include `DialogTitle` and `DialogDescription` (use `sr-only` if visually hidden) to comply with Reka UI ARIA standards.
+3. **English Standard:** All user-facing UI text, form labels, placeholders, error messages, toast notifications, and in-code comments **MUST be in English**.
+4. **No Build Commands:** NEVER run `pnpm build` or `npm run build` autonomously. Build only on explicit user request.
+5. **No Automatic Tests:** NEVER run `vitest`, `pnpm test`, or `pnpm test:run` autonomously.
+6. **No Git Operations:** NEVER run `git add`, `git commit`, or `git push` autonomously.
+7. **No New Packages Without Confirmation:** Always ask in chat before running `pnpm add`.
+8. **No Scoped CSS:** Use Tailwind utility classes. Do not write `<style scoped>`.
+9. **Dialog Accessibility:** Every `DialogContent` MUST include `DialogTitle` and `DialogDescription` (use `sr-only` if visually hidden) to comply with Reka UI ARIA standards.
+10. **Tailwind CSS v4 Strict Syntax Compliance:**
+    - **Gradients:** ALWAYS use `bg-linear-to-r`, `bg-linear-to-b`, `bg-linear-to-tr` (NEVER `bg-gradient-to-*`).
+    - **Sizing:** NEVER use arbitrary brackets like `max-w-[170px]`, `w-[300px]`, `p-[1px]`. Use Tailwind v4 scale (`max-w-44`, `w-75`, `p-px`).
+    - **Shadows:** Use `shadow-2xs`, `shadow-xs`, `shadow-sm`, `shadow-md`, `shadow-lg`.
+    - **Viewport:** Use `min-h-dvh` / `h-dvh` instead of `min-h-screen` / `h-screen`.
+    - **Opacity:** Use integer percentage (`bg-primary/50`) NOT decimal (`bg-primary/0.5`).
 
 ---
 
 ## ⚡ Auto-Import Guide Matrix
 
-| Auto-Imported (No Import Needed) | Manual Import Required |
-|---|---|
-| Vue Reactivity (`ref`, `computed`, `watch`, `onMounted`, etc.) | Lucide Icons (`import { Plus, Search, Trash2 } from '@lucide/vue'`) |
-| Vue Router (`useRoute`, `useRouter`) | Toast Notifications (`import { toast } from '@/components/ui/sonner'`) |
-| VueUse (`useColorMode`, `useLocalStorage`, etc.) | Axios Client (`import { apiClient } from '@/lib/axios'`) |
-| Pinia (`defineStore`, `storeToRefs`) | Form Validation (`import { z } from 'zod'`, `import { useForm } from 'vee-validate'`) |
-| All UI Components (`<Button>`, `<Card>`, `<Dialog>`, `<Input>`, `<Table>`, `<PageHeader>`, etc.) | Class Merger (`import { cn } from '@/lib/utils'`) |
+> The project uses `unplugin-auto-import` and `unplugin-vue-components`. Do NOT add manual imports for items marked ✅ AUTOMATIC.
+
+| Category | Auto-Import Status | Usage |
+|---|---|---|
+| **Vue Reactivity** (`ref`, `computed`, `watch`, `onMounted`, `reactive`, etc.) | ✅ **AUTOMATIC** | Use directly: `const count = ref(0)` |
+| **Vue Router** (`useRoute`, `useRouter`) | ✅ **AUTOMATIC** | Use directly: `const router = useRouter()` |
+| **VueUse** (`useColorMode`, `useLocalStorage`, `useDebounceFn`, etc.) | ✅ **AUTOMATIC** | Use directly: `const mode = useColorMode()` |
+| **Pinia** (`defineStore`, `storeToRefs`) | ✅ **AUTOMATIC** | Use directly: `defineStore(...)` |
+| **All UI Components** (`Button`, `Card`, `Dialog`, `Input`, `InputGroup`, `Table`, `Tabs`, etc.) | ✅ **AUTOMATIC** | Use directly in template: `<Card>`, `<Button>`, `<InputGroup>` |
+| **Shared Components** (`PageHeader`, `EmptyState`, `AppLogo`) | ✅ **AUTOMATIC** | Use directly: `<PageHeader>`, `<EmptyState>` |
+| **Custom Composables** (`useFormatter`, `useThemeConfig`) | ✅ **AUTOMATIC** | Use directly: `const fmt = useFormatter()` |
+| **Lucide Icons** (`Plus`, `Search`, `Trash2`, etc.) | ⚠️ **MANUAL IMPORT** | `import { Plus, Search } from '@lucide/vue'` |
+| **Toast Notifications** (`toast`) | ⚠️ **MANUAL IMPORT** | `import { toast } from '@/components/ui/sonner'` |
+| **HTTP API Client** (`apiClient`) | ⚠️ **MANUAL IMPORT** | `import { apiClient } from '@/lib/axios'` |
+| **Class Merging Utility** (`cn`) | ⚠️ **MANUAL IMPORT** | `import { cn } from '@/lib/utils'` |
+| **Form Validation** (`zod`, `toTypedSchema`, `useForm`) | ⚠️ **MANUAL IMPORT** | `import { z } from 'zod'`, `import { useForm } from 'vee-validate'` |
 
 ---
 
-## 🎨 UI Design System & Component Blueprints
+## 🎨 UI Design System — Key Patterns
 
-### 1. Standard Page Header (`<PageHeader>`)
-Always use the standardized `<PageHeader>` component at the top of every view:
+### 1. Standard Page Header
+Always use `<PageHeader>` at the top of every view — never build a custom header layout:
 ```vue
 <PageHeader
   title="Products"
@@ -75,32 +136,62 @@ Always use the standardized `<PageHeader>` component at the top of every view:
 </PageHeader>
 ```
 
-### 2. Standard KPI Stats Cards Blueprint
-When building summary metrics / stats cards, follow this exact blueprint:
+### 2. Edge-to-Edge Card Layout (`<Card flush>` + `<CardHeader section>`)
+- Use `<Card flush>` → auto-applies `overflow-hidden py-0 gap-0`
+- Use `<CardHeader section>` → auto-applies `p-6 border-b border-border bg-muted/10`
+- Use `<CardContent class="p-0">` for table content (zero inner padding)
+
+```vue
+<Card flush class="shadow-xs border">
+  <CardHeader section class="flex items-center justify-between gap-4">
+    <div>
+      <CardTitle class="text-base font-semibold">Title</CardTitle>
+      <CardDescription class="text-xs mt-0.5">Subtitle</CardDescription>
+    </div>
+  </CardHeader>
+  <CardContent class="p-0">
+    <!-- Table content here -->
+  </CardContent>
+</Card>
+```
+
+### 3. Input Groups with Icons & Addons
+Never write manual `absolute` positioning for input icons:
+```vue
+<!-- Search icon input -->
+<InputGroup>
+  <InputIcon side="left">
+    <Search class="h-3.5 w-3.5" />
+  </InputIcon>
+  <Input v-model="searchQuery" placeholder="Search..." class="pl-8 h-8 text-xs" />
+</InputGroup>
+
+<!-- URL prefix/suffix addon -->
+<InputGroup>
+  <InputAddon side="left">https://</InputAddon>
+  <Input placeholder="my-subdomain" class="rounded-none border-x-0" />
+  <InputAddon side="right">.example.com</InputAddon>
+</InputGroup>
+```
+
+### 4. Standard KPI Stats Cards
 ```vue
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
   <Card
     v-for="stat in stats"
     :key="stat.title"
     flush
-    class="highlight-card shadow-xs border-border/80 bg-card hover:border-border transition-all duration-200"
+    class="highlight-card shadow-xs border-border/80 hover:border-border transition-all duration-200"
   >
     <CardContent class="p-5 space-y-2">
-      <!-- 1. Top Row: Title + Icon -->
       <div class="flex items-center justify-between">
         <span class="text-xs font-medium text-muted-foreground">{{ stat.title }}</span>
         <component :is="stat.icon" class="h-4 w-4 text-primary" />
       </div>
-
-      <!-- 2. Value -->
-      <div class="text-2xl font-bold tracking-tight text-foreground">{{ stat.value }}</div>
-
-      <!-- 3. Trend Indicator -->
+      <div class="text-2xl font-bold tracking-tight">{{ stat.value }}</div>
       <p class="text-xs text-muted-foreground flex items-center gap-1">
-        <span
-          class="font-semibold inline-flex items-center gap-0.5"
-          :class="stat.positive ? 'text-emerald-500' : 'text-rose-500'"
-        >
+        <span class="font-semibold inline-flex items-center gap-0.5"
+          :class="stat.positive ? 'text-emerald-500' : 'text-rose-500'">
           <component :is="stat.positive ? ArrowUpRight : ArrowDownRight" class="h-3.5 w-3.5" />
           {{ stat.change }}
         </span>
@@ -111,23 +202,28 @@ When building summary metrics / stats cards, follow this exact blueprint:
 </div>
 ```
 
-### 3. Input Groups with Icons & Addons
-Never write manual absolute positioning for input icons:
+### 5. Empty State (use `<EmptyState>` — don't build inline)
 ```vue
-<!-- Search Icon Input -->
-<InputGroup>
-  <InputIcon side="left">
-    <Search class="h-3.5 w-3.5" />
-  </InputIcon>
-  <Input v-model="searchQuery" placeholder="Search..." class="pl-8 h-8 text-xs" />
-</InputGroup>
+<!-- Inside a table cell or card content when data is empty -->
+<EmptyState
+  title="No products found"
+  description="Try adjusting your search or add a new product."
+/>
+```
 
-<!-- URL Prefix / Suffix Addon -->
-<InputGroup>
-  <InputAddon side="left">https://</InputAddon>
-  <Input placeholder="my-subdomain" class="rounded-none border-x-0" />
-  <InputAddon side="right">.nala.dev</InputAddon>
-</InputGroup>
+### 6. `useFormatter()` — Data Formatting
+```ts
+const fmt = useFormatter()
+
+fmt.currency(150000, 'IDR')     // "Rp 150.000"
+fmt.currency(1999, 'USD')       // "$1,999.00"
+fmt.number(1500000)             // "1,500,000"
+fmt.compact(1500000)            // "1.5M"
+fmt.date(new Date())            // "Sep 3, 2026"
+fmt.dateTime(new Date())        // "Sep 3, 2026, 14:30"
+fmt.relative(pastDate)          // "5 minutes ago"
+fmt.bytes(1024 * 1024)          // "1 MB"
+fmt.initials('John Doe')        // "JD"
 ```
 
 ---
@@ -473,21 +569,72 @@ const filteredProducts = computed(() => {
 </template>
 ```
 
-### 5. Register in Router & Sidebar
-- **`src/router/index.ts`:**
-  ```ts
-  {
-    path: 'products',
-    name: 'products',
-    component: () => import('@/views/products/IndexView.vue'),
-  }
-  ```
-- **`src/components/layout/AppSidebar.vue`:**
-  ```ts
-  import { Package } from '@lucide/vue'
+### 5. Register Route & Sidebar Entry
 
-  const mainNav = [
-    { name: 'Dashboard', routeName: 'dashboard', href: '/', icon: LayoutDashboard },
-    { name: 'Products', routeName: 'products', href: '/products', icon: Package },
-  ]
-  ```
+**`src/router/index.ts`** — Add inside the AdminLayout children array:
+```ts
+{
+  path: 'products',
+  name: 'products',
+  component: () => import('@/views/products/IndexView.vue'),
+},
+```
+
+**`src/components/layout/AppSidebar.vue`** — Add to the `mainNav` array:
+```ts
+import { Package } from '@lucide/vue'
+
+const mainNav = [
+  { name: 'Dashboard', routeName: 'dashboard', href: '/', icon: LayoutDashboard },
+  { name: 'Products', routeName: 'products', href: '/products', icon: Package },
+]
+```
+
+---
+
+## 🗺️ Available Routes (Starter Template)
+
+| Route | Name | View |
+|---|---|---|
+| `/` | `dashboard` | `views/dashboard/IndexView.vue` |
+| `/_blank` | `starter-blank` | `views/_starter/BlankView.vue` — starting point for new pages |
+| `/auth/login` | `login` | Full login form with demo credentials |
+| `/auth/register` | `register` | Registration with password strength meter |
+| `/auth/forgot-password` | `forgot-password` | Recovery email request |
+| `/auth/reset-password` | `reset-password` | Token-based password reset |
+| `/auth/verify-otp` | `verify-otp` | 6-box OTP input |
+| `/auth/confirm-email` | `confirm-email` | Email confirmation with polling |
+| `/auth/lock-screen` | `lock-screen` | Session lock screen |
+| `/errors/404` | `not-found` | 404 Not Found page |
+| `/errors/500` | `server-error` | 500 Server Error page |
+| `/errors/403` | `unauthorized` | 403 Access Denied page |
+| `/errors/maintenance` | `maintenance` | Maintenance mode with countdown |
+| `/errors/coming-soon` | `coming-soon` | Coming soon with newsletter capture |
+
+> **Auth Guard:** The router file (`src/router/index.ts`) has a pre-built auth guard scaffold in comments. Uncomment and configure it to protect your routes.
+
+---
+
+## 🔧 Tailwind v4 Syntax Reference (Anti-Pattern Table)
+
+| Category | ❌ NEVER (v3 / Anti-Pattern) | ✅ ALWAYS (Tailwind v4) |
+|---|---|---|
+| **Gradients** | `bg-gradient-to-r` | `bg-linear-to-r` |
+| **Max Width** | `max-w-[170px]` | `max-w-44` |
+| **Width/Height** | `w-[300px]` / `h-[400px]` | `w-75` / `h-100` |
+| **1px Spacing** | `p-[1px]` / `m-[1px]` | `p-px` / `m-px` |
+| **Shadows** | `shadow-[0_1px_...]` | `shadow-2xs` / `shadow-xs` / `shadow-sm` |
+| **Viewport** | `min-h-screen` / `h-screen` | `min-h-dvh` / `h-dvh` |
+| **Opacity** | `bg-primary/0.5` | `bg-primary/50` |
+
+---
+
+## 🛠️ Dev Commands
+
+| Command | Action |
+|---|---|
+| `pnpm dev` | Start dev server |
+| `pnpm build` | Build for production (run manually only) |
+| `pnpm preview` | Preview production build |
+| `pnpm test` | Run unit tests in watch mode |
+| `pnpm test:run` | Run unit tests once (CI mode) |

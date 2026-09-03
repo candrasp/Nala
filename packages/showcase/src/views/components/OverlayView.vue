@@ -18,6 +18,9 @@ import {
   GitFork,
   Star,
   Circle,
+  Globe,
+  Check,
+  ChevronDown,
 } from '@lucide/vue'
 import {
   Sheet,
@@ -82,6 +85,7 @@ const tags = Array.from({ length: 50 }).map(
   (_, i, a) => `v1.2.0-beta.${a.length - i}`
 )
 const filterMaxLatency = ref('50')
+const selectedLanguage = ref('EN')
 
 // ─── Code Documentation Snippets ─────────────────────────────────────────────
 
@@ -277,6 +281,32 @@ const dropdownSnippet = `<!-- Dropdown Action Menus with Keyboard Shortcuts -->
       <LogOut class="mr-2 h-3.5 w-3.5" />
       <span>Log out</span>
       <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+    </DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+
+<!-- Multi-Language Selector Dropdown with Flags -->
+<DropdownMenu>
+  <DropdownMenuTrigger as-child>
+    <Button variant="outline" class="gap-2">
+      <span>🇺🇸</span>
+      <span>EN</span>
+      <ChevronDown class="h-3 w-3 text-muted-foreground" />
+    </Button>
+  </DropdownMenuTrigger>
+  <DropdownMenuContent align="start" class="w-48">
+    <DropdownMenuLabel class="text-xs text-muted-foreground font-normal flex items-center justify-between">
+      <span>Select Language</span>
+      <Globe class="h-3.5 w-3.5" />
+    </DropdownMenuLabel>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem @click="selectedLanguage = 'EN'" class="cursor-pointer text-xs flex items-center justify-between">
+      <div class="flex items-center gap-2"><span>🇺🇸</span><span>English (US)</span></div>
+      <Check v-if="selectedLanguage === 'EN'" class="h-3.5 w-3.5 text-primary" />
+    </DropdownMenuItem>
+    <DropdownMenuItem @click="selectedLanguage = 'ID'" class="cursor-pointer text-xs flex items-center justify-between">
+      <div class="flex items-center gap-2"><span>🇮🇩</span><span>Bahasa Indonesia</span></div>
+      <Check v-if="selectedLanguage === 'ID'" class="h-3.5 w-3.5 text-primary" />
     </DropdownMenuItem>
   </DropdownMenuContent>
 </DropdownMenu>`
@@ -619,43 +649,80 @@ const scrollAreaSnippet = `<!-- Scroll Area with custom styled slim scrollbar --
 
     <!-- 5. Dropdown Action Menus -->
     <CodePreview
-      title="Dropdown Action Menus"
-      description="Nested popup menus with icons, label groupings, dividers, and keyboard shortcut indicators."
+      title="Dropdown Action Menus & Language Switcher"
+      description="Nested popup menus with icons, label groupings, dividers, keyboard shortcut indicators, and multi-language selectors."
       :code="dropdownSnippet"
     >
-      <DropdownMenu>
-        <DropdownMenuTrigger as-child>
-          <Button variant="outline" class="gap-2">
-            <User class="h-3.5 w-3.5" />
-            Account Settings
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent class="w-56" align="start">
-          <DropdownMenuLabel>My Developer Account</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem class="cursor-pointer text-xs">
-            <User class="mr-2 h-3.5 w-3.5 text-muted-foreground" />
-            <span>Profile Settings</span>
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem class="cursor-pointer text-xs">
-            <CreditCard class="mr-2 h-3.5 w-3.5 text-muted-foreground" />
-            <span>Billing &amp; Plan</span>
-            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuItem class="cursor-pointer text-xs">
-            <Settings class="mr-2 h-3.5 w-3.5 text-muted-foreground" />
-            <span>API Tokens</span>
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem class="cursor-pointer text-xs text-destructive focus:text-destructive">
-            <LogOut class="mr-2 h-3.5 w-3.5" />
-            <span>Log out</span>
-            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <div class="flex flex-wrap items-center gap-4">
+        <!-- Account Settings Dropdown -->
+        <DropdownMenu>
+          <DropdownMenuTrigger as-child>
+            <Button variant="outline" class="gap-2">
+              <User class="h-3.5 w-3.5" />
+              Account Settings
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent class="w-56" align="start">
+            <DropdownMenuLabel>My Developer Account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem class="cursor-pointer text-xs">
+              <User class="mr-2 h-3.5 w-3.5 text-muted-foreground" />
+              <span>Profile Settings</span>
+              <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+            </DropdownMenuItem>
+            <DropdownMenuItem class="cursor-pointer text-xs">
+              <CreditCard class="mr-2 h-3.5 w-3.5 text-muted-foreground" />
+              <span>Billing &amp; Plan</span>
+              <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+            </DropdownMenuItem>
+            <DropdownMenuItem class="cursor-pointer text-xs">
+              <Settings class="mr-2 h-3.5 w-3.5 text-muted-foreground" />
+              <span>API Tokens</span>
+              <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem class="cursor-pointer text-xs text-destructive focus:text-destructive">
+              <LogOut class="mr-2 h-3.5 w-3.5" />
+              <span>Log out</span>
+              <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <!-- Language Selector Dropdown -->
+        <DropdownMenu>
+          <DropdownMenuTrigger as-child>
+            <Button variant="outline" class="gap-2">
+              <span class="text-base leading-none">{{ selectedLanguage === 'EN' ? '🇺🇸' : selectedLanguage === 'ID' ? '🇮🇩' : selectedLanguage === 'ES' ? '🇪🇸' : '🇯🇵' }}</span>
+              <span>{{ selectedLanguage }}</span>
+              <ChevronDown class="h-3 w-3 text-muted-foreground" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="start" class="w-48">
+            <DropdownMenuLabel class="text-xs text-muted-foreground font-normal flex items-center justify-between">
+              <span>Select Language</span>
+              <Globe class="h-3.5 w-3.5" />
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem @click="selectedLanguage = 'EN'" class="cursor-pointer text-xs flex items-center justify-between">
+              <div class="flex items-center gap-2"><span>🇺🇸</span><span>English (US)</span></div>
+              <Check v-if="selectedLanguage === 'EN'" class="h-3.5 w-3.5 text-primary" />
+            </DropdownMenuItem>
+            <DropdownMenuItem @click="selectedLanguage = 'ID'" class="cursor-pointer text-xs flex items-center justify-between">
+              <div class="flex items-center gap-2"><span>🇮🇩</span><span>Bahasa Indonesia</span></div>
+              <Check v-if="selectedLanguage === 'ID'" class="h-3.5 w-3.5 text-primary" />
+            </DropdownMenuItem>
+            <DropdownMenuItem @click="selectedLanguage = 'ES'" class="cursor-pointer text-xs flex items-center justify-between">
+              <div class="flex items-center gap-2"><span>🇪🇸</span><span>Español</span></div>
+              <Check v-if="selectedLanguage === 'ES'" class="h-3.5 w-3.5 text-primary" />
+            </DropdownMenuItem>
+            <DropdownMenuItem @click="selectedLanguage = 'JA'" class="cursor-pointer text-xs flex items-center justify-between">
+              <div class="flex items-center gap-2"><span>🇯🇵</span><span>日本語</span></div>
+              <Check v-if="selectedLanguage === 'JA'" class="h-3.5 w-3.5 text-primary" />
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </CodePreview>
 
     <!-- 6. Context Menu Primitive -->
