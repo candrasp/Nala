@@ -42,6 +42,7 @@ import {
   Kanban,
   FolderOpen,
   MessageSquare,
+  FileEdit,
 } from '@lucide/vue'
 import {
   Sidebar,
@@ -111,6 +112,7 @@ const componentNav: NavItem[] = [
   { name: 'Badges & Avatars', routeName: 'components-badges', href: '/components/badges', icon: Tag },
   { name: 'Cards & Surfaces', routeName: 'components-cards', href: '/components/cards', icon: Layers },
   { name: 'Form & Inputs', routeName: 'components-forms', href: '/components/forms', icon: FormInput },
+  { name: 'Rich Text Editor', routeName: 'components-editor', href: '/components/editor', icon: FileEdit },
   { name: 'Data Tables', routeName: 'components-tables', href: '/components/tables', icon: Table2 },
   { name: 'Charts & Analytics', routeName: 'components-charts', href: '/components/charts', icon: AreaChart },
   { name: 'Modals & Dialogs', routeName: 'components-modals', href: '/components/modals', icon: AppWindow },

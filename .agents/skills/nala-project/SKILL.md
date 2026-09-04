@@ -157,6 +157,7 @@ The following shared components live **outside** `ui/` but are also auto-importe
 | `date-picker/` | `DatePicker` (single & range date selector) |
 | `dialog/` | `Dialog`, `DialogTrigger`, `DialogContent`, `DialogHeader`, `DialogTitle`, `DialogDescription`, `DialogFooter`, `DialogClose` |
 | `dropdown-menu/` | `DropdownMenu`, `DropdownMenuTrigger`, `DropdownMenuContent`, `DropdownMenuItem`, `DropdownMenuLabel`, `DropdownMenuSeparator`, `DropdownMenuShortcut`, `DropdownMenuGroup` |
+| `editor/` | `RichTextEditor` (Tiptap-powered WYSIWYG editor with toolbar, floating bubble menu, word/character counter, hyperlink/image popovers, and Tailwind v4 prose styles) |
 | `form/` | `Form`, `FormField`, `FormItem`, `FormLabel`, `FormControl`, `FormMessage`, `FormDescription` |
 | `hover-card/` | `HoverCard`, `HoverCardTrigger`, `HoverCardContent` |
 | `input/` | `Input`, `InputGroup` (relative flex wrapper), `InputIcon` (side: `left` \| `right`), `InputAddon` (side: `left` \| `right`) |
@@ -582,7 +583,61 @@ Never write manual absolute positioning for input icons:
 - **IMPORTANT:** Every `DialogContent` MUST have a `DialogTitle` and `DialogDescription` (use `sr-only` class if visually hidden) to meet Reka UI ARIA standards.
 - Do not add native `autoFocus` attributes to inputs inside Dialogs.
 
-### 5. Tailwind CSS v4 Syntax Reference & Anti-Patterns (CRITICAL)
+### 5. Rich Text WYSIWYG Editor (`<RichTextEditor>`)
+The project includes a full-featured Tiptap WYSIWYG editor primitive (`src/components/ui/editor/`). It is auto-imported globally as `<RichTextEditor>`.
+
+```vue
+<script setup lang="ts">
+import type { EditorChangePayload } from '@/components/ui/editor'
+
+const content = ref('<p>Initial content...</p>')
+
+function onEditorChange(payload: EditorChangePayload) {
+  // payload: { html, text, characterCount, wordCount }
+}
+</script>
+
+<template>
+  <!-- Standard v-model usage -->
+  <RichTextEditor
+    v-model="content"
+    placeholder="Write your article or product description..."
+    :max-length="5000"
+    min-height="180px"
+    @change="onEditorChange"
+  />
+
+  <!-- Integration with VeeValidate <FormField> -->
+  <FormField v-slot="{ value, handleChange }" name="description">
+    <FormItem>
+      <FormLabel>Description</FormLabel>
+      <FormControl>
+        <RichTextEditor
+          :model-value="value"
+          @update:model-value="handleChange"
+          placeholder="Product details..."
+        />
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  </FormField>
+</template>
+```
+
+**Props Reference:**
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `modelValue` | `string` | `''` | HTML string bound via `v-model` |
+| `placeholder` | `string` | `'Write something insightful...'` | Empty state placeholder |
+| `disabled` | `boolean` | `false` | Disables editor and hides toolbar |
+| `readonly` | `boolean` | `false` | View-only mode with prose styling |
+| `maxLength` | `number` | `undefined` | Maximum character limit |
+| `minHeight` | `string` | `'160px'` | Minimum content area height |
+| `maxHeight` | `string` | `'480px'` | Maximum content area before scroll |
+| `hideToolbar` | `boolean` | `false` | Hide the top formatting toolbar |
+| `hideFooter` | `boolean` | `false` | Hide the bottom word/character counter |
+
+### 6. Tailwind CSS v4 Syntax Reference & Anti-Patterns (CRITICAL)
 
 | Category | ❌ NEVER USE (v3 / Anti-Pattern) | ✅ ALWAYS USE (Tailwind v4) | Notes |
 |---|---|---|---|

@@ -27,8 +27,8 @@
 - ✅ **Form & Validation** — `vee-validate` + `zod` schema validation with rich input primitives (PIN/OTP, date picker, combobox, file upload)
 - 🗂️ **Auth Flow** — Login, Register, Forgot Password, OTP Verify, Reset Password, Confirm Email, Lock Screen
 - 🚫 **Error Pages** — 404 Not Found, 500 Server Error, 403 Access Denied, Maintenance Mode, Coming Soon
-- 🧩 **45+ UI Primitives** — Chart, Toggle, ToggleGroup, ContextMenu, ScrollArea, PinInput, Sonner, and all shadcn-vue primitives ready to use
-- 🎯 **Component Showcase** — Buttons, Forms, Modals, Cards, Tables, Charts, Overlays, Badges, Toasts, Navigation, Typography, Colors, Icons
+- 🧩 **46+ UI Primitives** — RichTextEditor (Tiptap), Chart, Toggle, ToggleGroup, ContextMenu, ScrollArea, PinInput, Sonner, and all shadcn-vue primitives ready to use
+- 🎯 **Component Showcase** — Buttons, Forms, Rich Text Editor, Modals, Cards, Tables, Charts, Overlays, Badges, Toasts, Navigation, Typography, Colors, Icons
 
 ---
 
@@ -41,6 +41,7 @@
 | Package Manager | `pnpm` |
 | Styling | Tailwind CSS v4 + `tw-animate-css` |
 | UI Primitives | `reka-ui` + shadcn-vue (New York style) |
+| Rich Text Editor | Tiptap (ProseMirror for Vue 3) |
 | Charts & Visualization | `@unovis/vue` + `@unovis/ts` |
 | Data Table | `@tanstack/vue-table` |
 | Form & Validation | `vee-validate` + `@vee-validate/zod` + `zod` |

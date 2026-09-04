@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Component } from 'vue'
 import {
   LayoutDashboard,
   Users,
@@ -45,6 +46,7 @@ import {
   Kanban,
   FolderOpen,
   MessageSquare,
+  FileEdit,
 } from '@lucide/vue'
 import {
   Dialog,
@@ -57,7 +59,7 @@ import {
 interface SearchItem {
   title: string
   href: string
-  icon: any
+  icon: Component
   category: string
 }
 
@@ -93,6 +95,7 @@ const searchItems: SearchItem[] = [
   { title: 'Badges & Avatars', href: '/components/badges', icon: Tag, category: 'UI Components' },
   { title: 'Cards & Surfaces', href: '/components/cards', icon: Layers, category: 'UI Components' },
   { title: 'Form & Inputs', href: '/components/forms', icon: FormInput, category: 'UI Components' },
+  { title: 'Rich Text Editor (WYSIWYG)', href: '/components/editor', icon: FileEdit, category: 'UI Components' },
   { title: 'Data Tables', href: '/components/tables', icon: Table2, category: 'UI Components' },
   { title: 'Charts & Analytics', href: '/components/charts', icon: AreaChart, category: 'UI Components' },
   { title: 'Modals & Dialogs', href: '/components/modals', icon: AppWindow, category: 'UI Components' },

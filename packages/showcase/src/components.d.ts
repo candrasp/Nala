@@ -147,6 +147,7 @@ declare module 'vue' {
     Progress: typeof import('./components/ui/progress/Progress.vue')['default']
     RadioGroup: typeof import('./components/ui/radio-group/RadioGroup.vue')['default']
     RadioGroupItem: typeof import('./components/ui/radio-group/RadioGroupItem.vue')['default']
+    RichTextEditor: typeof import('./components/ui/editor/RichTextEditor.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ScrollArea: typeof import('./components/ui/scroll-area/ScrollArea.vue')['default']

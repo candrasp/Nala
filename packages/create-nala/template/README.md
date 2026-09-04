@@ -57,7 +57,7 @@ src/
 ├── assets/fonts/            # High-performance local Inter fonts (woff2)
 ├── components/
 │   ├── layout/              # Admin shell (AppNavbar, AppSidebar, CommandPalette)
-│   ├── ui/                  # 45 accessible UI primitives (Reka UI / shadcn-vue)
+│   ├── ui/                  # 46 accessible UI primitives (Reka UI / shadcn-vue & Tiptap)
 │   ├── AppLogo.vue          # Auto-imported brand logo component
 │   ├── EmptyState.vue       # Auto-imported empty state component
 │   └── PageHeader.vue       # Standardized page header component

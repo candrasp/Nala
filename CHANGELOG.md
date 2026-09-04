@@ -5,6 +5,24 @@ All notable changes to **Nala** — Vue 3 Admin Dashboard Template — are docum
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [Semantic Versioning](https://semver.org/).
 
+## [3.1.1] — 2026-09-05
+
+### Added & Improved
+
+#### 📝 Rich Text WYSIWYG Editor (`src/components/ui/editor/` & `/components/editor`)
+- **Tiptap-Powered WYSIWYG Editor Primitive (`RichTextEditor.vue`)**:
+  - Headless, modular rich text editor built with `@tiptap/vue-3`, `@tiptap/starter-kit`, `@tiptap/extension-underline`, `@tiptap/extension-link`, `@tiptap/extension-image`, and `@tiptap/extension-placeholder`.
+  - Comprehensive formatting toolbar supporting Headings (H1–H3), Paragraph, Bold, Italic, Underline, Strikethrough, Inline Code, Bullet Lists, Ordered Lists, Blockquotes, Code Blocks, and Horizontal Dividers.
+  - Interactive popover overlays for inserting and editing hyperlinks and embedded images with URL input validation.
+  - Undo and Redo transaction history with Lucide iconography and one-click clear formatting helper.
+  - Status footer with live word count, character count, and optional `maxLength` enforcement.
+  - Configurable component states including `placeholder`, `disabled`, `readonly`, `autofocus`, `hideToolbar`, `hideFooter`, and responsive height constraints (`minHeight`, `maxHeight`).
+  - Strict TypeScript interface (`EditorChangePayload`) with `v-model` two-way data binding and `change`, `focus`, `blur` events.
+- **Component Showcase View (`src/views/components/EditorView.vue` / `/components/editor`)**:
+  - Interactive playground featuring live editor sandbox, raw HTML code output inspector, read-only mode toggle, and character limit demonstrations.
+  - Full integration into `AppSidebar.vue`, `CommandSearchDialog.vue` (`Ctrl+K`), and `router/index.ts`.
+  - Component parity synchronized to `packages/create-nala/template/src/components/ui/editor/`.
+
 ## [3.1.0] — 2026-09-03
 
 ### Added & Improved

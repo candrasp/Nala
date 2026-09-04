@@ -514,6 +514,51 @@
 
 ---
 
+## 🎯 v3.2 & Future Milestones — Enterprise Expansion
+
+> **Target:** Transform Nala into an exhaustive, world-class enterprise admin template with advanced authorization tooling, operational CRUD suites, productivity apps, full internationalization, and rich developer documentation.
+
+### 🛡️ 1. Access Control & Authorization DX (RBAC & ABAC Enforcers)
+- [ ] **`usePermission` & `useRole` Composables** — Declarative helper functions (`can('users.create')`, `hasRole('admin')`, `canAny([...])`) connected to the auth & role stores.
+- [ ] **Custom `v-can` / `v-permission` Directives** — Declarative template-level access gating to automatically hide or disable unauthorized buttons, links, and action triggers.
+- [ ] **Active Router Access Guard** — Production-ready navigation guard evaluating `meta: { requiresAuth: true, permissions: ['users.read'], roles: ['admin'] }`, automatically routing unauthorized attempts to `/errors/403`.
+
+### 🌐 2. Full Internationalization (i18n)
+- [ ] **`vue-i18n` Core Integration** — Integrate `vue-i18n` with type-safe locale messages and dynamic locale switching.
+- [ ] **Locale Dictionaries** — Ship ready-to-use translations (`en`, `id`, `es`, `de`, `ja`) for core navigation, auth forms, common buttons, and error messages.
+- [ ] **Reactive Language Switcher** — Connect the existing `AppNavbar.vue` language dropdown directly to active `vue-i18n` instance with persistent localStorage preference.
+
+### 📦 3. Operational Business & E-Commerce CRUD Suite
+- [ ] **Product Catalog Management (`/ecommerce/products`)**:
+  - [ ] Interactive product table & card grid views with SKU, category, stock level, and price range filters.
+  - [ ] **Product Form View (`/ecommerce/products/new`, `/ecommerce/products/:id/edit`)** with multi-image dropzone upload, variant builder (sizes/colors), and Tiptap Rich Text Editor for descriptions.
+- [ ] **Order Management & Detail (`/ecommerce/orders` & `/ecommerce/orders/:id`)**:
+  - [ ] Orders list with multi-state filters (*Pending, Paid, Processing, Shipped, Delivered, Cancelled*).
+  - [ ] Detailed Order View with visual shipment fulfillment stepper/timeline, line-item pricing table, customer details, and invoice download action.
+- [ ] **Customer / CRM View (`/ecommerce/customers`)** — Customer directory with purchase history, lifetime value (LTV), and communication logs.
+
+### 💼 4. Extended Productivity Mini-Apps
+- [ ] **Email / Webmail Inbox App (`/apps/mail`)**:
+  - [ ] Responsive multi-pane layout: Mailbox folders sidebar (*Inbox, Starred, Sent, Drafts, Trash, Spam*), searchable message list, and reading pane.
+  - [ ] **Compose Modal / Drawer** integrated with Tiptap `RichTextEditor`, attachment dropzone, and draft autosaving.
+- [ ] **Calendar & Scheduling App (`/apps/calendar`)**:
+  - [ ] Interactive month, week, day, and agenda views.
+  - [ ] Event creation and editing dialog modal with category color tagging, date-time pickers, and reminder settings.
+- [ ] **Multi-Step Form Wizard (`/forms/wizard`)** — Multi-stage workflow (e.g. Account Onboarding / KYC verification) with cross-step validation powered by `vee-validate` + `zod`.
+
+### 🎨 5. Layout Diversity & Global Usability
+- [ ] **Horizontal Navigation Layout Preset** — Alternate layout option featuring a clean top-navigation bar for corporate ERP / fintech dashboard use cases.
+- [ ] **Bidirectional / RTL (Right-to-Left) Support** — Full `dir="rtl"` support with mirror-aware Tailwind utilities for Arabic and Hebrew locales.
+- [ ] **Data Table Advanced Enhancements**:
+  - [ ] Column Visibility Dropdown for customizing visible data table columns.
+  - [ ] Standardized `useTableExport` composable for one-click CSV and Excel data exports.
+
+### 📚 6. Developer Documentation & Component Portal
+- [ ] **In-App Documentation Portal (`/docs/*`)** — Integrated guides for project architecture, API integration, auth flows, custom theming, and deployment.
+- [ ] **Component Props & API Reference Matrix** — Detailed props, emits, and slots documentation tables across all `/components/*` showcase pages.
+
+---
+
 ### Long-Term Maintenance Strategy
 
 > **Golden Rule:** `packages/showcase/` and `packages/create-nala/template/` evolve **independently**. There is no automatic sync — template updates are **intentional decisions**, not automatic.

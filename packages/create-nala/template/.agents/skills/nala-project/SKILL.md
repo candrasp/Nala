@@ -64,7 +64,7 @@ src/
 | **Framework** | Vue 3 (Composition API) | Always use `<script setup lang="ts">` |
 | **Build Tool** | Vite 8 (`@vitejs/plugin-vue`) | Super-fast HMR & production bundler |
 | **Styling** | Tailwind CSS v4 (`@tailwindcss/vite`) + `tw-animate-css` | OKLCH color tokens in `src/style.css` |
-| **UI Primitives** | `reka-ui` + shadcn-vue (New York style) | 45 primitive components in `src/components/ui/` |
+| **UI Primitives** | `reka-ui` + shadcn-vue (New York style) | 46 primitive components in `src/components/ui/` (including `RichTextEditor`) |
 | **Charts** | `@unovis/ts` + `@unovis/vue` | SVG chart primitives: `AreaChart`, `BarChart`, `LineChart`, `DonutChart` |
 | **Data Table** | `@tanstack/vue-table` | Headless table logic with sorting & pagination |
 | **Form & Validation** | `vee-validate` + `@vee-validate/zod` + `zod` | Strongly-typed validation schemas |
@@ -224,6 +224,47 @@ fmt.dateTime(new Date())        // "Sep 3, 2026, 14:30"
 fmt.relative(pastDate)          // "5 minutes ago"
 fmt.bytes(1024 * 1024)          // "1 MB"
 fmt.initials('John Doe')        // "JD"
+```
+
+### 7. Rich Text WYSIWYG Editor (`<RichTextEditor>`)
+The template includes a full-featured Tiptap WYSIWYG editor primitive (`src/components/ui/editor/`). It is auto-imported globally as `<RichTextEditor>`.
+
+```vue
+<script setup lang="ts">
+import type { EditorChangePayload } from '@/components/ui/editor'
+
+const content = ref('<p>Initial content...</p>')
+
+function onEditorChange(payload: EditorChangePayload) {
+  // payload: { html, text, characterCount, wordCount }
+}
+</script>
+
+<template>
+  <!-- Standard v-model usage -->
+  <RichTextEditor
+    v-model="content"
+    placeholder="Write your article or product description..."
+    :max-length="5000"
+    min-height="180px"
+    @change="onEditorChange"
+  />
+
+  <!-- Integration with VeeValidate <FormField> -->
+  <FormField v-slot="{ value, handleChange }" name="description">
+    <FormItem>
+      <FormLabel>Description</FormLabel>
+      <FormControl>
+        <RichTextEditor
+          :model-value="value"
+          @update:model-value="handleChange"
+          placeholder="Product details..."
+        />
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  </FormField>
+</template>
 ```
 
 ---

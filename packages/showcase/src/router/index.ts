@@ -138,6 +138,15 @@ const router = createRouter({
           component: () => import('@/views/components/FormView.vue'),
         },
         {
+          path: 'components/editor',
+          name: 'components-editor',
+          component: () => import('@/views/components/EditorView.vue'),
+        },
+        {
+          path: 'editor',
+          redirect: '/components/editor',
+        },
+        {
           path: 'components/modals',
           name: 'components-modals',
           component: () => import('@/views/components/ModalView.vue'),
