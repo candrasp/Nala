@@ -31,6 +31,7 @@ import {
   ServerCrash,
   ShieldAlert,
   ShieldCheck,
+  ShieldOff,
   Settings,
   User,
   LayoutTemplate,
@@ -43,6 +44,7 @@ import {
   FolderOpen,
   MessageSquare,
   FileEdit,
+  Building2,
 } from '@lucide/vue'
 import {
   Sidebar,
@@ -130,7 +132,13 @@ const authNav: NavItem[] = [
   { name: 'Verify OTP', routeName: 'verify-otp', href: '/auth/verify-otp', icon: ScanLine },
   { name: 'Reset Password', routeName: 'reset-password', href: '/auth/reset-password', icon: LockKeyhole },
   { name: 'Confirm Email', routeName: 'confirm-email', href: '/auth/confirm-email', icon: MailCheck },
+  { name: '2FA Challenge', routeName: 'two-factor', href: '/auth/2fa', icon: ShieldCheck },
+  { name: 'Enterprise SSO', routeName: 'sso-login', href: '/auth/sso', icon: Building2 },
+  { name: 'Magic Link', routeName: 'magic-link', href: '/auth/magic-link', icon: Sparkles },
+  { name: 'Workspace Selector', routeName: 'select-tenant', href: '/auth/select-tenant', icon: Layers },
+  { name: 'Account Suspended', routeName: 'suspended', href: '/auth/suspended', icon: ShieldOff },
   { name: 'Lock Screen', routeName: 'lock-screen', href: '/auth/lock-screen', icon: Lock },
+  { name: 'Split Cover Auth', routeName: 'split-login', href: '/auth-split/login', icon: LayoutTemplate },
 ]
 
 // 6. Pages & Errors Group

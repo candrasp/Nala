@@ -138,6 +138,44 @@ function copyImport(iconName: string) {
     copiedIcon.value = null
   }, 2000)
 }
+
+const brandIconsList = [
+  { name: 'google', label: 'Google' },
+  { name: 'github', label: 'GitHub' },
+  { name: 'microsoft', label: 'Microsoft' },
+  { name: 'apple', label: 'Apple' },
+  { name: 'x', label: 'X (Twitter)' },
+  { name: 'tiktok', label: 'TikTok' },
+  { name: 'pinterest', label: 'Pinterest' },
+  { name: 'youtube', label: 'YouTube' },
+  { name: 'instagram', label: 'Instagram' },
+  { name: 'facebook', label: 'Facebook' },
+  { name: 'linkedin', label: 'LinkedIn' },
+  { name: 'threads', label: 'Threads' },
+  { name: 'discord', label: 'Discord' },
+  { name: 'slack', label: 'Slack' },
+  { name: 'telegram', label: 'Telegram' },
+  { name: 'whatsapp', label: 'WhatsApp' },
+  { name: 'reddit', label: 'Reddit' },
+  { name: 'twitch', label: 'Twitch' },
+  { name: 'figma', label: 'Figma' },
+  { name: 'gitlab', label: 'GitLab' },
+  { name: 'spotify', label: 'Spotify' },
+  { name: 'notion', label: 'Notion' },
+  { name: 'dribbble', label: 'Dribbble' },
+] as const
+
+const brandColored = ref(true)
+const copiedBrand = ref<string | null>(null)
+
+function copyBrandUsage(brandName: string) {
+  const code = `<BrandIcon name="${brandName}"${brandColored.value ? ' colored' : ''} class="size-4" />`
+  navigator.clipboard.writeText(code)
+  copiedBrand.value = brandName
+  setTimeout(() => {
+    copiedBrand.value = null
+  }, 2000)
+}
 </script>
 
 <template>
@@ -217,6 +255,74 @@ function copyImport(iconName: string) {
             >
               <Check class="h-4 w-4" />
               Copied!
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+
+    <!-- Brand & Social Icons Section -->
+    <Card flush class="shadow-sm border-border/80">
+      <CardHeader class="p-6 border-b border-border/60 bg-muted/20 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <CardTitle class="text-base font-semibold">Brand & Social Icons (&lt;BrandIcon /&gt;)</CardTitle>
+            <Badge variant="secondary" shape="pill" class="text-[10px] font-mono">24 Icons</Badge>
+          </div>
+          <CardDescription class="text-xs mt-1">
+            Built-in, zero-dependency SVG brand icons for OAuth logins, social links, and external services. Click any icon to copy the Vue tag.
+          </CardDescription>
+        </div>
+
+        <div class="flex items-center gap-2 text-xs">
+          <span class="text-muted-foreground">Color Mode:</span>
+          <Button
+            size="sm"
+            :variant="brandColored ? 'default' : 'outline'"
+            class="h-7 text-xs px-2.5 cursor-pointer"
+            @click="brandColored = true"
+          >
+            Brand Colors
+          </Button>
+          <Button
+            size="sm"
+            :variant="!brandColored ? 'default' : 'outline'"
+            class="h-7 text-xs px-2.5 cursor-pointer"
+            @click="brandColored = false"
+          >
+            Monochrome
+          </Button>
+        </div>
+      </CardHeader>
+
+      <CardContent class="p-6">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          <div
+            v-for="brand in brandIconsList"
+            :key="brand.name"
+            class="rounded-xl border border-border p-4 bg-card hover:border-primary/50 hover:bg-primary/5 transition-all flex flex-col items-center justify-center text-center group cursor-pointer relative shadow-2xs"
+            @click="copyBrandUsage(brand.name)"
+          >
+            <!-- Brand Icon Display -->
+            <div class="h-12 w-12 rounded-lg bg-muted/40 group-hover:bg-primary/10 flex items-center justify-center transition-colors mb-2">
+              <BrandIcon :name="brand.name" :colored="brandColored" class="size-6" />
+            </div>
+
+            <!-- Brand Name -->
+            <p class="text-xs font-semibold text-foreground truncate max-w-full">
+              {{ brand.label }}
+            </p>
+            <span class="text-[10px] text-muted-foreground font-mono mt-0.5">
+              :name="'{{ brand.name }}'"
+            </span>
+
+            <!-- Copy Hover Overlay Indicator -->
+            <div
+              v-if="copiedBrand === brand.name"
+              class="absolute inset-0 bg-popover/95 backdrop-blur-xs rounded-xl flex items-center justify-center gap-1 text-xs font-semibold text-emerald-500 shadow-md animate-in fade-in"
+            >
+              <Check class="h-4 w-4" />
+              Copied Tag!
             </div>
           </div>
         </div>

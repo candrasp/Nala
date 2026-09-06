@@ -29,6 +29,7 @@ Nala is built as a **Single Page Application (SPA)** using Vite.
 ### Build Command
 
 **From the monorepo root** (recommended):
+
 ```bash
 # Install all workspace dependencies
 pnpm install
@@ -38,6 +39,7 @@ pnpm build
 ```
 
 **Or directly from the showcase package:**
+
 ```bash
 cd packages/showcase
 pnpm build
@@ -147,14 +149,15 @@ For a complete, verified step-by-step guide including `wrangler.toml` configurat
 
 **Quick summary:**
 
-| Setting | Value |
-|---|---|
-| Root directory | `packages/showcase` |
-| Build command | `pnpm build` |
-| Deploy command | `npx wrangler deploy` |
-| Output directory | `dist` |
+| Setting          | Value                 |
+| ---------------- | --------------------- |
+| Root directory   | `packages/showcase`   |
+| Build command    | `pnpm build`          |
+| Deploy command   | `npx wrangler deploy` |
+| Output directory | `dist`                |
 
 The `packages/showcase/wrangler.toml` is pre-configured:
+
 ```toml
 name = "nala"
 compatibility_date = "2025-07-09"
@@ -167,21 +170,22 @@ not_found_handling = "single-page-application"
 
 ---
 
-
 ### GitHub Pages
 
 For deploying to GitHub Pages under a subpath (e.g. `https://<username>.github.io/<repo-name>/`):
 
 1. **Update Base Path** in `vite.config.ts`:
+
    ```ts
    // vite.config.ts
    export default defineConfig({
-     base: process.env.NODE_ENV === 'production' ? '/nala/' : '/',
+     base: process.env.NODE_ENV === "production" ? "/nala/" : "/",
      // ... rest of config
-   })
+   });
    ```
 
 2. **GitHub Actions Workflow** — Create `.github/workflows/deploy.yml`:
+
    ```yaml
    name: Deploy to GitHub Pages
 
@@ -195,7 +199,7 @@ For deploying to GitHub Pages under a subpath (e.g. `https://<username>.github.i
      id-token: write
 
    concurrency:
-     group: 'pages'
+     group: "pages"
      cancel-in-progress: true
 
    jobs:
@@ -217,7 +221,7 @@ For deploying to GitHub Pages under a subpath (e.g. `https://<username>.github.i
            uses: actions/setup-node@v4
            with:
              node-version: 20
-             cache: 'pnpm'
+             cache: "pnpm"
 
          - name: Install dependencies
            run: pnpm install --frozen-lockfile
@@ -231,7 +235,7 @@ For deploying to GitHub Pages under a subpath (e.g. `https://<username>.github.i
          - name: Upload artifact
            uses: actions/upload-pages-artifact@v3
            with:
-             path: 'dist'
+             path: "dist"
 
          - name: Deploy to GitHub Pages
            id: deployment
@@ -401,10 +405,10 @@ If using Apache, create `public/.htaccess`:
 
 Vite embeds environment variables starting with **`VITE_`** into the client bundle during build time.
 
-| Variable | Description | Example Production Value |
-|---|---|---|
-| `VITE_API_BASE_URL` | Backend REST API endpoint | `https://api.yourdomain.com/v1` |
-| `VITE_APP_NAME` | Display name in header/browser | `Nala Cloud Console` |
+| Variable            | Description                    | Example Production Value        |
+| ------------------- | ------------------------------ | ------------------------------- |
+| `VITE_API_BASE_URL` | Backend REST API endpoint      | `https://api.yourdomain.com/v1` |
+| `VITE_APP_NAME`     | Display name in header/browser | `Nala Cloud Console`            |
 
 > ⚠️ **Important Security Note:**  
 > Variables prefixed with `VITE_` are bundled into client-side code and are publicly visible in browser inspector. **Never put private API keys, database credentials, or secret tokens in `.env` files.**
@@ -425,14 +429,17 @@ Vite embeds environment variables starting with **`VITE_`** into the client bund
 ## 7. Troubleshooting Common Issues
 
 ### 1. 404 Error on Page Refresh
+
 - **Cause:** Web server is trying to find a physical file matching the route path (e.g. `/users`) instead of serving `index.html`.
 - **Solution:** Add the rewrite rule (`try_files $uri $uri/ /index.html;` for Nginx, or `/* /index.html 200` for Netlify/Cloudflare).
 
 ### 2. Assets Returning 404 or Blank White Screen
+
 - **Cause:** Base path mismatch if hosting under a subdirectory.
 - **Solution:** Ensure `base` in `vite.config.ts` matches your hosting path or is set to `'./'`.
 
 ### 3. Environment Variables Not Updating
+
 - **Cause:** Vite bakes `VITE_*` variables at **build time**, not runtime.
 - **Solution:** Re-run `pnpm build` after modifying production environment variables.
 

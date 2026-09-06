@@ -47,6 +47,8 @@ import {
   FolderOpen,
   MessageSquare,
   FileEdit,
+  Building2,
+  ShieldOff,
 } from '@lucide/vue'
 import {
   Dialog,
@@ -118,6 +120,12 @@ const searchItems: SearchItem[] = [
   { title: 'Verify OTP', href: '/auth/verify-otp', icon: ScanLine, category: 'Auth' },
   { title: 'Reset Password', href: '/auth/reset-password', icon: LockKeyhole, category: 'Auth' },
   { title: 'Confirm Email', href: '/auth/confirm-email', icon: MailCheck, category: 'Auth' },
+  { title: 'Two-Factor Authentication (2FA)', href: '/auth/2fa', icon: ShieldCheck, category: 'Auth' },
+  { title: 'Enterprise SSO & SAML', href: '/auth/sso', icon: Building2, category: 'Auth' },
+  { title: 'Magic Link / Passwordless', href: '/auth/magic-link', icon: Sparkles, category: 'Auth' },
+  { title: 'Workspace & Tenant Selector', href: '/auth/select-tenant', icon: Layers, category: 'Auth' },
+  { title: 'Account Suspended / Deactivated', href: '/auth/suspended', icon: ShieldOff, category: 'Auth' },
+  { title: 'Split Cover Auth Layout', href: '/auth-split/login', icon: LayoutTemplate, category: 'Auth' },
   { title: 'User Profile', href: '/profile', icon: User, category: 'System' },
   { title: 'Settings', href: '/settings', icon: Settings, category: 'System' },
 ]

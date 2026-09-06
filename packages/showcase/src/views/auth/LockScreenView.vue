@@ -109,7 +109,7 @@ function fillDemoPassword() {
         </CardDescription>
       </CardHeader>
 
-      <CardContent class="space-y-4">
+      <CardContent class="px-6 sm:px-8 pb-6 space-y-4">
         <form @submit.prevent="handleUnlock" class="space-y-4">
           <div class="space-y-2">
             <div class="flex items-center justify-between">

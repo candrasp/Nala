@@ -5,6 +5,45 @@ All notable changes to **Nala** — Vue 3 Admin Dashboard Template — are docum
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [Semantic Versioning](https://semver.org/).
 
+## [3.1.2] — 2026-09-05
+
+### Added & Improved
+
+#### 🔐 Enterprise Authentication & Identity Suite
+- **Two-Factor Authentication (2FA / TOTP) Challenge View (`TwoFactorChallengeView.vue` / `/auth/2fa`)**:
+  - Segmented 6-digit TOTP authenticator code input with auto-advance, paste detection, and auto-submit.
+  - *"Trust this device for 30 days"* persistent toggle option.
+  - *"Use a backup recovery code"* fallback switcher with formatted `XXXX-XXXX` emergency code input.
+  - Fully synchronized across both `@nala/showcase` and `create-nala` starter template.
+- **Enterprise SSO & SAML Login (`SsoLoginView.vue` / `/auth/sso`)**:
+  - Smart corporate email domain recognition (`@company.com`) with dynamic IdP provider hints.
+  - One-click Single Sign-On triggers for Okta, Microsoft Entra ID (Azure AD), Google Workspace, and generic SAML 2.0.
+  - Security status badge and direct fallback link to standard password login.
+- **Passwordless Magic Link Authentication (`MagicLinkView.vue` / `/auth/magic-link`)**:
+  - Frictionless email-based magic link login with real-time email dispatch simulation.
+  - Animated email confirmation state featuring direct mail client launch buttons (*Open Gmail*, *Open Outlook*).
+  - Countdown cooldown timer for requesting link resends.
+- **Multi-Tenant Organization & Workspace Selector (`SelectTenantView.vue` / `/auth/select-tenant`)**:
+  - Post-login tenant switcher featuring organization cards, membership role chips (*Owner, Admin, Member*), active plan tags (*Enterprise, Pro, Starter*), and last active timestamps.
+  - Search filter by organization name and modal action for creating a new workspace.
+- **Account Suspension & Deactivation State Page (`SuspendedView.vue` / `/auth/suspended`)**:
+  - Dedicated state page for frozen, suspended, or verification-pending user accounts.
+  - Structured case details card with violation/suspension reason, ticket reference ID, and suspension effective date.
+  - Action buttons to file an appeal and request personal data export (`GDPR/CCPA compliant archive`).
+- **Split-Screen Side-Banner Auth Layout Variant (`AuthSplitLayout.vue`)**:
+  - Modern two-column auth shell with clean responsive left form container and right ambient hero banner.
+  - Built-in OKLCH ambient gradients, brand badge, enterprise client testimonial quote, and platform highlights.
+- **Navigation & Router Integration**:
+  - Registered all new authentication routes in `packages/showcase/src/router/index.ts` and `packages/create-nala/template/src/router/index.ts`.
+  - Added quick links in `AppSidebar.vue` under the Authentication menu group and registered entries in `CommandSearchDialog.vue` (`Ctrl+K`).
+
+#### 🎨 Zero-Dependency Brand & Social Icons (`BrandIcon.vue` & `/components/icons`)
+- **Brand & Social SVG Icon Primitive (`BrandIcon.vue`)**:
+  - Zero-dependency, lightweight SVG component supporting 24 popular tech and social platforms: Google, GitHub, Microsoft, Apple, X (Twitter), TikTok, Pinterest, YouTube, Instagram, Facebook, LinkedIn, Threads, Discord, Slack, Telegram, WhatsApp, Reddit, Twitch, Figma, GitLab, Spotify, Notion, and Dribbble.
+  - Supports both multi-color brand palette (`colored`) and adaptive monochrome (`currentColor`) modes.
+  - Interactive showcase catalog added to `IconsView.vue` (`/components/icons`) with one-click code snippet copy.
+  - Synchronized across `@nala/showcase` and `create-nala` template.
+
 ## [3.1.1] — 2026-09-05
 
 ### Added & Improved

@@ -115,6 +115,106 @@ const router = createRouter({
           name: 'lock-screen',
           component: () => import('@/views/auth/LockScreenView.vue'),
         },
+        {
+          path: '2fa',
+          name: 'two-factor',
+          component: () => import('@/views/auth/TwoFactorChallengeView.vue'),
+        },
+        {
+          path: 'two-factor',
+          redirect: '/auth/2fa',
+        },
+        {
+          path: 'sso',
+          name: 'sso-login',
+          component: () => import('@/views/auth/SsoLoginView.vue'),
+        },
+        {
+          path: 'magic-link',
+          name: 'magic-link',
+          component: () => import('@/views/auth/MagicLinkView.vue'),
+        },
+        {
+          path: 'select-tenant',
+          name: 'select-tenant',
+          component: () => import('@/views/auth/SelectTenantView.vue'),
+        },
+        {
+          path: 'select-workspace',
+          redirect: '/auth/select-tenant',
+        },
+        {
+          path: 'suspended',
+          name: 'suspended',
+          component: () => import('@/views/auth/SuspendedView.vue'),
+        },
+        {
+          path: 'deactivated',
+          redirect: '/auth/suspended',
+        },
+        {
+          path: 'frozen',
+          redirect: '/auth/suspended',
+        },
+      ],
+    },
+    {
+      path: '/auth-split',
+      component: () => import('@/layouts/AuthSplitLayout.vue'),
+      children: [
+        {
+          path: '',
+          redirect: '/auth-split/login',
+        },
+        {
+          path: 'login',
+          name: 'split-login',
+          component: () => import('@/views/auth/LoginView.vue'),
+        },
+        {
+          path: 'register',
+          name: 'split-register',
+          component: () => import('@/views/auth/RegisterView.vue'),
+        },
+        {
+          path: '2fa',
+          name: 'split-2fa',
+          component: () => import('@/views/auth/TwoFactorChallengeView.vue'),
+        },
+        {
+          path: 'sso',
+          name: 'split-sso',
+          component: () => import('@/views/auth/SsoLoginView.vue'),
+        },
+        {
+          path: 'magic-link',
+          name: 'split-magic-link',
+          component: () => import('@/views/auth/MagicLinkView.vue'),
+        },
+        {
+          path: 'select-tenant',
+          name: 'split-select-tenant',
+          component: () => import('@/views/auth/SelectTenantView.vue'),
+        },
+        {
+          path: 'select-workspace',
+          redirect: '/auth-split/select-tenant',
+        },
+        {
+          path: 'forgot-password',
+          name: 'split-forgot-password',
+          component: () => import('@/views/auth/ForgotPasswordView.vue'),
+        },
+        {
+          path: 'reset-password',
+          name: 'split-reset-password',
+          component: () => import('@/views/auth/ResetPasswordView.vue'),
+        },
+        {
+          path: 'suspended',
+          name: 'split-suspended',
+          component: () => import('@/views/auth/SuspendedView.vue'),
+        },
       ],
     },
     {

@@ -67,7 +67,6 @@ nala/                                    ← Root monorepo
 | **Icons** | `@lucide/vue` | Must be imported explicitly (`import { Plus } from '@lucide/vue'`) |
 | **State Management** | Pinia | Setup Stores pattern (`defineStore('name', () => { ... })`) |
 | **Routing** | Vue Router v5 | HTML5 history mode with route guards |
-| **API Client** | Axios + Enterprise Interceptors | Silent Token Refresh, Global Loading Bar, Auto Error Toast |
 | **CLI Scaffolder** | `@clack/prompts` + `kolorist` + `tsup` | Powers `pnpm create nala my-app` |
 | **Notifications** | `vue-sonner` | Toast notifications via `toast.success()`, `toast.error()` |
 | **Language & Types** | TypeScript 6 + `vue-tsc` | Strict static typing, zero `any` |
@@ -76,26 +75,30 @@ nala/                                    ← Root monorepo
 
 ## 🛑 Strict Rules (MUST FOLLOW)
 
-1. **NEVER** run `pnpm build` or `npm run build` after finishing code changes — only run the dev server or build checks if explicitly requested by the user.
-2. **DO NOT** use the Options API — always use `<script setup lang="ts">`.
-3. **DO NOT** use the `any` type — always define an explicit TypeScript interface or type.
-4. **New Package Installation Confirmation:** DO NOT install new npm packages without explicit confirmation in chat. Always ask the user directly before running `pnpm add`.
-5. **DO NOT** create separate CSS files per component — use Tailwind utility classes.
-6. **DO NOT** use `style scoped` if it can be solved with Tailwind.
-7. **DO NOT** remove comments or docstrings unrelated to the change being made.
-8. **Output & Code Comment Language (English Standard):**
-   - All user-facing UI text, form labels, placeholders, validation/error messages, page titles, status badges, and toast notifications **MUST be written in English**.
-   - All code comments (JSDoc, inline code comments, TODO notes) inside `.vue` and `.ts` source files **MUST be written in English**.
-9. **NEVER** run `git add`, `git commit`, or `git push` without explicit instruction from the user.
-10. **Tailwind CSS v4 Strict Syntax & Sizing Scale Compliance:**
+1. **Direct & Fluff-Free Responses (Token Efficiency):** Never use conversational filler, pleasantries, apologies, or verbose preambles. Deliver concise, direct, and actionable technical deliverables to conserve tokens.
+2. **Surgical & Focused Edits:** Only modify files directly related to the user's explicit request. Do not arbitrarily refactor untouched files.
+3. **NEVER** run `pnpm build` or `npm run build` after finishing code changes — only run the dev server or build checks if explicitly requested by the user.
+4. **DO NOT** use the Options API — always use `<script setup lang="ts">`.
+5. **DO NOT** use the `any` type — always define an explicit TypeScript interface or type.
+6. **New Package Installation Confirmation:** DO NOT install new npm packages without explicit confirmation in chat. Always ask the user directly before running `pnpm add`.
+7. **Semantic Color & Token System:** NEVER use arbitrary palette classes like `text-gray-500` or `bg-blue-600`. ALWAYS use semantic tokens: `bg-background`, `bg-card`, `bg-primary`, `text-foreground`, `text-muted-foreground`, `border-border`.
+8. **DO NOT** create separate CSS files per component — use Tailwind utility classes.
+9. **DO NOT** use `style scoped` if it can be solved with Tailwind.
+10. **DO NOT** remove comments or docstrings unrelated to the change being made.
+11. **Output & Code Comment Language (English Standard):**
+    - All user-facing UI text, form labels, placeholders, validation/error messages, page titles, status badges, and toast notifications **MUST be written in English**.
+    - All code comments (JSDoc, inline code comments, TODO notes) inside `.vue` and `.ts` source files **MUST be written in English**.
+12. **NEVER** run `git add`, `git commit`, or `git push` without explicit instruction from the user.
+13. **Dialog Accessibility:** Every `DialogContent` MUST include `DialogTitle` and `DialogDescription` (use `sr-only` if visually hidden) to comply with Reka UI ARIA standards.
+14. **Tailwind CSS v4 Strict Syntax & Sizing Scale Compliance:**
     - **Gradients:** ALWAYS use `bg-linear-to-r`, `bg-linear-to-b`, `bg-linear-to-tr`, etc. (NEVER write legacy v3 `bg-gradient-to-*`).
-    - **Sizing Scale:** NEVER write arbitrary pixel brackets like `max-w-[170px]`, `w-[300px]`, or `p-[1px]`. ALWAYS use Tailwind v4 scale (`max-w-44`, `max-w-28`, `w-75`, `max-h-75`, `p-px`).
+    - **Sizing Scale:** NEVER write arbitrary pixel brackets like `max-w-[170px]`, `w-[300px]`, or `p-[1px]`. ALWAYS use Tailwind v4 scale (`max-w-44`, `max-w-28`, `w-75`, `max-h-75`, `p-px`, `size-4` / `size-3.5` for icons).
     - **Shadows:** Use `shadow-2xs`, `shadow-xs`, `shadow-sm`, `shadow-md`, `shadow-lg`.
-11. **Workspace Monorepo Architecture:**
+15. **Workspace Monorepo Architecture:**
     - Main showcase app lives in `packages/showcase/`.
     - CLI tool & clean starter template live in `packages/create-nala/`.
     - Root `package.json` delegates commands via `pnpm --filter`.
-12. **Testing Scope & Execution:** Unit tests (`vitest`, `pnpm test`, `pnpm test:run`) are executed ONLY upon explicit instruction from the user.
+16. **Testing Scope & Execution:** Unit tests (`vitest`, `pnpm test`, `pnpm test:run`) are executed ONLY upon explicit instruction from the user.
 
 ---
 
@@ -130,6 +133,7 @@ The following shared components live **outside** `ui/` but are also auto-importe
 | Component | Description |
 |---|---|
 | `AppLogo.vue` | Brand logo with `size` prop (`sm`, `md`, `lg`, `xl`) |
+| `BrandIcon.vue` | 24+ brand & social SVG icons (`google`, `github`, `x`, `tiktok`, `pinterest`, etc.) with `colored` mode |
 | `PageHeader.vue` | Standard page top header with `title`, `description`, `badge`, `statusDot` props and `#actions` slot |
 | `EmptyState.vue` | Zero-data empty state with icon, title, description, and optional action button |
 | `CodePreview.vue` | Interactive code snippet with syntax highlighting, line numbers, and clipboard copy (showcase only) |

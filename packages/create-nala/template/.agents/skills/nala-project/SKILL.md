@@ -18,19 +18,20 @@ You are an expert frontend engineer building features for this **Nala Admin Dash
 ## 🏗️ Project Structure
 
 ```
-src/
 ├── components/
 │   ├── AppLogo.vue              ← Auto-imported brand logo component
+│   ├── BrandIcon.vue            ← Auto-imported 24+ brand & social SVG icons
 │   ├── EmptyState.vue           ← Auto-imported zero-data empty state component
 │   ├── PageHeader.vue           ← Auto-imported standard page top header
 │   ├── layout/                  ← AdminLayout sub-components (Navbar, Sidebar, etc.)
-│   └── ui/                      ← 45 Reka UI primitives (all auto-imported)
+│   └── ui/                      ← 46 Reka UI primitives (all auto-imported)
 ├── composables/
 │   ├── useFormatter.ts          ← Auto-imported: currency, date, number, relative time formatting
 │   └── useThemeConfig.ts        ← Auto-imported: layout mode, border radius, accent color
 ├── layouts/
 │   ├── AdminLayout.vue          ← Main dashboard shell (sidebar + navbar + content slot)
-│   └── AuthLayout.vue           ← Centered auth card layout
+│   ├── AuthLayout.vue           ← Centered auth card layout
+│   └── AuthSplitLayout.vue      ← Split-screen side-banner auth layout
 ├── lib/
 │   ├── axios.ts                 ← Pre-configured Axios instance with interceptors
 │   ├── formatters.ts            ← Core formatter functions (used by useFormatter)
@@ -49,7 +50,7 @@ src/
 └── views/
     ├── _starter/
     │   └── BlankView.vue        ← Scaffolding starting point for new pages
-    ├── auth/                    ← Full auth suite (Login, Register, Forgot/Reset Password, OTP, etc.)
+    ├── auth/                    ← Full enterprise auth suite (Login, Register, 2FA, SSO, Magic Link, etc.)
     ├── dashboard/
     │   └── IndexView.vue        ← Minimal dashboard with KPI stat cards (your starting point)
     └── errors/                  ← 404, 500, 403, Maintenance, Coming Soon pages
@@ -79,18 +80,21 @@ src/
 
 ## 🛑 Strict Guardrails (MUST FOLLOW)
 
-1. **Composition API Only:** Never use Options API — always use `<script setup lang="ts">`.
-2. **Strict TypeScript:** No `any` type — define explicit TypeScript interfaces for all props, emits, and API payloads.
-3. **English Standard:** All user-facing UI text, form labels, placeholders, error messages, toast notifications, and in-code comments **MUST be in English**.
-4. **No Build Commands:** NEVER run `pnpm build` or `npm run build` autonomously. Build only on explicit user request.
-5. **No Automatic Tests:** NEVER run `vitest`, `pnpm test`, or `pnpm test:run` autonomously.
-6. **No Git Operations:** NEVER run `git add`, `git commit`, or `git push` autonomously.
-7. **No New Packages Without Confirmation:** Always ask in chat before running `pnpm add`.
-8. **No Scoped CSS:** Use Tailwind utility classes. Do not write `<style scoped>`.
-9. **Dialog Accessibility:** Every `DialogContent` MUST include `DialogTitle` and `DialogDescription` (use `sr-only` if visually hidden) to comply with Reka UI ARIA standards.
-10. **Tailwind CSS v4 Strict Syntax Compliance:**
+1. **Direct & Fluff-Free Responses (Token Efficiency):** Never use conversational filler, pleasantries, apologies, or verbose preambles. Deliver concise, direct, and actionable technical deliverables to conserve tokens.
+2. **Surgical & Focused Edits:** Only modify files directly related to the user's explicit request. Do not arbitrarily refactor untouched files.
+3. **Composition API Only:** Never use Options API — always use `<script setup lang="ts">`.
+4. **Strict TypeScript:** No `any` type — define explicit TypeScript interfaces for all props, emits, and API payloads.
+5. **English Standard:** All user-facing UI text, form labels, placeholders, error messages, toast notifications, and in-code comments **MUST be in English**.
+6. **No Build Commands:** NEVER run `pnpm build` or `npm run build` autonomously. Build only on explicit user request.
+7. **No Automatic Tests:** NEVER run `vitest`, `pnpm test`, or `pnpm test:run` autonomously.
+8. **No Git Operations:** NEVER run `git add`, `git commit`, or `git push` autonomously.
+9. **No New Packages Without Confirmation:** Always ask in chat before running `pnpm add` or `npm install`.
+10. **Semantic Color & Token System:** NEVER use arbitrary palette classes like `text-gray-500` or `bg-blue-600`. ALWAYS use semantic tokens: `bg-background`, `bg-card`, `bg-primary`, `text-foreground`, `text-muted-foreground`, `border-border`.
+11. **No Scoped CSS:** Use Tailwind utility classes. Do not write `<style scoped>`.
+12. **Dialog Accessibility:** Every `DialogContent` MUST include `DialogTitle` and `DialogDescription` (use `sr-only` if visually hidden) to comply with Reka UI ARIA standards.
+13. **Tailwind CSS v4 Strict Syntax Compliance:**
     - **Gradients:** ALWAYS use `bg-linear-to-r`, `bg-linear-to-b`, `bg-linear-to-tr` (NEVER `bg-gradient-to-*`).
-    - **Sizing:** NEVER use arbitrary brackets like `max-w-[170px]`, `w-[300px]`, `p-[1px]`. Use Tailwind v4 scale (`max-w-44`, `w-75`, `p-px`).
+    - **Sizing:** NEVER use arbitrary brackets like `max-w-[170px]`, `w-[300px]`, `p-[1px]`. Use Tailwind v4 scale (`max-w-44`, `w-75`, `p-px`, `size-4` / `size-3.5` for icons).
     - **Shadows:** Use `shadow-2xs`, `shadow-xs`, `shadow-sm`, `shadow-md`, `shadow-lg`.
     - **Viewport:** Use `min-h-dvh` / `h-dvh` instead of `min-h-screen` / `h-screen`.
     - **Opacity:** Use integer percentage (`bg-primary/50`) NOT decimal (`bg-primary/0.5`).
@@ -108,7 +112,7 @@ src/
 | **VueUse** (`useColorMode`, `useLocalStorage`, `useDebounceFn`, etc.) | ✅ **AUTOMATIC** | Use directly: `const mode = useColorMode()` |
 | **Pinia** (`defineStore`, `storeToRefs`) | ✅ **AUTOMATIC** | Use directly: `defineStore(...)` |
 | **All UI Components** (`Button`, `Card`, `Dialog`, `Input`, `InputGroup`, `Table`, `Tabs`, etc.) | ✅ **AUTOMATIC** | Use directly in template: `<Card>`, `<Button>`, `<InputGroup>` |
-| **Shared Components** (`PageHeader`, `EmptyState`, `AppLogo`) | ✅ **AUTOMATIC** | Use directly: `<PageHeader>`, `<EmptyState>` |
+| **Shared Components** (`PageHeader`, `EmptyState`, `AppLogo`, `BrandIcon`) | ✅ **AUTOMATIC** | Use directly: `<PageHeader>`, `<EmptyState>`, `<BrandIcon>` |
 | **Custom Composables** (`useFormatter`, `useThemeConfig`) | ✅ **AUTOMATIC** | Use directly: `const fmt = useFormatter()` |
 | **Lucide Icons** (`Plus`, `Search`, `Trash2`, etc.) | ⚠️ **MANUAL IMPORT** | `import { Plus, Search } from '@lucide/vue'` |
 | **Toast Notifications** (`toast`) | ⚠️ **MANUAL IMPORT** | `import { toast } from '@/components/ui/sonner'` |
@@ -129,7 +133,7 @@ Always use `<PageHeader>` at the top of every view — never build a custom head
 >
   <template #actions>
     <Button size="sm" class="gap-1.5" @click="isDialogOpen = true">
-      <Plus class="h-3.5 w-3.5" />
+      <Plus class="size-3.5" />
       Add Product
     </Button>
   </template>
@@ -161,7 +165,7 @@ Never write manual `absolute` positioning for input icons:
 <!-- Search icon input -->
 <InputGroup>
   <InputIcon side="left">
-    <Search class="h-3.5 w-3.5" />
+    <Search class="size-3.5" />
   </InputIcon>
   <Input v-model="searchQuery" placeholder="Search..." class="pl-8 h-8 text-xs" />
 </InputGroup>
@@ -186,13 +190,13 @@ Never write manual `absolute` positioning for input icons:
     <CardContent class="p-5 space-y-2">
       <div class="flex items-center justify-between">
         <span class="text-xs font-medium text-muted-foreground">{{ stat.title }}</span>
-        <component :is="stat.icon" class="h-4 w-4 text-primary" />
+        <component :is="stat.icon" class="size-4 text-primary" />
       </div>
       <div class="text-2xl font-bold tracking-tight">{{ stat.value }}</div>
       <p class="text-xs text-muted-foreground flex items-center gap-1">
         <span class="font-semibold inline-flex items-center gap-0.5"
           :class="stat.positive ? 'text-emerald-500' : 'text-rose-500'">
-          <component :is="stat.positive ? ArrowUpRight : ArrowDownRight" class="h-3.5 w-3.5" />
+          <component :is="stat.positive ? ArrowUpRight : ArrowDownRight" class="size-3.5" />
           {{ stat.change }}
         </span>
         <span>{{ stat.changeLabel }}</span>

@@ -37,6 +37,7 @@ declare module 'vue' {
     AvatarImage: typeof import('./components/ui/avatar/AvatarImage.vue')['default']
     Badge: typeof import('./components/ui/badge/Badge.vue')['default']
     BarChart: typeof import('./components/ui/chart/BarChart.vue')['default']
+    BrandIcon: typeof import('./components/BrandIcon.vue')['default']
     Breadcrumb: typeof import('./components/ui/breadcrumb/Breadcrumb.vue')['default']
     BreadcrumbEllipsis: typeof import('./components/ui/breadcrumb/BreadcrumbEllipsis.vue')['default']
     BreadcrumbItem: typeof import('./components/ui/breadcrumb/BreadcrumbItem.vue')['default']

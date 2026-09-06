@@ -557,6 +557,24 @@
 - [ ] **In-App Documentation Portal (`/docs/*`)** — Integrated guides for project architecture, API integration, auth flows, custom theming, and deployment.
 - [ ] **Component Props & API Reference Matrix** — Detailed props, emits, and slots documentation tables across all `/components/*` showcase pages.
 
+### 🔐 7. Extended Authentication & Enterprise Identity Suite
+- [x] **Two-Factor (2FA / TOTP) Challenge View (`/auth/2fa`)**:
+  - [x] 6-digit TOTP authenticator code input with auto-submit.
+  - [x] *"Trust this device for 30 days"* option.
+  - [x] *"Use a backup recovery code"* fallback switcher with formatted `XXXX-XXXX` input.
+- [x] **Enterprise SSO & SAML Login (`/auth/sso`)**:
+  - [x] Smart work email domain detection (`@company.com`).
+  - [x] Single Sign-On triggers for Okta, Azure AD (Microsoft Entra), Google Workspace, and SAML identity providers.
+- [x] **Magic Link / Passwordless Login (`/auth/magic-link`)**:
+  - [x] Passwordless email authentication flow with animated confirmation state.
+  - [x] Direct email app launch triggers (*Gmail, Outlook*) and resend cooldown timer.
+- [x] **Split-Screen Side-Banner Auth Layout Variant (`AuthSplitLayout.vue`)**:
+  - [x] Modern 2-column layout (Left: clean auth form; Right: rich visual hero banner with OKLCH ambient gradients and enterprise customer testimonial quote).
+- [x] **Organization & Workspace Selector (`/auth/select-tenant`)**:
+  - [x] Multi-tenant workspace selector post-login with organization cards, plan badges, user role chips, and *"Create New Workspace"* action.
+- [x] **Account Status & Deactivation Notice (`/auth/suspended`)**:
+  - [x] Dedicated state page for frozen, suspended, or pending verification accounts with ticket ID, appeal button, and data export request.
+
 ---
 
 ### Long-Term Maintenance Strategy
