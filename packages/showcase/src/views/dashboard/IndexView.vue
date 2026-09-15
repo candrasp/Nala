@@ -220,20 +220,22 @@ const services = ref([
         v-for="stat in stats"
         :key="stat.title"
         flush
-        class="highlight-card shadow-xs border-border/80 bg-card hover:border-border transition-all duration-200"
+        class="border border-border/80 bg-card hover:border-border transition-all duration-200"
       >
-        <CardContent class="p-5 space-y-2">
+        <CardContent class="p-4.5 flex flex-col gap-2.5">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-medium text-muted-foreground">{{ stat.title }}</span>
-            <component :is="stat.icon" class="h-4 w-4" :class="stat.color" />
+            <span class="label-mono">{{ stat.title }}</span>
+            <div class="size-7 rounded-md bg-muted/60 flex items-center justify-center">
+              <component :is="stat.icon" class="size-3.5" :class="stat.color" />
+            </div>
           </div>
-          <div class="text-2xl font-bold tracking-tight text-foreground">{{ stat.value }}</div>
-          <p class="text-xs text-muted-foreground flex items-center gap-1">
+          <div class="kpi-value text-2xl text-foreground">{{ stat.value }}</div>
+          <p class="text-xs text-muted-foreground flex items-center gap-1.5">
             <span
-              class="font-semibold inline-flex items-center gap-0.5"
+              class="font-data font-medium inline-flex items-center gap-0.5"
               :class="stat.positive ? 'text-emerald-500' : 'text-rose-500'"
             >
-              <component :is="stat.positive ? ArrowUpRight : ArrowDownRight" class="h-3.5 w-3.5" />
+              <component :is="stat.positive ? ArrowUpRight : ArrowDownRight" class="size-3.5" />
               {{ stat.change }}
             </span>
             <span>{{ stat.changeLabel }}</span>
@@ -243,7 +245,7 @@ const services = ref([
     </div>
 
     <!-- Quick Metrics Banner -->
-    <Card flush class="shadow-sm">
+    <Card flush class="border border-border/80 bg-card">
       <CardContent class="p-0">
         <div class="grid grid-cols-2 divide-x divide-y divide-border sm:grid-cols-4 sm:divide-y-0">
           <div
@@ -263,7 +265,7 @@ const services = ref([
     <div class="grid gap-4 grid-cols-1 lg:grid-cols-3">
 
       <!-- Recent Transactions -->
-      <Card flush class="shadow-sm lg:col-span-2">
+      <Card flush class="border border-border/80 bg-card lg:col-span-2">
         <CardHeader class="border-b border-border px-4 py-3 bg-muted/20 flex flex-row items-center justify-between">
           <div>
             <CardTitle class="text-sm font-semibold">Recent Transactions</CardTitle>
@@ -329,7 +331,7 @@ const services = ref([
       </Card>
 
       <!-- Activity Feed -->
-      <Card flush class="shadow-sm">
+      <Card flush class="border border-border/80 bg-card">
         <CardHeader class="border-b border-border px-4 py-3 bg-muted/20">
           <CardTitle class="text-sm font-semibold">Recent Activity</CardTitle>
           <CardDescription class="text-xs">System &amp; user events</CardDescription>
@@ -356,7 +358,7 @@ const services = ref([
     </div>
 
     <!-- System Health -->
-    <Card flush class="shadow-sm">
+    <Card flush class="border border-border/80 bg-card">
       <CardHeader class="border-b border-border px-4 py-3 bg-muted/20 flex flex-row items-center justify-between">
         <div>
           <CardTitle class="text-sm font-semibold">System Health</CardTitle>

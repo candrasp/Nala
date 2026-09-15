@@ -317,18 +317,20 @@ function handleExport() {
         flush
         class="highlight-card shadow-xs border-border/80 bg-card hover:border-border transition-all duration-200"
       >
-        <CardContent class="p-5 space-y-2">
+        <CardContent class="p-4.5 flex flex-col gap-2.5">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-medium text-muted-foreground">{{ stat.title }}</span>
-            <component :is="stat.icon" class="h-4 w-4" :class="stat.color" />
+            <span class="label-mono">{{ stat.title }}</span>
+            <div class="size-7 rounded-md bg-muted/60 flex items-center justify-center">
+              <component :is="stat.icon" class="size-3.5" :class="stat.color" />
+            </div>
           </div>
-          <div class="text-2xl font-bold tracking-tight text-foreground font-mono">{{ stat.value }}</div>
-          <p class="text-xs text-muted-foreground flex items-center gap-1">
+          <div class="kpi-value text-2xl text-foreground">{{ stat.value }}</div>
+          <p class="text-xs text-muted-foreground flex items-center gap-1.5">
             <span
-              class="font-semibold inline-flex items-center gap-0.5"
+              class="font-data font-medium inline-flex items-center gap-0.5"
               :class="stat.positive ? 'text-emerald-500' : 'text-rose-500'"
             >
-              <component :is="stat.positive ? ArrowUpRight : ArrowDownRight" class="h-3.5 w-3.5" />
+              <component :is="stat.positive ? ArrowUpRight : ArrowDownRight" class="size-3.5" />
               {{ stat.change }}
             </span>
             <span>{{ stat.changeLabel }}</span>

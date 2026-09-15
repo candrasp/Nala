@@ -64,6 +64,7 @@ You are an expert frontend engineer building features for this **Nala Admin Dash
 |---|---|---|
 | **Framework** | Vue 3 (Composition API) | Always use `<script setup lang="ts">` |
 | **Build Tool** | Vite 8 (`@vitejs/plugin-vue`) | Super-fast HMR & production bundler |
+| **Typography & Fonts** | Geist Sans & Geist Mono (Self-Hosted) | High-contrast tabular numbers, financial precision |
 | **Styling** | Tailwind CSS v4 (`@tailwindcss/vite`) + `tw-animate-css` | OKLCH color tokens in `src/style.css` |
 | **UI Primitives** | `reka-ui` + shadcn-vue (New York style) | 46 primitive components in `src/components/ui/` (including `RichTextEditor`) |
 | **Charts** | `@unovis/ts` + `@unovis/vue` | SVG chart primitives: `AreaChart`, `BarChart`, `LineChart`, `DonutChart` |
@@ -178,23 +179,25 @@ Never write manual `absolute` positioning for input icons:
 </InputGroup>
 ```
 
-### 4. Standard KPI Stats Cards
+### 4. Standard KPI Stats Cards (Compact Flat Standard)
 ```vue
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
   <Card
     v-for="stat in stats"
     :key="stat.title"
     flush
-    class="highlight-card shadow-xs border-border/80 hover:border-border transition-all duration-200"
+    class="border border-border/80 bg-card hover:border-border transition-all duration-200"
   >
-    <CardContent class="p-5 space-y-2">
+    <CardContent class="p-4.5 flex flex-col gap-2.5">
       <div class="flex items-center justify-between">
-        <span class="text-xs font-medium text-muted-foreground">{{ stat.title }}</span>
-        <component :is="stat.icon" class="size-4 text-primary" />
+        <span class="label-mono">{{ stat.title }}</span>
+        <div class="size-7 rounded-md bg-muted/60 flex items-center justify-center">
+          <component :is="stat.icon" class="size-3.5 text-muted-foreground" />
+        </div>
       </div>
-      <div class="text-2xl font-bold tracking-tight">{{ stat.value }}</div>
-      <p class="text-xs text-muted-foreground flex items-center gap-1">
-        <span class="font-semibold inline-flex items-center gap-0.5"
+      <div class="kpi-value text-2xl text-foreground">{{ stat.value }}</div>
+      <p class="text-xs text-muted-foreground flex items-center gap-1.5">
+        <span class="font-data font-medium inline-flex items-center gap-0.5"
           :class="stat.positive ? 'text-emerald-500' : 'text-rose-500'">
           <component :is="stat.positive ? ArrowUpRight : ArrowDownRight" class="size-3.5" />
           {{ stat.change }}

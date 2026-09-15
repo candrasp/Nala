@@ -54,7 +54,7 @@ Open **http://localhost:5173** in your browser.
 
 ```
 src/
-├── assets/fonts/            # High-performance local Inter fonts (woff2)
+├── assets/fonts/            # High-performance local Geist Sans & Geist Mono fonts (woff2)
 ├── components/
 │   ├── layout/              # Admin shell (AppNavbar, AppSidebar, CommandPalette)
 │   ├── ui/                  # 46 accessible UI primitives (Reka UI / shadcn-vue & Tiptap)

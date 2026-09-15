@@ -67,6 +67,13 @@ interface NavItem {
 
 const route = useRoute()
 
+// Helper to check active state across route variations
+const isItemActive = (item: NavItem) => {
+  if (item.routeName === 'apps-kanban' && route.name === 'kanban') return true
+  if (item.routeName === 'components-buttons' && route.name === 'buttons') return true
+  return route.name === item.routeName
+}
+
 // Auto-close sidebar on mobile when navigating
 const closeMobileSidebar = () => {
   const triggerBtn = document.querySelector('[data-sidebar="trigger"]') as HTMLButtonElement
@@ -158,17 +165,27 @@ const pagesNav: NavItem[] = [
     <SidebarContent class="py-2 space-y-0">
       <!-- 1. Overview Group -->
       <SidebarGroup class="py-1 px-2">
-        <SidebarGroupLabel class="text-[11px] font-medium tracking-wider uppercase text-muted-foreground/70">
+        <SidebarGroupLabel class="text-[10.5px] font-semibold tracking-wider uppercase text-sidebar-foreground/80">
           Overview
         </SidebarGroupLabel>
         <SidebarMenu class="gap-0.5">
           <SidebarMenuItem v-for="item in mainNav" :key="item.name">
             <SidebarMenuButton
               as-child
-              :is-active="route.name === item.routeName"
+              :is-active="isItemActive(item)"
               :tooltip="item.name"
             >
-              <router-link :to="item.href" @click="closeMobileSidebar">
+              <router-link
+                :to="item.href"
+                class="relative"
+                :class="{ 'font-semibold text-sidebar-accent-foreground': isItemActive(item) }"
+                @click="closeMobileSidebar"
+              >
+                <span
+                  v-if="isItemActive(item)"
+                  class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full bg-primary"
+                  aria-hidden="true"
+                />
                 <component :is="item.icon" class="h-4 w-4 shrink-0" />
                 <span>{{ item.name }}</span>
               </router-link>
@@ -179,17 +196,27 @@ const pagesNav: NavItem[] = [
 
       <!-- 2. Apps Group (Enterprise Mini Apps) -->
       <SidebarGroup class="py-1 px-2">
-        <SidebarGroupLabel class="text-[11px] font-medium tracking-wider uppercase text-muted-foreground/70">
+        <SidebarGroupLabel class="text-[10.5px] font-semibold tracking-wider uppercase text-sidebar-foreground/80">
           Apps
         </SidebarGroupLabel>
         <SidebarMenu class="gap-0.5">
           <SidebarMenuItem v-for="item in appsNav" :key="item.name">
             <SidebarMenuButton
               as-child
-              :is-active="route.name === item.routeName || (item.routeName === 'apps-kanban' && route.name === 'kanban')"
+              :is-active="isItemActive(item)"
               :tooltip="item.name"
             >
-              <router-link :to="item.href" @click="closeMobileSidebar">
+              <router-link
+                :to="item.href"
+                class="relative"
+                :class="{ 'font-semibold text-sidebar-accent-foreground': isItemActive(item) }"
+                @click="closeMobileSidebar"
+              >
+                <span
+                  v-if="isItemActive(item)"
+                  class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full bg-primary"
+                  aria-hidden="true"
+                />
                 <component :is="item.icon" class="h-4 w-4 shrink-0" />
                 <span>{{ item.name }}</span>
               </router-link>
@@ -200,17 +227,27 @@ const pagesNav: NavItem[] = [
 
       <!-- 3. Account & Settings Group -->
       <SidebarGroup class="py-1 px-2">
-        <SidebarGroupLabel class="text-[11px] font-medium tracking-wider uppercase text-muted-foreground/70">
+        <SidebarGroupLabel class="text-[10.5px] font-semibold tracking-wider uppercase text-sidebar-foreground/80">
           Management
         </SidebarGroupLabel>
         <SidebarMenu class="gap-0.5">
           <SidebarMenuItem v-for="item in systemNav" :key="item.name">
             <SidebarMenuButton
               as-child
-              :is-active="route.name === item.routeName"
+              :is-active="isItemActive(item)"
               :tooltip="item.name"
             >
-              <router-link :to="item.href" @click="closeMobileSidebar">
+              <router-link
+                :to="item.href"
+                class="relative"
+                :class="{ 'font-semibold text-sidebar-accent-foreground': isItemActive(item) }"
+                @click="closeMobileSidebar"
+              >
+                <span
+                  v-if="isItemActive(item)"
+                  class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full bg-primary"
+                  aria-hidden="true"
+                />
                 <component :is="item.icon" class="h-4 w-4 shrink-0" />
                 <span>{{ item.name }}</span>
               </router-link>
@@ -219,19 +256,29 @@ const pagesNav: NavItem[] = [
         </SidebarMenu>
       </SidebarGroup>
 
-      <!-- 3. Design System Group -->
+      <!-- 4. Design System Group -->
       <SidebarGroup class="py-1 px-2">
-        <SidebarGroupLabel class="text-[11px] font-medium tracking-wider uppercase text-muted-foreground/70">
+        <SidebarGroupLabel class="text-[10.5px] font-semibold tracking-wider uppercase text-sidebar-foreground/80">
           Design System
         </SidebarGroupLabel>
         <SidebarMenu class="gap-0.5">
           <SidebarMenuItem v-for="item in designSystemNav" :key="item.name">
             <SidebarMenuButton
               as-child
-              :is-active="route.name === item.routeName"
+              :is-active="isItemActive(item)"
               :tooltip="item.name"
             >
-              <router-link :to="item.href" @click="closeMobileSidebar">
+              <router-link
+                :to="item.href"
+                class="relative"
+                :class="{ 'font-semibold text-sidebar-accent-foreground': isItemActive(item) }"
+                @click="closeMobileSidebar"
+              >
+                <span
+                  v-if="isItemActive(item)"
+                  class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full bg-primary"
+                  aria-hidden="true"
+                />
                 <component :is="item.icon" class="h-4 w-4 shrink-0" />
                 <span>{{ item.name }}</span>
               </router-link>
@@ -240,19 +287,29 @@ const pagesNav: NavItem[] = [
         </SidebarMenu>
       </SidebarGroup>
 
-      <!-- 4. UI Components Group -->
+      <!-- 5. UI Components Group -->
       <SidebarGroup class="py-1 px-2">
-        <SidebarGroupLabel class="text-[11px] font-medium tracking-wider uppercase text-muted-foreground/70">
+        <SidebarGroupLabel class="text-[10.5px] font-semibold tracking-wider uppercase text-sidebar-foreground/80">
           UI Components
         </SidebarGroupLabel>
         <SidebarMenu class="gap-0.5">
           <SidebarMenuItem v-for="item in componentNav" :key="item.name">
             <SidebarMenuButton
               as-child
-              :is-active="route.name === item.routeName || (item.routeName === 'components-buttons' && route.name === 'buttons')"
+              :is-active="isItemActive(item)"
               :tooltip="item.name"
             >
-              <router-link :to="item.href" @click="closeMobileSidebar">
+              <router-link
+                :to="item.href"
+                class="relative"
+                :class="{ 'font-semibold text-sidebar-accent-foreground': isItemActive(item) }"
+                @click="closeMobileSidebar"
+              >
+                <span
+                  v-if="isItemActive(item)"
+                  class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full bg-primary"
+                  aria-hidden="true"
+                />
                 <component :is="item.icon" class="h-4 w-4 shrink-0" />
                 <span>{{ item.name }}</span>
               </router-link>
@@ -261,19 +318,29 @@ const pagesNav: NavItem[] = [
         </SidebarMenu>
       </SidebarGroup>
 
-      <!-- 5. Auth Pages Group -->
+      <!-- 6. Auth Pages Group -->
       <SidebarGroup class="py-1 px-2">
-        <SidebarGroupLabel class="text-[11px] font-medium tracking-wider uppercase text-muted-foreground/70">
+        <SidebarGroupLabel class="text-[10.5px] font-semibold tracking-wider uppercase text-sidebar-foreground/80">
           Authentication
         </SidebarGroupLabel>
         <SidebarMenu class="gap-0.5">
           <SidebarMenuItem v-for="item in authNav" :key="item.name">
             <SidebarMenuButton
               as-child
-              :is-active="route.name === item.routeName"
+              :is-active="isItemActive(item)"
               :tooltip="item.name"
             >
-              <router-link :to="item.href" @click="closeMobileSidebar">
+              <router-link
+                :to="item.href"
+                class="relative"
+                :class="{ 'font-semibold text-sidebar-accent-foreground': isItemActive(item) }"
+                @click="closeMobileSidebar"
+              >
+                <span
+                  v-if="isItemActive(item)"
+                  class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full bg-primary"
+                  aria-hidden="true"
+                />
                 <component :is="item.icon" class="h-4 w-4 shrink-0" />
                 <span>{{ item.name }}</span>
               </router-link>
@@ -282,19 +349,29 @@ const pagesNav: NavItem[] = [
         </SidebarMenu>
       </SidebarGroup>
 
-      <!-- 6. Pages & Errors Group -->
+      <!-- 7. Pages & Errors Group -->
       <SidebarGroup class="py-1 px-2">
-        <SidebarGroupLabel class="text-[11px] font-medium tracking-wider uppercase text-muted-foreground/70">
+        <SidebarGroupLabel class="text-[10.5px] font-semibold tracking-wider uppercase text-sidebar-foreground/80">
           Pages
         </SidebarGroupLabel>
         <SidebarMenu class="gap-0.5">
           <SidebarMenuItem v-for="item in pagesNav" :key="item.name">
             <SidebarMenuButton
               as-child
-              :is-active="route.name === item.routeName"
+              :is-active="isItemActive(item)"
               :tooltip="item.name"
             >
-              <router-link :to="item.href" @click="closeMobileSidebar">
+              <router-link
+                :to="item.href"
+                class="relative"
+                :class="{ 'font-semibold text-sidebar-accent-foreground': isItemActive(item) }"
+                @click="closeMobileSidebar"
+              >
+                <span
+                  v-if="isItemActive(item)"
+                  class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full bg-primary"
+                  aria-hidden="true"
+                />
                 <component :is="item.icon" class="h-4 w-4 shrink-0" />
                 <span>{{ item.name }}</span>
               </router-link>

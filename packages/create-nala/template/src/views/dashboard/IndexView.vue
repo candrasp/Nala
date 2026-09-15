@@ -74,26 +74,25 @@ const stats = [
       <Card
         v-for="stat in stats"
         :key="stat.title"
-        class="relative overflow-hidden transition-all duration-200 hover:shadow-md"
+        flush
+        class="border border-border/80 bg-card hover:border-border transition-all duration-200"
       >
-        <CardHeader class="flex flex-row items-center justify-between pb-2 space-y-0">
-          <CardTitle class="text-xs font-medium tracking-wide uppercase text-muted-foreground">
-            {{ stat.title }}
-          </CardTitle>
-          <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-muted/60">
-            <component :is="stat.icon" class="h-4 w-4" :class="stat.color" />
+        <CardContent class="p-4.5 flex flex-col gap-2.5">
+          <div class="flex items-center justify-between">
+            <span class="label-mono">{{ stat.title }}</span>
+            <div class="size-7 rounded-md bg-muted/60 flex items-center justify-center">
+              <component :is="stat.icon" class="size-3.5" :class="stat.color" />
+            </div>
           </div>
-        </CardHeader>
-        <CardContent>
-          <div class="text-2xl font-bold tracking-tight text-foreground">
+          <div class="kpi-value text-2xl text-foreground">
             {{ stat.value }}
           </div>
-          <div class="mt-1 flex items-center text-xs text-muted-foreground">
+          <div class="flex items-center gap-1.5 text-xs text-muted-foreground">
             <span
-              class="inline-flex items-center font-medium mr-1"
+              class="font-data font-medium inline-flex items-center gap-0.5"
               :class="stat.positive ? 'text-emerald-500' : 'text-amber-500'"
             >
-              <ArrowUpRight class="h-3 w-3 mr-0.5" />
+              <ArrowUpRight class="size-3.5" />
               {{ stat.change }}
             </span>
             <span>{{ stat.changeLabel }}</span>

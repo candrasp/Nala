@@ -44,7 +44,7 @@ const mainNav: NavItem[] = [
     <SidebarContent class="py-2 space-y-0">
       <!-- Main Navigation Group -->
       <SidebarGroup class="py-1 px-2">
-        <SidebarGroupLabel class="text-[11px] font-medium tracking-wider uppercase text-muted-foreground/70">
+        <SidebarGroupLabel class="text-[10.5px] font-semibold tracking-wider uppercase text-sidebar-foreground/80">
           Navigation
         </SidebarGroupLabel>
         <SidebarMenu class="gap-0.5">
@@ -54,7 +54,17 @@ const mainNav: NavItem[] = [
               :is-active="route.name === item.routeName"
               :tooltip="item.name"
             >
-              <router-link :to="item.href" @click="closeMobileSidebar">
+              <router-link
+                :to="item.href"
+                class="relative"
+                :class="{ 'font-semibold text-sidebar-accent-foreground': route.name === item.routeName }"
+                @click="closeMobileSidebar"
+              >
+                <span
+                  v-if="route.name === item.routeName"
+                  class="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 rounded-r-full bg-primary"
+                  aria-hidden="true"
+                />
                 <component :is="item.icon" class="h-4 w-4 shrink-0" />
                 <span>{{ item.name }}</span>
               </router-link>

@@ -102,6 +102,22 @@ const kbdSnippet = `<!-- Keyboard Shortcut (<Kbd>) Combinations -->
   <Kbd size="sm">P</Kbd>
   <span class="text-xs text-muted-foreground">Command Palette</span>
 </div>`
+
+const financialDataSnippet = `<!-- Financial & Data Typography Utilities -->
+
+<!-- 1. KPI Value Display (Geist Sans 600, tabular numbers, tight tracking) -->
+<div class="kpi-value text-3xl text-foreground">$128,450.00</div>
+
+<!-- 2. Technical KPI Value (Geist Mono tabular) -->
+<div class="kpi-value-mono text-2xl text-primary">99.98%</div>
+
+<!-- 3. Monospace Data & UUID (Geist Mono + tabular-nums) -->
+<span class="font-data text-xs text-muted-foreground">
+  tx_8f19da2e-91a0-4b3c-a7e8-f9b12d5064a3
+</span>
+
+<!-- 4. Tabular Numbers in Table/Financial Alignments -->
+<span class="tabular-nums font-semibold text-emerald-500">+12.8%</span>`
 </script>
 
 <template>
@@ -348,6 +364,40 @@ const kbdSnippet = `<!-- Keyboard Shortcut (<Kbd>) Combinations -->
               </div>
             </div>
           </div>
+        </div>
+      </div>
+    </CodePreview>
+
+    <!-- 6. FINANCIAL & DATA TYPOGRAPHY (GEIST UTILITIES) -->
+    <CodePreview
+      title="Financial & Data Typography (.kpi-value & .font-data)"
+      description="Tailored utilities for financial precision, tabular numerals alignment, and developer-grade UUID/token representations powered by Geist."
+      :code="financialDataSnippet"
+    >
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="p-4 rounded-xl border border-border bg-card space-y-2">
+          <span class="label-mono">KPI Main Display</span>
+          <div class="kpi-value text-2xl sm:text-3xl text-foreground">$128,450.00</div>
+          <p class="text-xs text-muted-foreground flex items-center gap-1">
+            <span class="font-data font-medium text-emerald-500">+14.2%</span>
+            <span>vs previous period</span>
+          </p>
+        </div>
+
+        <div class="p-4 rounded-xl border border-border bg-card space-y-2">
+          <span class="label-mono">KPI Tech Gauge</span>
+          <div class="kpi-value-mono text-2xl sm:text-3xl text-primary">99.98%</div>
+          <p class="text-xs text-muted-foreground">System SLA Uptime</p>
+        </div>
+
+        <div class="p-4 rounded-xl border border-border bg-card space-y-2 sm:col-span-2">
+          <span class="label-mono">Monospace Data Token</span>
+          <div class="p-2.5 rounded-md bg-muted/40 border border-border/60">
+            <span class="font-data text-xs text-foreground select-all break-all">
+              tx_9f82a1b7-4c2e-4b9d-8152-3e5f2a1b9c70
+            </span>
+          </div>
+          <p class="text-xs text-muted-foreground">Geist Mono with fixed tabular numeral widths.</p>
         </div>
       </div>
     </CodePreview>

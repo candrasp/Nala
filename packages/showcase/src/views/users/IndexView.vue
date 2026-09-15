@@ -314,15 +314,17 @@ const statusConfig: Record<string, { label: string; dotClass: string; badgeClass
     <!-- 1. Stats Summary Cards -->
     <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
       <Card flush class="highlight-card shadow-xs border-border/80 bg-card hover:border-border transition-all duration-200">
-        <CardContent class="p-5 space-y-2">
+        <CardContent class="p-4.5 flex flex-col gap-2.5">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-medium text-muted-foreground">Total Members</span>
-            <Users class="h-4 w-4 text-primary" />
+            <span class="label-mono">Total Members</span>
+            <div class="size-7 rounded-md bg-muted/60 flex items-center justify-center">
+              <Users class="size-3.5 text-primary" />
+            </div>
           </div>
-          <div class="text-2xl font-bold tracking-tight text-foreground">{{ stats.total }}</div>
-          <p class="text-xs text-muted-foreground flex items-center gap-1">
-            <span class="text-emerald-500 font-semibold inline-flex items-center gap-0.5">
-              <ArrowUpRight class="h-3.5 w-3.5" /> +12%
+          <div class="kpi-value text-2xl text-foreground">{{ stats.total }}</div>
+          <p class="text-xs text-muted-foreground flex items-center gap-1.5">
+            <span class="font-data font-medium text-emerald-500 inline-flex items-center gap-0.5">
+              <ArrowUpRight class="size-3.5" /> +12%
             </span>
             <span>from last month</span>
           </p>
@@ -330,15 +332,17 @@ const statusConfig: Record<string, { label: string; dotClass: string; badgeClass
       </Card>
 
       <Card flush class="highlight-card shadow-xs border-border/80 bg-card hover:border-border transition-all duration-200">
-        <CardContent class="p-5 space-y-2">
+        <CardContent class="p-4.5 flex flex-col gap-2.5">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-medium text-muted-foreground">Active Now</span>
-            <UserCheck class="h-4 w-4 text-emerald-500" />
+            <span class="label-mono">Active Now</span>
+            <div class="size-7 rounded-md bg-muted/60 flex items-center justify-center">
+              <UserCheck class="size-3.5 text-emerald-500" />
+            </div>
           </div>
-          <div class="text-2xl font-bold tracking-tight text-foreground">{{ stats.active }}</div>
-          <p class="text-xs text-muted-foreground flex items-center gap-1">
-            <span class="text-emerald-500 font-semibold inline-flex items-center gap-0.5">
-              <ArrowUpRight class="h-3.5 w-3.5" /> 92.4%
+          <div class="kpi-value text-2xl text-foreground">{{ stats.active }}</div>
+          <p class="text-xs text-muted-foreground flex items-center gap-1.5">
+            <span class="font-data font-medium text-emerald-500 inline-flex items-center gap-0.5">
+              <ArrowUpRight class="size-3.5" /> 92.4%
             </span>
             <span>active rate</span>
           </p>
@@ -346,27 +350,31 @@ const statusConfig: Record<string, { label: string; dotClass: string; badgeClass
       </Card>
 
       <Card flush class="highlight-card shadow-xs border-border/80 bg-card hover:border-border transition-all duration-200">
-        <CardContent class="p-5 space-y-2">
+        <CardContent class="p-4.5 flex flex-col gap-2.5">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-medium text-muted-foreground">Pending Invites</span>
-            <Clock class="h-4 w-4 text-amber-500" />
+            <span class="label-mono">Pending Invites</span>
+            <div class="size-7 rounded-md bg-muted/60 flex items-center justify-center">
+              <Clock class="size-3.5 text-amber-500" />
+            </div>
           </div>
-          <div class="text-2xl font-bold tracking-tight text-foreground">{{ stats.pending }}</div>
-          <p class="text-xs text-muted-foreground flex items-center gap-1">
-            <span class="text-amber-500 font-medium">Awaiting acceptance</span>
+          <div class="kpi-value text-2xl text-foreground">{{ stats.pending }}</div>
+          <p class="text-xs text-muted-foreground flex items-center gap-1.5">
+            <span class="font-data text-amber-500 font-medium">Awaiting acceptance</span>
           </p>
         </CardContent>
       </Card>
 
       <Card flush class="highlight-card shadow-xs border-border/80 bg-card hover:border-border transition-all duration-200">
-        <CardContent class="p-5 space-y-2">
+        <CardContent class="p-4.5 flex flex-col gap-2.5">
           <div class="flex items-center justify-between">
-            <span class="text-xs font-medium text-muted-foreground">Suspended</span>
-            <UserX class="h-4 w-4 text-rose-500" />
+            <span class="label-mono">Suspended</span>
+            <div class="size-7 rounded-md bg-muted/60 flex items-center justify-center">
+              <UserX class="size-3.5 text-rose-500" />
+            </div>
           </div>
-          <div class="text-2xl font-bold tracking-tight text-foreground">{{ stats.suspended }}</div>
-          <p class="text-xs text-muted-foreground flex items-center gap-1">
-            <span class="text-rose-500 font-medium">Access revoked</span>
+          <div class="kpi-value text-2xl text-foreground">{{ stats.suspended }}</div>
+          <p class="text-xs text-muted-foreground flex items-center gap-1.5">
+            <span class="font-data text-rose-500 font-medium">Access revoked</span>
           </p>
         </CardContent>
       </Card>

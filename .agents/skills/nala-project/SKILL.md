@@ -59,6 +59,7 @@ nala/                                    ← Root monorepo
 | **Build Tool** | Vite 8 (`@vitejs/plugin-vue`) | Super fast HMR & production bundler |
 | **Monorepo / Package Manager** | `pnpm` v10+ (Workspaces) | `pnpm-workspace.yaml` packages: `packages/*` |
 | **Auto-Imports** | `unplugin-auto-import` & `unplugin-vue-components` | Auto-imports Vue, Router, Pinia, VueUse, & all UI components |
+| **Typography & Fonts** | Geist Sans & Geist Mono (Self-Hosted) | High-contrast tabular numbers, financial precision |
 | **Styling** | Tailwind CSS v4 (`@tailwindcss/vite`) + `tw-animate-css` | Modern OKLCH color tokens in `src/style.css` |
 | **UI Primitives** | `reka-ui` + shadcn-vue (New York style) | 45+ primitive components in `src/components/ui/` |
 | **Data Table** | `@tanstack/vue-table` | Headless table logic with sorting & pagination |
@@ -565,6 +566,30 @@ Always use the `<PageHeader>` component instead of manual header layouts:
 - **CardHeader:** Use `<CardHeader section>` (applies `p-6 border-b border-border bg-muted/10` automatically).
 - **CardContent:** Provide explicit internal padding (e.g. `p-6`, or `p-0` for Tables).
 - **CardFooter:** Provide internal padding and separator border (`border-t border-border bg-muted/20 px-6 py-4 flex items-center justify-between`).
+
+### 2b. Global Grid & Card Spacing Standards
+- **Intra-Grid Spacing:** Always use `gap-4` (16px) for all card grids (e.g. `grid gap-4 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4`).
+- **Inter-Section Spacing:** Always use `space-y-6` (24px) for vertical stacking of layout blocks and sections.
+- **Compact KPI Card Blueprint:**
+  ```vue
+  <Card flush class="border border-border/80 bg-card hover:border-border transition-all duration-200">
+    <CardContent class="p-4.5 flex flex-col gap-2.5">
+      <div class="flex items-center justify-between">
+        <span class="label-mono">Title</span>
+        <div class="size-7 rounded-md bg-muted/60 flex items-center justify-center">
+          <Icon class="size-3.5" />
+        </div>
+      </div>
+      <div class="kpi-value text-2xl text-foreground">{{ value }}</div>
+      <p class="text-xs text-muted-foreground flex items-center gap-1.5">
+        <span class="font-data font-medium inline-flex items-center gap-0.5 text-emerald-500">
+          <ArrowUpRight class="size-3.5" /> +12.5%
+        </span>
+        <span>vs last month</span>
+      </p>
+    </CardContent>
+  </Card>
+  ```
 
 ### 3. Input Affixes & Addons (`<InputGroup>`, `<InputIcon>`, `<InputAddon>`)
 Never write manual absolute positioning for input icons:

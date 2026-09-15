@@ -5,6 +5,48 @@ All notable changes to **Nala** — Vue 3 Admin Dashboard Template — are docum
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning follows [Semantic Versioning](https://semver.org/).
 
+## [3.1.3] — 2026-09-16
+
+### Added & Improved
+
+#### 🔤 Self-Hosted Geist Typography System
+- **Geist Sans & Geist Mono Variable Woff2 Stack**:
+  - Replaced Inter with locally bundled, self-hosted **Geist Sans** (weights 300, 400, 500, 600, 700) and **Geist Mono** (weights 300, 400, 500, 600, 700).
+  - Synchronized font assets across both `@nala/showcase` and `packages/create-nala/template/src/assets/fonts/`.
+- **Calibrated Scale & Optical Hierarchy**:
+  - Line-height hierarchy explicitly bound per text tier (`--text-xs` to `--text-3xl`) for readable dashboard layouts.
+  - Base body weight normalized to `400` with subtle letter-spacing `-0.005em`.
+- **Semantic & Financial Utilities**:
+  - `.font-data`: Geist Mono with tabular numeral alignment for UUIDs, transaction hashes, timestamps, and API tokens.
+  - `.tabular-nums`: Fixed numerical glyph width alignment.
+  - `.kpi-value`: Geist Sans 600 with tight optical tracking (`-0.025em`) and `line-height: 1.15`.
+  - `.kpi-value-mono`: Geist Mono tabular KPI display for SLA and technical metrics.
+  - Showcase documentation section added to `/components/typography` (`TypographyView.vue`).
+
+#### ♿ WCAG 2.1 Contrast & Accessibility Enhancements
+- **Color Token Calibration (`style.css`)**:
+  - Light Mode `--primary`: Calibrated to `oklch(0.508 0.118 165.612)` (*brand-700*) achieving > 5:1 contrast against white background (PASS WCAG AA).
+  - Light Mode `--muted-foreground`: Calibrated to `oklch(0.52 0 0)` (contrast > 4.8:1, PASS WCAG AA).
+  - Light Mode `--input`: Solid `oklch(0.88 0.003 159)` non-text UI component border.
+  - Solid focus rings: `--ring` and `--sidebar-ring` upgraded to solid tokens without opacity slash in both Light and Dark mode for unambiguous keyboard focus visibility.
+
+#### 📐 Streamlined Sidebar & Non-Color Active State (WCAG 1.4.1)
+- **Active Left Pill Indicator Bar**:
+  - Added visual vertical indicator bar (`absolute left-0 w-1 h-5 rounded-r-full bg-primary`) for active menu items in `AppSidebar.vue`. Active state no longer relies solely on color.
+- **Button Variant Standardization (`sidebarMenuButtonVariants`)**:
+  - Default button height increased from `h-8` to `h-9` for larger touch target.
+  - Typography tuned to `text-[13.5px]`, padding to `px-3 py-2`, and gap to `gap-2.5`.
+  - Solid semantic tokens with `font-semibold` dynamic emphasis on active items.
+
+#### 📊 Dashboard Layout & Card Grid Standardization
+- **Compact KPI Metric Cards (`IndexView.vue`)**:
+  - Standardized metric card padding to compact `p-4.5` with vertical `gap-2.5` and `size-7` icon containers.
+  - Integrated `.kpi-value` and `.font-data` across overview metrics.
+- **Design System Spacing Rhythm**:
+  - Documented `gap-4` intra-grid and `space-y-6` inter-section standards in `.agents/skills/nala-project/SKILL.md`.
+
+---
+
 ## [3.1.2] — 2026-09-05
 
 ### Added & Improved

@@ -26,7 +26,7 @@
 - 🔍 **Global Search** — Command palette with `Ctrl+K` / `Cmd+K` shortcut and category filtering
 - 🔔 **Notification Center** — Slide-out drawer with unread badge counter and bulk actions
 - 📊 **Chart Primitives** — Declarative charts powered by `@unovis/vue` & `@unovis/ts` (`AreaChart`, `BarChart`, `LineChart`, `DonutChart`) with dynamic theme color, dark mode support, and reactive timeframe switching
-- 📈 **Standardized KPI Cards** — Reusable metric stats blueprint (`<Card flush>` + `<CardContent class="p-5 space-y-2">`) with semantic trend indicators (`ArrowUpRight` / `ArrowDownRight`) applied consistently across all dashboards
+- 📈 **Standardized KPI Cards** — Reusable metric stats blueprint (`<Card flush>` + `<CardContent class="p-4.5 gap-2.5">`) with semantic trend indicators (`ArrowUpRight` / `ArrowDownRight`) and `.kpi-value` tabular formatting applied consistently across all dashboards
 - 📋 **Data Table** — Powered by `@tanstack/vue-table` with sorting, filtering, and pagination
 - ✅ **Form & Validation** — `vee-validate` + `zod` schema validation with rich input primitives (PIN/OTP, date picker, combobox, file upload)
 - 🗂️ **Auth Flow** — Login, Register, Forgot Password, OTP Verify, Reset Password, Confirm Email, Lock Screen
@@ -132,7 +132,7 @@ nala/                                    ← Root monorepo
 │   ├── showcase/                        ← Full enterprise demo application (@nala/showcase)
 │   │   ├── public/                      ← Static assets, icons, screenshots
 │   │   ├── src/
-│   │   │   ├── assets/fonts/            ← Local font assets (Inter woff2)
+│   │   │   ├── assets/fonts/            ← Local font assets (Geist Sans & Geist Mono woff2)
 │   │   │   ├── components/
 │   │   │   │   ├── layout/              ← AppNavbar, AppSidebar, NotificationDrawer, ThemeCustomizer, etc.
 │   │   │   │   ├── ui/                  ← 46+ UI primitives (reka-ui / shadcn-vue + Tiptap)
